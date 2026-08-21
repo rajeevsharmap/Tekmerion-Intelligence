@@ -1,0 +1,221 @@
+account_id,customer_id,customer_name,account_type,account_open_date,kyc_status,risk_rating,registered_country,avg_monthly_txn_count,avg_monthly_txn_amount,home_branch,occupation,annual_income
+ACC000001,CUST100000,Aryan Maharaj,current,2016-11-22,verified,low,India,12,185435.45,Jaipur - Sector 5 Branch,Salaried - Govt,2730927.65
+ACC000002,CUST100001,Udant Dewan,savings,2015-07-17,verified,low,India,39,53715.22,Jaipur - Sector 5 Branch,Retired,1132303.49
+ACC000003,CUST100002,Gagan Sami,current,2019-09-25,verified,medium,India,48,108540.53,Hyderabad - Central Branch,Self Employed - Trader,1110155.45
+ACC000004,CUST100003,Ayushman Chander,business,2020-09-22,verified,low,India,58,89269.15,Hyderabad - MG Road Branch,Salaried - IT,3332441.32
+ACC000005,CUST100004,Viraj Tiwari,savings,2024-02-15,pending,low,India,39,76828.68,Lucknow - Main Branch,Freelancer,2674161.27
+ACC000006,CUST100005,Rushil Saini,business,2016-03-08,verified,low,India,9,214552.84,Mumbai - Sector 5 Branch,Retired,1380845.97
+ACC000007,CUST100006,Saumya Mall,business,2021-03-16,verified,low,India,48,234480.37,Mumbai - MG Road Branch,Unemployed,2923106.21
+ACC000008,CUST100007,Nathaniel Sami,salary,2024-02-02,verified,medium,India,21,247433.22,Jaipur - Main Branch,Business Owner,3137533.56
+ACC000009,CUST100008,Arunima Dugal,business,2015-12-14,verified,low,India,29,70596.51,Chennai - Central Branch,Unemployed,3965908.15
+ACC000010,CUST100009,Gayathri Chaudry,salary,2020-05-09,verified,low,India,13,69895.64,Chennai - Main Branch,Salaried - Finance,2508381.89
+ACC000011,CUST100010,Lajita Chatterjee,current,2022-04-16,verified,medium,India,12,129833.94,Mumbai - Central Branch,Salaried - IT,3899964.57
+ACC000012,CUST100011,Hemangini Lalla,salary,2017-08-07,verified,low,India,42,20564.29,Kolkata - MG Road Branch,Unemployed,4483244.36
+ACC000013,CUST100012,Tripti Yadav,savings,2024-01-01,verified,low,India,47,181576.85,Jaipur - Sector 5 Branch,Student,3500346.53
+ACC000014,CUST100013,Kritika Brar,salary,2020-10-14,verified,low,India,4,238684.9,Hyderabad - MG Road Branch,Salaried - Finance,3471676.7
+ACC000015,CUST100014,Janaki Handa,business,2023-08-21,pending,high,India,57,161542.63,Lucknow - Sector 5 Branch,Business Owner,840265.64
+ACC000016,CUST100015,Chakradev Kari,savings,2017-09-30,verified,low,India,42,84418.23,Bengaluru - Central Branch,Salaried - Govt,4193706.02
+ACC000017,CUST100016,Fariq Kaul,savings,2020-03-25,verified,low,India,9,184317.36,Mumbai - MG Road Branch,Salaried - Finance,3488404.73
+ACC000018,CUST100017,Lajita Mall,current,2017-03-08,pending,medium,India,20,134280.08,Lucknow - Sector 5 Branch,Retired,4346047.75
+ACC000019,CUST100018,Janya Gaba,business,2024-03-05,verified,medium,India,29,248811.59,Pune - Main Branch,Homemaker,4066332.85
+ACC000020,CUST100019,Isha Kadakia,business,2022-09-06,verified,low,India,5,149135.64,Chennai - Sector 5 Branch,Unemployed,1131339.1
+ACC000021,CUST100020,Ekbal Garg,savings,2016-03-17,verified,medium,India,6,215610.67,Mumbai - MG Road Branch,Salaried - Finance,1208180.02
+ACC000022,CUST100021,Nihal Shere,salary,2023-04-05,verified,low,India,19,197231.76,Kolkata - Sector 5 Branch,Business Owner,587487.44
+ACC000023,CUST100022,Anamika Kanda,savings,2022-05-02,verified,low,India,47,165096.59,Mumbai - Sector 5 Branch,Salaried - IT,1919323.94
+ACC000024,CUST100023,Daksh Karnik,current,2020-10-09,verified,medium,India,16,136390.01,Delhi - MG Road Branch,Retired,972668.31
+ACC000025,CUST100024,Diya Rattan,salary,2022-11-14,pending,low,India,55,216030.53,Jaipur - Main Branch,Salaried - Govt,398541.58
+ACC000026,CUST100025,Dominic Kakar,current,2024-03-13,rejected,medium,India,14,104571.44,Ahmedabad - Sector 5 Branch,Business Owner,3915289.7
+ACC000027,CUST100026,Simon Tata,salary,2015-12-31,verified,low,India,20,231996.93,Ahmedabad - Central Branch,Student,2007392.34
+ACC000028,CUST100027,Tara Dhar,current,2024-06-15,verified,medium,India,22,58336.72,Bengaluru - Main Branch,Unemployed,3358384.61
+ACC000029,CUST100028,Liam Koshy,salary,2016-01-14,verified,medium,India,36,230249.85,Jaipur - Central Branch,Self Employed - Trader,425719.78
+ACC000030,CUST100029,Priya Rastogi,savings,2023-08-22,verified,low,India,47,216145.7,Kolkata - Central Branch,Salaried - Govt,4247695.27
+ACC000031,CUST100030,Theodore Devi,savings,2024-09-09,verified,low,India,30,166056.43,Lucknow - MG Road Branch,Salaried - Finance,1546717.73
+ACC000032,CUST100031,Gavin Batta,current,2019-06-09,verified,low,India,20,101967.53,Hyderabad - Main Branch,Homemaker,1545885.49
+ACC000033,CUST100032,Michael Dutta,savings,2016-03-26,verified,low,India,8,136720.43,Jaipur - MG Road Branch,Student,752212.38
+ACC000034,CUST100033,Devansh Rajan,business,2020-12-08,pending,medium,India,22,43647.97,Jaipur - Sector 5 Branch,Student,2822447.95
+ACC000035,CUST100034,Upadhriti Wadhwa,business,2023-12-31,verified,low,India,46,30378.69,Delhi - MG Road Branch,Student,678651.86
+ACC000036,CUST100035,Advay Contractor,business,2016-10-27,verified,medium,India,42,56604.27,Pune - Central Branch,Business Owner,3149987.6
+ACC000037,CUST100036,Harini Choudhury,savings,2019-06-29,verified,low,India,9,160399.69,Hyderabad - Central Branch,Salaried - IT,195317.38
+ACC000038,CUST100037,Radhika Dugar,salary,2017-03-23,verified,low,India,39,177888.52,Jaipur - Main Branch,Salaried - IT,663295.16
+ACC000039,CUST100038,Aarush Lall,current,2017-07-15,verified,low,India,31,36224.15,Hyderabad - Main Branch,Freelancer,4063600.03
+ACC000040,CUST100039,Yashica Cherian,current,2015-09-05,verified,medium,India,46,30184.44,Jaipur - Main Branch,Retired,4386975.94
+ACC000041,CUST100040,Yashica Issac,current,2017-08-18,verified,high,India,55,203639.07,Kolkata - Sector 5 Branch,Salaried - IT,954838.07
+ACC000042,CUST100041,Kashvi Edwin,current,2020-08-26,verified,medium,India,21,44003.47,Mumbai - Sector 5 Branch,Retired,3947760.5
+ACC000043,CUST100042,Ekiya Suresh,salary,2023-01-03,verified,low,India,26,79771.76,Chennai - Sector 5 Branch,Business Owner,282230.36
+ACC000044,CUST100043,Isaac Patil,savings,2018-04-15,verified,low,India,53,73385.62,Jaipur - MG Road Branch,Retired,3115518.27
+ACC000045,CUST100044,Wriddhish Bhardwaj,business,2024-02-14,verified,low,India,15,147244.48,Hyderabad - MG Road Branch,Salaried - IT,648299.0
+ACC000046,CUST100045,Farhan Chada,salary,2022-05-24,verified,low,India,42,246137.78,Mumbai - Main Branch,Retired,4065860.45
+ACC000047,CUST100046,Ekapad Walia,savings,2018-03-27,verified,low,India,37,231765.92,Jaipur - Sector 5 Branch,Business Owner,1753436.76
+ACC000048,CUST100047,Kabir Soman,business,2016-03-10,pending,high,India,46,212763.74,Hyderabad - Main Branch,Salaried - Finance,1516109.74
+ACC000049,CUST100048,Alka Wable,current,2021-12-12,verified,low,India,16,108009.35,Kolkata - MG Road Branch,Self Employed - Trader,2839024.44
+ACC000050,CUST100049,Siddharth Zacharia,business,2020-02-14,verified,low,India,22,56494.76,Lucknow - Central Branch,Unemployed,3008328.29
+ACC000051,CUST100050,Devika Rastogi,salary,2022-11-29,verified,low,India,54,225789.3,Delhi - Sector 5 Branch,Salaried - Govt,1405957.27
+ACC000052,CUST100051,Raksha Varughese,current,2020-09-13,rejected,low,India,47,81052.77,Chennai - MG Road Branch,Self Employed - Trader,285517.67
+ACC000053,CUST100052,Jai Kota,savings,2019-03-02,verified,high,India,33,106538.05,Lucknow - MG Road Branch,Business Owner,3283254.35
+ACC000054,CUST100053,Devansh Nigam,savings,2021-07-13,verified,low,India,52,215807.94,Mumbai - Sector 5 Branch,Retired,1125393.71
+ACC000055,CUST100054,Victor Kannan,savings,2023-10-24,verified,low,India,33,37668.08,Ahmedabad - Central Branch,Salaried - Finance,4447695.4
+ACC000056,CUST100055,Ekavir Bhargava,salary,2020-05-25,pending,high,India,57,227179.41,Ahmedabad - MG Road Branch,Self Employed - Trader,3392591.51
+ACC000057,CUST100056,Ekansh Balay,business,2023-01-28,verified,low,India,53,195530.33,Ahmedabad - Main Branch,Business Owner,1366260.97
+ACC000058,CUST100057,Ekavir Varkey,business,2016-04-26,verified,medium,India,24,223791.57,Mumbai - Central Branch,Self Employed - Trader,831588.44
+ACC000059,CUST100058,Arya Sunder,savings,2021-07-08,verified,medium,India,30,104861.85,Jaipur - Sector 5 Branch,Homemaker,1976144.69
+ACC000060,CUST100059,Kevin Solanki,savings,2018-07-09,verified,medium,India,58,220760.88,Lucknow - MG Road Branch,Retired,2240552.44
+ACC000061,CUST100060,Urvashi Ray,salary,2020-12-25,verified,low,India,38,188141.34,Jaipur - Sector 5 Branch,Unemployed,4058545.02
+ACC000062,CUST100061,Girindra Chatterjee,savings,2023-04-22,verified,low,India,28,87351.74,Kolkata - Central Branch,Self Employed - Trader,3810984.46
+ACC000063,CUST100062,Irya Sampath,salary,2017-03-04,verified,high,India,41,143276.04,Bengaluru - Central Branch,Salaried - Govt,2956678.48
+ACC000064,CUST100063,Unni Bhagat,business,2017-04-23,verified,medium,India,28,85201.4,Ahmedabad - Central Branch,Freelancer,1638002.37
+ACC000065,CUST100064,Darsh Rau,salary,2021-06-13,rejected,low,India,20,209553.17,Ahmedabad - Sector 5 Branch,Salaried - IT,3415784.81
+ACC000066,CUST100065,Ikbal Kothari,savings,2015-11-20,verified,high,India,53,239534.97,Bengaluru - Sector 5 Branch,Salaried - IT,4282322.69
+ACC000067,CUST100066,Ranveer Yadav,current,2018-05-23,verified,medium,India,12,121022.46,Mumbai - Main Branch,Unemployed,4274310.34
+ACC000068,CUST100067,Logan Sami,current,2022-11-29,verified,medium,India,42,153775.64,Mumbai - Main Branch,Self Employed - Trader,4347593.74
+ACC000069,CUST100068,Arya Shere,salary,2016-11-02,pending,low,India,29,235660.3,Chennai - MG Road Branch,Salaried - Govt,2737862.76
+ACC000070,CUST100069,Faqid Savant,savings,2019-02-18,verified,low,India,54,246041.87,Bengaluru - Sector 5 Branch,Freelancer,2481459.46
+ACC000071,CUST100070,Chandresh Zachariah,savings,2021-04-21,verified,low,India,58,107914.39,Ahmedabad - Main Branch,Salaried - Govt,2052821.09
+ACC000072,CUST100071,Girik Khalsa,current,2021-02-28,verified,low,India,31,48153.56,Jaipur - Central Branch,Student,2840741.37
+ACC000073,CUST100072,Niharika Sunder,business,2024-02-27,verified,medium,India,24,213669.72,Mumbai - Central Branch,Student,3988646.71
+ACC000074,CUST100073,Tanay Rattan,salary,2019-02-24,verified,medium,India,25,12031.5,Pune - MG Road Branch,Self Employed - Trader,2286215.71
+ACC000075,CUST100074,Nitesh Raghavan,business,2021-01-13,verified,medium,India,39,7487.02,Chennai - MG Road Branch,Salaried - Govt,1222658.14
+ACC000076,CUST100075,Madhavi Lanka,salary,2021-11-30,verified,low,India,45,179401.39,Ahmedabad - MG Road Branch,Salaried - IT,581990.47
+ACC000077,CUST100076,Bhavika Sampath,business,2018-10-08,verified,low,India,34,140600.87,Pune - Sector 5 Branch,Retired,4485447.92
+ACC000078,CUST100077,Mohammed Gupta,business,2024-05-12,verified,low,India,23,66593.9,Mumbai - Main Branch,Business Owner,1543167.12
+ACC000079,CUST100078,Teerth Bhardwaj,current,2024-02-12,verified,high,India,17,185958.14,Hyderabad - Central Branch,Unemployed,4398942.34
+ACC000080,CUST100079,Dipta Bhandari,current,2023-12-04,rejected,low,India,22,60733.38,Delhi - Main Branch,Student,241120.95
+ACC000081,CUST100080,Vansha Thakkar,savings,2024-02-01,verified,low,India,39,76573.48,Delhi - MG Road Branch,Homemaker,623178.63
+ACC000082,CUST100081,Dakshesh Trivedi,salary,2015-03-18,verified,low,India,25,50169.1,Bengaluru - Main Branch,Student,4245394.74
+ACC000083,CUST100082,Quincy Biswas,salary,2023-02-16,verified,low,India,8,146370.18,Bengaluru - Main Branch,Self Employed - Trader,824533.56
+ACC000084,CUST100083,Wahab Raval,current,2024-07-29,verified,high,India,11,141727.89,Kolkata - Sector 5 Branch,Unemployed,2755267.97
+ACC000085,CUST100084,Yatin Baral,salary,2018-11-03,verified,medium,India,23,215740.83,Kolkata - Main Branch,Student,2636479.31
+ACC000086,CUST100085,Oni Virk,current,2016-01-10,verified,low,India,44,56701.17,Mumbai - Central Branch,Self Employed - Trader,1216217.57
+ACC000087,CUST100086,Advika Jayaraman,salary,2024-05-22,verified,low,India,48,150483.74,Hyderabad - Sector 5 Branch,Salaried - IT,1179977.33
+ACC000088,CUST100087,William Lanka,current,2019-10-23,verified,medium,India,20,198017.87,Lucknow - Central Branch,Business Owner,2016600.33
+ACC000089,CUST100088,Karan Mital,business,2024-04-06,verified,low,India,56,39847.89,Bengaluru - Main Branch,Self Employed - Trader,3604155.41
+ACC000090,CUST100089,Diya Bora,salary,2024-09-06,verified,high,India,48,79502.34,Kolkata - Central Branch,Student,2342039.81
+ACC000091,CUST100090,Tara Chaudhry,salary,2023-05-27,verified,low,India,51,83968.79,Hyderabad - MG Road Branch,Salaried - IT,574532.15
+ACC000092,CUST100091,Tanay Toor,business,2024-10-14,verified,low,India,40,14856.76,Delhi - Main Branch,Homemaker,2421923.79
+ACC000093,CUST100092,Kevin Palla,salary,2022-07-10,verified,high,India,44,204490.01,Mumbai - Central Branch,Homemaker,1683191.76
+ACC000094,CUST100093,Yash Pingle,current,2020-09-02,verified,low,India,25,105853.05,Ahmedabad - Main Branch,Student,3042360.88
+ACC000095,CUST100094,Nakul Sarma,salary,2021-10-24,verified,medium,India,9,82056.7,Pune - MG Road Branch,Salaried - Govt,4371198.02
+ACC000096,CUST100095,Abhiram Mistry,savings,2021-11-16,verified,medium,India,46,217995.03,Ahmedabad - Central Branch,Retired,414161.65
+ACC000097,CUST100096,Krish Lalla,salary,2023-10-27,verified,low,India,52,17644.88,Hyderabad - Central Branch,Salaried - Finance,745977.15
+ACC000098,CUST100097,Hredhaan Dugal,savings,2019-11-25,verified,low,India,5,243420.97,Lucknow - Sector 5 Branch,Business Owner,3246261.8
+ACC000099,CUST100098,Baghyawati Kade,savings,2020-04-14,verified,low,India,18,248103.0,Mumbai - Main Branch,Homemaker,4271302.41
+ACC000100,CUST100099,Samar Lalla,business,2017-08-14,verified,low,India,30,209507.37,Ahmedabad - Sector 5 Branch,Business Owner,2153317.56
+ACC000101,CUST100100,Zayan Behl,current,2017-06-17,pending,low,India,59,22103.47,Kolkata - Sector 5 Branch,Freelancer,4215953.06
+ACC000102,CUST100101,Pallavi Malhotra,business,2023-08-21,verified,low,India,57,148799.74,Ahmedabad - Main Branch,Self Employed - Trader,2109084.74
+ACC000103,CUST100102,Aarush Nath,salary,2023-03-29,verified,low,India,33,233548.8,Chennai - MG Road Branch,Business Owner,2650165.81
+ACC000104,CUST100103,Adweta Edwin,business,2018-12-22,verified,medium,India,51,120879.18,Kolkata - MG Road Branch,Retired,4449948.49
+ACC000105,CUST100104,Prisha Andra,business,2017-08-03,verified,low,India,59,29589.33,Ahmedabad - MG Road Branch,Salaried - Govt,2452108.7
+ACC000106,CUST100105,Faqid Dixit,current,2022-10-10,verified,low,India,8,120025.2,Hyderabad - MG Road Branch,Freelancer,2872480.61
+ACC000107,CUST100106,Kala Divan,salary,2021-10-05,pending,low,India,24,158565.8,Ahmedabad - Main Branch,Salaried - Finance,335084.11
+ACC000108,CUST100107,Joshua Barman,business,2016-03-01,verified,low,India,18,187957.76,Kolkata - Main Branch,Salaried - Govt,3464797.07
+ACC000109,CUST100108,Janya Baral,savings,2016-09-16,verified,low,India,6,84471.79,Bengaluru - Main Branch,Student,1728561.64
+ACC000110,CUST100109,Shivansh Krish,current,2022-04-30,verified,low,India,14,47891.99,Lucknow - Main Branch,Retired,2857148.79
+ACC000111,CUST100110,Irya Ray,current,2019-02-05,verified,low,India,33,161286.63,Ahmedabad - Central Branch,Student,3060751.9
+ACC000112,CUST100111,Warjas Gaba,current,2022-11-30,verified,high,India,8,113223.8,Pune - Sector 5 Branch,Unemployed,1472346.36
+ACC000113,CUST100112,Nitara Bakshi,business,2022-03-21,verified,medium,India,16,249846.52,Ahmedabad - Sector 5 Branch,Salaried - Govt,1204728.63
+ACC000114,CUST100113,Gaurangi Sabharwal,business,2024-09-23,verified,low,India,5,244596.4,Kolkata - Central Branch,Student,214983.21
+ACC000115,CUST100114,Amara Dutta,business,2015-11-01,verified,high,India,53,200720.73,Lucknow - Sector 5 Branch,Freelancer,1126099.61
+ACC000116,CUST100115,Lavanya Barad,current,2018-03-27,verified,low,India,44,28805.16,Bengaluru - Sector 5 Branch,Student,3586797.29
+ACC000117,CUST100116,Tristan Iyengar,savings,2015-07-27,verified,low,India,22,85046.19,Kolkata - Sector 5 Branch,Self Employed - Trader,1047433.51
+ACC000118,CUST100117,Inaya Mody,business,2024-03-05,verified,medium,India,57,45313.38,Ahmedabad - Sector 5 Branch,Student,3405136.4
+ACC000119,CUST100118,Udant Bajwa,savings,2020-10-05,verified,medium,India,13,189767.12,Chennai - Sector 5 Branch,Retired,4358605.31
+ACC000120,CUST100119,Mohini Narasimhan,savings,2024-06-25,verified,low,India,20,136460.22,Ahmedabad - Central Branch,Freelancer,3086618.61
+ACC000121,CUST100120,Ekaraj Mallick,business,2019-06-18,verified,low,India,10,170334.96,Ahmedabad - Sector 5 Branch,Salaried - IT,2856442.47
+ACC000122,CUST100121,Yashodhara Ratta,savings,2024-07-20,verified,low,India,44,206844.56,Hyderabad - Main Branch,Retired,684040.05
+ACC000123,CUST100122,Ayaan D’Alia,salary,2015-10-09,verified,high,India,11,28812.04,Jaipur - Sector 5 Branch,Self Employed - Trader,1858949.99
+ACC000124,CUST100123,Pranav Lanka,salary,2021-04-24,verified,medium,India,41,186855.91,Delhi - Central Branch,Retired,3009262.6
+ACC000125,CUST100124,Ikbal Saraf,business,2023-04-29,pending,low,India,6,174118.76,Chennai - Central Branch,Homemaker,2101086.11
+ACC000126,CUST100125,Dipta Sarin,business,2019-01-07,verified,medium,India,38,225915.57,Pune - Sector 5 Branch,Salaried - IT,1899963.26
+ACC000127,CUST100126,Lekha Gupta,salary,2018-03-25,pending,high,India,9,167378.34,Lucknow - Sector 5 Branch,Salaried - IT,398499.17
+ACC000128,CUST100127,Chaitanya Sarin,current,2020-09-03,verified,low,India,8,208305.37,Jaipur - Main Branch,Business Owner,2713174.92
+ACC000129,CUST100128,Zinal Yohannan,savings,2018-12-18,verified,low,India,21,215309.5,Delhi - Central Branch,Self Employed - Trader,2513730.77
+ACC000130,CUST100129,Januja Sankar,current,2017-12-20,pending,low,India,4,92769.36,Chennai - Main Branch,Unemployed,1578692.72
+ACC000131,CUST100130,Ganga Murthy,salary,2017-12-18,verified,low,India,37,32844.08,Mumbai - MG Road Branch,Homemaker,2116548.93
+ACC000132,CUST100131,Charita Tripathi,current,2021-02-27,verified,low,India,43,15624.43,Jaipur - Central Branch,Student,2158743.7
+ACC000133,CUST100132,Nilima Narain,salary,2015-07-13,verified,low,India,31,173093.89,Ahmedabad - Main Branch,Homemaker,497479.89
+ACC000134,CUST100133,Chakrika Datta,current,2016-05-17,verified,low,India,21,157957.79,Lucknow - Central Branch,Salaried - Finance,3256500.08
+ACC000135,CUST100134,Osha Raghavan,salary,2021-06-24,verified,high,India,36,153329.56,Mumbai - Sector 5 Branch,Salaried - Govt,3864064.63
+ACC000136,CUST100135,Charvi Ravi,salary,2024-05-18,verified,medium,India,60,60980.93,Pune - Central Branch,Homemaker,1902514.4
+ACC000137,CUST100136,Daksha Mangat,business,2016-08-13,verified,low,India,27,238630.17,Ahmedabad - Sector 5 Branch,Salaried - Govt,574091.09
+ACC000138,CUST100137,Qushi Nagy,business,2016-06-14,verified,low,India,55,36878.29,Bengaluru - Main Branch,Unemployed,4312618.38
+ACC000139,CUST100138,Riya Sathe,business,2024-07-22,verified,low,India,59,168008.43,Kolkata - Main Branch,Salaried - IT,4363482.06
+ACC000140,CUST100139,Yasti Solanki,current,2020-04-25,verified,low,India,13,165900.39,Chennai - Sector 5 Branch,Salaried - Govt,1692492.46
+ACC000141,CUST100140,Frado Mander,current,2024-06-18,verified,low,India,55,110132.54,Jaipur - Main Branch,Unemployed,2830636.57
+ACC000142,CUST100141,Girik Keer,business,2024-06-21,pending,low,India,5,49201.94,Hyderabad - Main Branch,Freelancer,1696421.18
+ACC000143,CUST100142,Umang Issac,salary,2018-02-01,verified,medium,India,8,39759.29,Bengaluru - Central Branch,Salaried - Govt,3403202.81
+ACC000144,CUST100143,Aryan Batra,current,2018-08-29,verified,low,India,27,81351.16,Pune - MG Road Branch,Unemployed,2755686.7
+ACC000145,CUST100144,Vaishnavi Bora,savings,2015-11-23,verified,low,India,47,24987.47,Ahmedabad - MG Road Branch,Retired,2278058.57
+ACC000146,CUST100145,Oeshi Hayer,savings,2022-07-09,verified,low,India,26,110328.84,Hyderabad - Sector 5 Branch,Unemployed,2282253.49
+ACC000147,CUST100146,Warda Ratta,savings,2020-03-31,verified,low,India,4,55083.67,Chennai - Central Branch,Self Employed - Trader,3481175.07
+ACC000148,CUST100147,Manbir Ahluwalia,salary,2019-12-04,verified,low,India,15,36650.5,Jaipur - Sector 5 Branch,Business Owner,2341133.34
+ACC000149,CUST100148,Pavani Kanda,savings,2021-01-09,pending,low,India,31,9591.68,Mumbai - MG Road Branch,Freelancer,2667279.57
+ACC000150,CUST100149,Zarna Shetty,business,2024-10-02,verified,low,India,11,104232.92,Pune - MG Road Branch,Self Employed - Trader,3641711.71
+ACC000151,CUST100150,Zaid Dara,savings,2022-10-29,pending,medium,India,31,211898.67,Chennai - Main Branch,Retired,2723923.97
+ACC000152,CUST100151,Kiaan Shetty,business,2023-11-30,pending,low,India,18,86601.81,Delhi - Sector 5 Branch,Salaried - Govt,2385287.79
+ACC000153,CUST100152,Saanvi Thaman,business,2016-12-09,verified,low,India,26,183207.88,Delhi - Central Branch,Business Owner,624115.56
+ACC000154,CUST100153,Sanaya Dutt,savings,2019-05-10,verified,low,India,15,238066.57,Ahmedabad - Main Branch,Homemaker,3439205.97
+ACC000155,CUST100154,Shivani Lad,business,2024-11-09,pending,low,India,59,242888.4,Pune - MG Road Branch,Self Employed - Trader,2079775.37
+ACC000156,CUST100155,Aradhana Verma,business,2022-12-23,verified,low,India,41,18762.17,Jaipur - MG Road Branch,Salaried - Govt,1520961.91
+ACC000157,CUST100156,William Maharaj,business,2022-09-09,verified,low,India,8,162943.29,Mumbai - Central Branch,Unemployed,2746424.82
+ACC000158,CUST100157,Faras Mangal,savings,2021-07-17,verified,low,India,32,227717.24,Lucknow - MG Road Branch,Business Owner,1568995.62
+ACC000159,CUST100158,Anita Nayak,salary,2023-02-03,rejected,low,India,10,203686.87,Pune - Central Branch,Salaried - Govt,2359651.69
+ACC000160,CUST100159,Faris Devi,salary,2017-12-08,verified,low,India,37,133073.27,Delhi - Sector 5 Branch,Freelancer,1790720.56
+ACC000161,CUST100160,Vihaan Rajagopal,savings,2019-10-24,verified,low,India,54,159567.21,Pune - Central Branch,Salaried - Govt,1604264.06
+ACC000162,CUST100161,Tanish Bhatt,current,2024-06-29,verified,medium,India,25,24967.99,Delhi - Central Branch,Freelancer,1520201.11
+ACC000163,CUST100162,Nikita Narayanan,savings,2021-09-01,verified,low,India,23,141935.91,Pune - Central Branch,Self Employed - Trader,3074902.85
+ACC000164,CUST100163,Ojasvi Bhatia,business,2023-12-15,verified,low,India,5,93836.43,Delhi - Main Branch,Business Owner,1656283.73
+ACC000165,CUST100164,Osha Ramachandran,current,2023-04-10,rejected,low,India,8,77469.06,Mumbai - Sector 5 Branch,Salaried - Finance,3510178.79
+ACC000166,CUST100165,Lajita Sood,current,2023-12-16,verified,low,India,42,97296.37,Delhi - Sector 5 Branch,Self Employed - Trader,3771410.64
+ACC000167,CUST100166,Indira Misra,business,2017-10-25,verified,medium,India,47,181298.49,Ahmedabad - MG Road Branch,Unemployed,1410888.67
+ACC000168,CUST100167,Oni Yohannan,salary,2022-08-21,verified,low,India,57,52533.96,Lucknow - MG Road Branch,Homemaker,2174457.51
+ACC000169,CUST100168,Vinaya Kanda,salary,2019-10-17,verified,medium,India,14,205138.35,Lucknow - Sector 5 Branch,Self Employed - Trader,3951368.29
+ACC000170,CUST100169,Rajata Sunder,savings,2015-11-21,pending,low,India,49,212243.61,Mumbai - Main Branch,Student,542340.54
+ACC000171,CUST100170,Lopa Nayar,current,2017-09-23,pending,low,India,57,112180.78,Chennai - Sector 5 Branch,Homemaker,4001600.62
+ACC000172,CUST100171,Noah Sibal,business,2015-06-15,verified,low,India,19,99610.7,Mumbai - Central Branch,Freelancer,1150007.44
+ACC000173,CUST100172,Avi Ramesh,business,2020-06-03,verified,high,India,54,40782.08,Bengaluru - Sector 5 Branch,Student,4143151.46
+ACC000174,CUST100173,Fiyaz Sangha,salary,2023-01-14,verified,medium,India,32,155760.32,Mumbai - Central Branch,Salaried - IT,1285591.37
+ACC000175,CUST100174,Triya Gopal,salary,2017-07-18,verified,low,India,11,195162.29,Chennai - Main Branch,Student,706384.85
+ACC000176,CUST100175,Abha Raghavan,salary,2019-01-21,verified,low,India,8,32160.18,Ahmedabad - Main Branch,Unemployed,2495752.35
+ACC000177,CUST100176,Siddharth Sha,business,2023-10-08,verified,low,India,31,5383.26,Pune - Sector 5 Branch,Business Owner,2645267.25
+ACC000178,CUST100177,Geetika Raghavan,business,2018-03-09,verified,medium,India,8,238583.9,Jaipur - Sector 5 Branch,Salaried - Finance,3577301.29
+ACC000179,CUST100178,Oviya Krishnan,salary,2023-08-21,verified,low,India,6,160739.34,Pune - Main Branch,Student,3408407.68
+ACC000180,CUST100179,Upma Bahl,savings,2021-01-27,verified,medium,India,53,147566.31,Pune - Central Branch,Self Employed - Trader,371530.17
+ACC000181,CUST100180,Inaya Kapur,salary,2024-04-15,verified,low,India,48,122240.14,Delhi - Main Branch,Self Employed - Trader,452594.32
+ACC000182,CUST100181,Banjeet Balasubramanian,current,2022-10-14,verified,low,India,60,15266.96,Hyderabad - Main Branch,Salaried - Finance,1900327.92
+ACC000183,CUST100182,Ryan Bahri,current,2024-03-28,verified,low,India,22,92458.67,Bengaluru - Main Branch,Freelancer,1360295.74
+ACC000184,CUST100183,William Date,salary,2021-04-05,verified,low,India,28,88063.97,Delhi - Main Branch,Homemaker,3169735.88
+ACC000185,CUST100184,Ishwar Kamdar,savings,2021-04-01,verified,high,India,50,109002.42,Kolkata - Main Branch,Unemployed,4478824.07
+ACC000186,CUST100185,Aahana Pillay,savings,2018-01-26,verified,low,India,24,166925.21,Hyderabad - Main Branch,Homemaker,2783325.43
+ACC000187,CUST100186,Ishwar Gade,salary,2022-04-01,verified,low,India,6,183069.53,Pune - Sector 5 Branch,Unemployed,4492010.58
+ACC000188,CUST100187,Hritik Bal,savings,2019-09-03,verified,low,India,8,169440.05,Kolkata - Central Branch,Freelancer,2396531.6
+ACC000189,CUST100188,Keya Ranganathan,salary,2017-09-21,verified,high,India,6,35926.36,Chennai - Main Branch,Freelancer,1744490.52
+ACC000190,CUST100189,Faqid Kibe,salary,2024-08-25,verified,low,India,27,96143.28,Mumbai - MG Road Branch,Unemployed,774842.87
+ACC000191,CUST100190,Charvi Dara,current,2021-03-30,verified,low,India,11,11348.77,Delhi - Main Branch,Homemaker,2416659.58
+ACC000192,CUST100191,Idika Walia,salary,2024-07-22,verified,low,India,17,249109.45,Hyderabad - Sector 5 Branch,Homemaker,1044770.43
+ACC000193,CUST100192,Kamala Biswas,salary,2017-04-23,verified,medium,India,9,203575.74,Pune - MG Road Branch,Freelancer,3245214.9
+ACC000194,CUST100193,Advik Salvi,current,2024-05-10,pending,low,India,49,178843.13,Delhi - Main Branch,Freelancer,2377824.82
+ACC000195,CUST100194,Hitesh Sant,current,2017-01-24,verified,high,India,54,126035.37,Pune - Main Branch,Salaried - Finance,2652238.4
+ACC000196,CUST100195,Tripti Dua,savings,2022-12-14,verified,medium,India,8,80776.23,Ahmedabad - Sector 5 Branch,Salaried - Finance,1954634.92
+ACC000197,CUST100196,Patrick Vig,business,2021-12-19,verified,medium,India,45,23170.43,Ahmedabad - Central Branch,Salaried - Finance,1668303.85
+ACC000198,CUST100197,Veda Shroff,current,2024-05-18,verified,low,India,31,128201.63,Bengaluru - Main Branch,Salaried - Govt,2418201.21
+ACC000199,CUST100198,Amrita Naidu,current,2020-03-04,verified,low,India,26,237133.37,Jaipur - Central Branch,Student,3834433.61
+ACC000200,CUST100199,Gabriel Mallick,business,2019-04-07,rejected,low,India,12,158130.48,Lucknow - Main Branch,Salaried - Finance,583610.72
+ACC000201,CUST100200,Yagnesh Shetty,current,2017-11-13,verified,low,India,46,157997.4,Lucknow - Sector 5 Branch,Freelancer,3819729.62
+ACC000202,CUST100201,Gayathri Balakrishnan,savings,2024-08-03,pending,low,India,6,237393.98,Lucknow - MG Road Branch,Student,2992881.5
+ACC000203,CUST100202,Ekta Gopal,salary,2024-09-25,verified,low,India,60,158655.18,Hyderabad - Sector 5 Branch,Student,2266321.61
+ACC000204,CUST100203,Simon Pant,savings,2021-11-28,verified,low,India,14,112703.35,Ahmedabad - Sector 5 Branch,Homemaker,1061379.42
+ACC000205,CUST100204,Harini Mammen,business,2017-06-11,verified,low,India,29,37037.71,Pune - Main Branch,Salaried - Finance,2606333.25
+ACC000206,CUST100205,Advaith Varughese,salary,2020-06-05,verified,low,India,19,39515.02,Bengaluru - Main Branch,Student,4264062.74
+ACC000207,CUST100206,Frederick Khurana,current,2022-02-11,pending,low,India,56,85221.78,Lucknow - MG Road Branch,Freelancer,1000083.32
+ACC000208,CUST100207,Vrinda Khosla,salary,2017-09-17,verified,low,India,60,80592.42,Bengaluru - Central Branch,Salaried - Govt,4263405.71
+ACC000209,CUST100208,Vritti Sem,business,2023-08-07,verified,low,India,7,17382.4,Ahmedabad - Main Branch,Unemployed,3991706.54
+ACC000210,CUST100209,Girik Menon,savings,2023-01-03,verified,low,India,31,37814.06,Hyderabad - MG Road Branch,Freelancer,3479861.22
+ACC000211,CUST100210,Nidhi Kohli,current,2021-03-23,verified,low,India,27,140539.62,Mumbai - MG Road Branch,Retired,2358383.89
+ACC000212,CUST100211,Jyoti Solanki,savings,2024-05-09,rejected,low,India,12,243895.29,Kolkata - Central Branch,Freelancer,3613956.03
+ACC000213,CUST100212,Pavani Narayanan,current,2020-10-08,verified,low,India,16,152603.42,Kolkata - Central Branch,Salaried - Finance,353901.19
+ACC000214,CUST100213,Sudiksha Madan,salary,2015-08-30,verified,low,India,37,116962.2,Lucknow - Sector 5 Branch,Salaried - Finance,783853.86
+ACC000215,CUST100214,Zayan Kashyap,business,2020-06-02,rejected,low,India,41,87411.5,Jaipur - MG Road Branch,Salaried - Finance,2296137.54
+ACC000216,CUST100215,Reyansh Mutti,business,2024-07-29,verified,low,India,25,170082.57,Kolkata - Sector 5 Branch,Unemployed,1509168.24
+ACC000217,CUST100216,Qasim Handa,current,2015-06-15,verified,low,India,50,17582.02,Ahmedabad - Sector 5 Branch,Self Employed - Trader,2444683.68
+ACC000218,CUST100217,Veda Malhotra,savings,2021-06-20,verified,low,India,40,237310.27,Mumbai - Main Branch,Business Owner,261809.43
+ACC000219,CUST100218,Harish Hari,current,2020-05-03,verified,low,India,30,127945.78,Lucknow - Main Branch,Homemaker,3950572.5
+ACC000220,CUST100219,Utkarsh Patel,business,2016-01-23,verified,medium,India,46,122200.89,Kolkata - MG Road Branch,Freelancer,4312881.33

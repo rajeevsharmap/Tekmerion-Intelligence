@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Environment variables / secrets
+.env
+.env.*
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Generated evaluation output
+mock_data/eval_results.csv

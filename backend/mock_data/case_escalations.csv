@@ -1,0 +1,16 @@
+escalation_id,case_id,evidence_gap,completeness_score_at_escalation,primary_trigger,evidence_signals,escalated_at,escalated_by,ground_truth_label,ground_truth_recommended_action,status
+ESC000001,CASE000001,final-tier cash-out accounts not yet KYC-linked,44,reverse_smurfing,rapid_dispersal|structuring_fan_out,2025-04-30 01:49:35,S. Iyer,fraud,escalate,escalated
+ESC000002,CASE000002,beneficiary network ownership unverified beyond hop 2,49,money_mule,pass_through_velocity|unrelated_sender_concentration,2025-03-07 23:01:07,P. Nair,legitimate,monitor,escalated
+ESC000003,CASE000003,pending confirmation from telecom SIM-swap registry,87,account_swap,untrusted_device_high_value_txn,2025-07-09 19:18:52,K. Das,fraud,block,block
+ESC000004,CASE000005,pending confirmation from telecom SIM-swap registry,91,account_swap,sim_swap_detected,2025-05-07 04:45:29,S. Iyer,fraud,block,block
+ESC000005,CASE000011,final-tier cash-out accounts not yet KYC-linked,67,reverse_smurfing,rapid_dispersal|structuring_fan_out,2025-10-11 17:36:35,S. Iyer,legitimate,monitor,escalated
+ESC000006,CASE000012,source-of-funds documentation incomplete for structuring senders,67,smurfing,high_velocity_fan_in|structuring_below_threshold,2025-05-08 09:37:28,M. Reddy,legitimate,clear,escalated
+ESC000007,CASE000013,final-tier cash-out accounts not yet KYC-linked,51,reverse_smurfing,rapid_dispersal|structuring_fan_out,2025-04-25 03:13:29,R. Verma,fraud,escalate,escalated
+ESC000008,CASE000015,pending confirmation from telecom SIM-swap registry,88,account_swap,sim_swap_detected,2025-05-10 00:58:57,S. Iyer,fraud,block,escalated
+ESC000009,CASE000016,beneficiary network ownership unverified beyond hop 2,69,money_mule,unrelated_sender_concentration,2025-02-10 07:04:27,P. Nair,fraud,block,escalated
+ESC000010,CASE000017,pending confirmation from telecom SIM-swap registry,90,account_swap,untrusted_device_high_value_txn,2025-06-09 01:46:38,K. Das,fraud,block,block
+ESC000011,CASE000020,pending confirmation from telecom SIM-swap registry,61,account_swap,geo_impossible_travel,2025-03-30 19:20:53,S. Iyer,fraud,block,block
+ESC000012,CASE000022,final-tier cash-out accounts not yet KYC-linked,58,reverse_smurfing,rapid_dispersal|structuring_fan_out,2025-07-08 10:08:38,P. Nair,fraud,escalate,escalated
+ESC000013,CASE000023,pending confirmation from telecom SIM-swap registry,70,account_swap,sim_swap_detected,2025-12-13 06:13:01,P. Nair,fraud,block,escalated
+ESC000014,CASE000025,pending confirmation from telecom SIM-swap registry,63,account_swap,sim_swap_detected,2025-04-08 12:49:34,K. Das,fraud,block,escalated
+ESC000015,CASE000029,additional transaction history required for full pattern confirmation,84,behavioral_deviation,off_hours_txn,2025-05-10 13:56:40,M. Reddy,fraud,escalate,escalated

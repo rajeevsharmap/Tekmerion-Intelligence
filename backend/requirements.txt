@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+python-dotenv
+langgraph
+google-genai
+Faker
+networkx
+matplotlib
