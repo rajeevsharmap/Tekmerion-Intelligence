@@ -1,4 +1,5 @@
 """
+
 agents/scammer_hypothesis_agent.py
 =====================================
 Path A in the architecture diagram: builds the strongest good-faith case

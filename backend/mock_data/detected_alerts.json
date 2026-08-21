@@ -1,0 +1,1254 @@
+[
+  {
+    "alert_id": "ALERT-MONE-7CB7CC8C",
+    "account_id": "ACC000001",
+    "transaction_id": "TXN001576",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 30,
+    "severity": "medium",
+    "triggering_rules": [
+      "MM-001",
+      "MM-003"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 5
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 5,
+        "threshold": 4
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-02-24T09:26:10",
+    "linked_case_id": "CASE-5846664D"
+  },
+  {
+    "alert_id": "ALERT-SMUR-4418896F",
+    "account_id": "ACC000002",
+    "transaction_id": "TXN001455",
+    "typology": "smurfing",
+    "triggered": true,
+    "alert_score": 45,
+    "severity": "medium",
+    "triggering_rules": [
+      "SMF-001",
+      "SMF-002",
+      "SMF-005"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "multiple_inbound_counterparties",
+        "value": 8,
+        "threshold": 3
+      },
+      {
+        "signal": "aggregate_inbound_amount",
+        "value": 354801.16,
+        "currency": "INR"
+      },
+      {
+        "signal": "transaction_profile_deviation",
+        "value": 6.61
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-08-17T00:39:36",
+    "linked_case_id": "CASE-C5AA26BB"
+  },
+  {
+    "alert_id": "ALERT-MONE-EC2BA869",
+    "account_id": "ACC000002",
+    "transaction_id": "TXN001455",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 45,
+    "severity": "medium",
+    "triggering_rules": [
+      "MM-001",
+      "MM-003",
+      "MM-004"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 8
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 8,
+        "threshold": 4
+      },
+      {
+        "signal": "profile_deviation",
+        "value": 6.61
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-08-17T00:39:36",
+    "linked_case_id": "CASE-C5AA26BB"
+  },
+  {
+    "alert_id": "ALERT-ACCO-7AE0C880",
+    "account_id": "ACC000006",
+    "transaction_id": "TXN001591",
+    "typology": "account_swap",
+    "triggered": true,
+    "alert_score": 100,
+    "severity": "critical",
+    "triggering_rules": [
+      "AS-001",
+      "AS-002",
+      "AS-003",
+      "AS-004",
+      "AS-005",
+      "AS-006",
+      "AS-008"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "sim_change_detected",
+        "value": true
+      },
+      {
+        "signal": "new_device",
+        "value": true
+      },
+      {
+        "signal": "device_fingerprint_change",
+        "value": true
+      },
+      {
+        "signal": "distance_from_last_location_km",
+        "value": 8303.5
+      },
+      {
+        "signal": "time_difference_hours",
+        "value": 0.73
+      },
+      {
+        "signal": "registered_country_mismatch",
+        "value": true
+      },
+      {
+        "signal": "first_time_beneficiary",
+        "value": true
+      },
+      {
+        "signal": "compound_account_takeover_signal",
+        "value": true
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-08-11T06:12:45",
+    "linked_case_id": "CASE-7A41D843"
+  },
+  {
+    "alert_id": "ALERT-SMUR-1CE85CC5",
+    "account_id": "ACC000008",
+    "transaction_id": "TXN001561",
+    "typology": "smurfing",
+    "triggered": true,
+    "alert_score": 50,
+    "severity": "medium",
+    "triggering_rules": [
+      "SMF-001",
+      "SMF-003",
+      "SMF-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "multiple_inbound_counterparties",
+        "value": 6,
+        "threshold": 3
+      },
+      {
+        "signal": "rapid_onward_transfer",
+        "value": true,
+        "maximum_hours": 6
+      },
+      {
+        "signal": "network_depth",
+        "value": 3
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-07-22T21:32:23",
+    "linked_case_id": "CASE-4DF6BEE2"
+  },
+  {
+    "alert_id": "ALERT-MONE-495F673B",
+    "account_id": "ACC000008",
+    "transaction_id": "TXN001561",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 85,
+    "severity": "critical",
+    "triggering_rules": [
+      "MM-001",
+      "MM-002",
+      "MM-003",
+      "MM-005",
+      "MM-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 6
+      },
+      {
+        "signal": "outgoing_incoming_ratio",
+        "value": 0.9
+      },
+      {
+        "signal": "median_inbound_to_outbound_minutes",
+        "value": 157.0
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 7,
+        "threshold": 4
+      },
+      {
+        "signal": "low_retention_of_received_funds",
+        "value": 0.9
+      },
+      {
+        "signal": "new_beneficiary_after_inbound",
+        "value": true
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-07-22T18:55:22",
+    "linked_case_id": "CASE-4DF6BEE2"
+  },
+  {
+    "alert_id": "ALERT-REVE-7D9ED067",
+    "account_id": "ACC000010",
+    "transaction_id": "TXN001476",
+    "typology": "reverse_smurfing",
+    "triggered": true,
+    "alert_score": 80,
+    "severity": "critical",
+    "triggering_rules": [
+      "RSMF-001",
+      "RSMF-002",
+      "RSMF-003",
+      "RSMF-005",
+      "RSMF-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "unique_outbound_receivers",
+        "value": 3,
+        "threshold": 3
+      },
+      {
+        "signal": "outbound_amount_fragmentation",
+        "value": 3
+      },
+      {
+        "signal": "distribution_window_hours",
+        "value": 4.7
+      },
+      {
+        "signal": "transaction_profile_deviation",
+        "value": 12.11
+      },
+      {
+        "signal": "network_depth",
+        "value": 3
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-10-14T07:24:07",
+    "linked_case_id": "CASE-2A0D8718"
+  },
+  {
+    "alert_id": "ALERT-SMUR-263C17E1",
+    "account_id": "ACC000020",
+    "transaction_id": "TXN001440",
+    "typology": "smurfing",
+    "triggered": true,
+    "alert_score": 30,
+    "severity": "medium",
+    "triggering_rules": [
+      "SMF-001",
+      "SMF-002"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "multiple_inbound_counterparties",
+        "value": 9,
+        "threshold": 3
+      },
+      {
+        "signal": "aggregate_inbound_amount",
+        "value": 402049.95,
+        "currency": "INR"
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-05-15T00:18:25",
+    "linked_case_id": "CASE-FD16CAF9"
+  },
+  {
+    "alert_id": "ALERT-MONE-B9544495",
+    "account_id": "ACC000020",
+    "transaction_id": "TXN001440",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 30,
+    "severity": "medium",
+    "triggering_rules": [
+      "MM-001",
+      "MM-003"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 9
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 9,
+        "threshold": 4
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-05-15T00:18:25",
+    "linked_case_id": "CASE-FD16CAF9"
+  },
+  {
+    "alert_id": "ALERT-SMUR-E373553E",
+    "account_id": "ACC000053",
+    "transaction_id": "TXN001424",
+    "typology": "smurfing",
+    "triggered": true,
+    "alert_score": 45,
+    "severity": "medium",
+    "triggering_rules": [
+      "SMF-001",
+      "SMF-002",
+      "SMF-005"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "multiple_inbound_counterparties",
+        "value": 8,
+        "threshold": 3
+      },
+      {
+        "signal": "aggregate_inbound_amount",
+        "value": 347053.64,
+        "currency": "INR"
+      },
+      {
+        "signal": "transaction_profile_deviation",
+        "value": 3.26
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-05-18T13:11:49",
+    "linked_case_id": "CASE-41FB3398"
+  },
+  {
+    "alert_id": "ALERT-MONE-F630D117",
+    "account_id": "ACC000053",
+    "transaction_id": "TXN001424",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 45,
+    "severity": "medium",
+    "triggering_rules": [
+      "MM-001",
+      "MM-003",
+      "MM-004"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 8
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 8,
+        "threshold": 4
+      },
+      {
+        "signal": "profile_deviation",
+        "value": 3.26
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-05-18T13:11:49",
+    "linked_case_id": "CASE-41FB3398"
+  },
+  {
+    "alert_id": "ALERT-REVE-4DB98DC0",
+    "account_id": "ACC000061",
+    "transaction_id": "TXN001541",
+    "typology": "reverse_smurfing",
+    "triggered": true,
+    "alert_score": 65,
+    "severity": "high",
+    "triggering_rules": [
+      "RSMF-001",
+      "RSMF-002",
+      "RSMF-003",
+      "RSMF-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "unique_outbound_receivers",
+        "value": 3,
+        "threshold": 3
+      },
+      {
+        "signal": "outbound_amount_fragmentation",
+        "value": 3
+      },
+      {
+        "signal": "distribution_window_hours",
+        "value": 1.36
+      },
+      {
+        "signal": "network_depth",
+        "value": 3
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-10-26T08:15:42",
+    "linked_case_id": "CASE-6EF457C5"
+  },
+  {
+    "alert_id": "ALERT-SMUR-FD9A985E",
+    "account_id": "ACC000080",
+    "transaction_id": "TXN001571",
+    "typology": "smurfing",
+    "triggered": true,
+    "alert_score": 65,
+    "severity": "high",
+    "triggering_rules": [
+      "SMF-001",
+      "SMF-003",
+      "SMF-005",
+      "SMF-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "multiple_inbound_counterparties",
+        "value": 4,
+        "threshold": 3
+      },
+      {
+        "signal": "rapid_onward_transfer",
+        "value": true,
+        "maximum_hours": 6
+      },
+      {
+        "signal": "transaction_profile_deviation",
+        "value": 6.45
+      },
+      {
+        "signal": "network_depth",
+        "value": 3
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-03-13T13:54:09",
+    "linked_case_id": "CASE-A501AE47"
+  },
+  {
+    "alert_id": "ALERT-MONE-92C7C3E3",
+    "account_id": "ACC000080",
+    "transaction_id": "TXN001571",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 100,
+    "severity": "critical",
+    "triggering_rules": [
+      "MM-001",
+      "MM-002",
+      "MM-003",
+      "MM-004",
+      "MM-005",
+      "MM-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 4
+      },
+      {
+        "signal": "outgoing_incoming_ratio",
+        "value": 0.9
+      },
+      {
+        "signal": "median_inbound_to_outbound_minutes",
+        "value": 318.4
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 5,
+        "threshold": 4
+      },
+      {
+        "signal": "profile_deviation",
+        "value": 6.45
+      },
+      {
+        "signal": "low_retention_of_received_funds",
+        "value": 0.9
+      },
+      {
+        "signal": "new_beneficiary_after_inbound",
+        "value": true
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-03-13T08:35:44",
+    "linked_case_id": "CASE-A501AE47"
+  },
+  {
+    "alert_id": "ALERT-ACCO-5EE15B60",
+    "account_id": "ACC000095",
+    "transaction_id": "TXN001593",
+    "typology": "account_swap",
+    "triggered": true,
+    "alert_score": 100,
+    "severity": "critical",
+    "triggering_rules": [
+      "AS-001",
+      "AS-002",
+      "AS-003",
+      "AS-004",
+      "AS-005",
+      "AS-006",
+      "AS-007",
+      "AS-008"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "sim_change_detected",
+        "value": true
+      },
+      {
+        "signal": "new_device",
+        "value": true
+      },
+      {
+        "signal": "device_fingerprint_change",
+        "value": true
+      },
+      {
+        "signal": "distance_from_last_location_km",
+        "value": 3317.9
+      },
+      {
+        "signal": "time_difference_hours",
+        "value": 0.38
+      },
+      {
+        "signal": "registered_country_mismatch",
+        "value": true
+      },
+      {
+        "signal": "first_time_beneficiary",
+        "value": true
+      },
+      {
+        "signal": "transaction_amount",
+        "value": 374130.7,
+        "currency": "INR"
+      },
+      {
+        "signal": "compound_account_takeover_signal",
+        "value": true
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-08-10T10:24:58",
+    "linked_case_id": "CASE-7AE1940F"
+  },
+  {
+    "alert_id": "ALERT-REVE-180D3D59",
+    "account_id": "ACC000101",
+    "transaction_id": "TXN001524",
+    "typology": "reverse_smurfing",
+    "triggered": true,
+    "alert_score": 80,
+    "severity": "critical",
+    "triggering_rules": [
+      "RSMF-001",
+      "RSMF-002",
+      "RSMF-003",
+      "RSMF-005",
+      "RSMF-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "unique_outbound_receivers",
+        "value": 3,
+        "threshold": 3
+      },
+      {
+        "signal": "outbound_amount_fragmentation",
+        "value": 3
+      },
+      {
+        "signal": "distribution_window_hours",
+        "value": 3.69
+      },
+      {
+        "signal": "transaction_profile_deviation",
+        "value": 17.27
+      },
+      {
+        "signal": "network_depth",
+        "value": 3
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-03-03T09:09:48",
+    "linked_case_id": "CASE-440123E6"
+  },
+  {
+    "alert_id": "ALERT-ACCO-608E4B4D",
+    "account_id": "ACC000103",
+    "transaction_id": "TXN001594",
+    "typology": "account_swap",
+    "triggered": true,
+    "alert_score": 100,
+    "severity": "critical",
+    "triggering_rules": [
+      "AS-001",
+      "AS-002",
+      "AS-003",
+      "AS-004",
+      "AS-005",
+      "AS-006",
+      "AS-008"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "sim_change_detected",
+        "value": true
+      },
+      {
+        "signal": "new_device",
+        "value": true
+      },
+      {
+        "signal": "device_fingerprint_change",
+        "value": true
+      },
+      {
+        "signal": "distance_from_last_location_km",
+        "value": 6129.8
+      },
+      {
+        "signal": "time_difference_hours",
+        "value": 1.33
+      },
+      {
+        "signal": "registered_country_mismatch",
+        "value": true
+      },
+      {
+        "signal": "first_time_beneficiary",
+        "value": true
+      },
+      {
+        "signal": "compound_account_takeover_signal",
+        "value": true
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-05-25T10:06:04",
+    "linked_case_id": "CASE-3AB10E91"
+  },
+  {
+    "alert_id": "ALERT-SMUR-922E6E9E",
+    "account_id": "ACC000109",
+    "transaction_id": "TXN001471",
+    "typology": "smurfing",
+    "triggered": true,
+    "alert_score": 45,
+    "severity": "medium",
+    "triggering_rules": [
+      "SMF-001",
+      "SMF-002",
+      "SMF-005"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "multiple_inbound_counterparties",
+        "value": 7,
+        "threshold": 3
+      },
+      {
+        "signal": "aggregate_inbound_amount",
+        "value": 313650.15,
+        "currency": "INR"
+      },
+      {
+        "signal": "transaction_profile_deviation",
+        "value": 3.71
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-06-13T20:13:28",
+    "linked_case_id": "CASE-0889FCDE"
+  },
+  {
+    "alert_id": "ALERT-MONE-686E9A57",
+    "account_id": "ACC000109",
+    "transaction_id": "TXN001471",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 45,
+    "severity": "medium",
+    "triggering_rules": [
+      "MM-001",
+      "MM-003",
+      "MM-004"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 7
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 7,
+        "threshold": 4
+      },
+      {
+        "signal": "profile_deviation",
+        "value": 3.71
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-06-13T20:13:28",
+    "linked_case_id": "CASE-0889FCDE"
+  },
+  {
+    "alert_id": "ALERT-SMUR-89E480E9",
+    "account_id": "ACC000115",
+    "transaction_id": "TXN001449",
+    "typology": "smurfing",
+    "triggered": true,
+    "alert_score": 30,
+    "severity": "medium",
+    "triggering_rules": [
+      "SMF-001",
+      "SMF-002"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "multiple_inbound_counterparties",
+        "value": 7,
+        "threshold": 3
+      },
+      {
+        "signal": "aggregate_inbound_amount",
+        "value": 309217.33,
+        "currency": "INR"
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-04-30T20:13:39",
+    "linked_case_id": "CASE-3EA8A4C5"
+  },
+  {
+    "alert_id": "ALERT-MONE-BA8FBD85",
+    "account_id": "ACC000115",
+    "transaction_id": "TXN001449",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 30,
+    "severity": "medium",
+    "triggering_rules": [
+      "MM-001",
+      "MM-003"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 7
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 7,
+        "threshold": 4
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-04-30T20:13:39",
+    "linked_case_id": "CASE-3EA8A4C5"
+  },
+  {
+    "alert_id": "ALERT-ACCO-300C6AF8",
+    "account_id": "ACC000115",
+    "transaction_id": "TXN001595",
+    "typology": "account_swap",
+    "triggered": true,
+    "alert_score": 100,
+    "severity": "critical",
+    "triggering_rules": [
+      "AS-001",
+      "AS-002",
+      "AS-003",
+      "AS-004",
+      "AS-005",
+      "AS-006",
+      "AS-008"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "sim_change_detected",
+        "value": true
+      },
+      {
+        "signal": "new_device",
+        "value": true
+      },
+      {
+        "signal": "device_fingerprint_change",
+        "value": true
+      },
+      {
+        "signal": "distance_from_last_location_km",
+        "value": 4263.5
+      },
+      {
+        "signal": "time_difference_hours",
+        "value": 1.08
+      },
+      {
+        "signal": "registered_country_mismatch",
+        "value": true
+      },
+      {
+        "signal": "first_time_beneficiary",
+        "value": true
+      },
+      {
+        "signal": "compound_account_takeover_signal",
+        "value": true
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-05-02T10:06:10",
+    "linked_case_id": "CASE-294A3EED"
+  },
+  {
+    "alert_id": "ALERT-SMUR-BD0689EB",
+    "account_id": "ACC000120",
+    "transaction_id": "TXN001414",
+    "typology": "smurfing",
+    "triggered": true,
+    "alert_score": 30,
+    "severity": "medium",
+    "triggering_rules": [
+      "SMF-001",
+      "SMF-002"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "multiple_inbound_counterparties",
+        "value": 6,
+        "threshold": 3
+      },
+      {
+        "signal": "aggregate_inbound_amount",
+        "value": 262510.52,
+        "currency": "INR"
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-03-26T22:29:18",
+    "linked_case_id": "CASE-90745CF9"
+  },
+  {
+    "alert_id": "ALERT-MONE-C66A466D",
+    "account_id": "ACC000120",
+    "transaction_id": "TXN001414",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 30,
+    "severity": "medium",
+    "triggering_rules": [
+      "MM-001",
+      "MM-003"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 6
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 6,
+        "threshold": 4
+      }
+    ],
+    "recommended_initial_action": "monitor",
+    "case_required": true,
+    "created_at": "2025-03-26T22:29:18",
+    "linked_case_id": "CASE-90745CF9"
+  },
+  {
+    "alert_id": "ALERT-REVE-DB592543",
+    "account_id": "ACC000141",
+    "transaction_id": "TXN001510",
+    "typology": "reverse_smurfing",
+    "triggered": true,
+    "alert_score": 80,
+    "severity": "critical",
+    "triggering_rules": [
+      "RSMF-001",
+      "RSMF-002",
+      "RSMF-003",
+      "RSMF-005",
+      "RSMF-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "unique_outbound_receivers",
+        "value": 3,
+        "threshold": 3
+      },
+      {
+        "signal": "outbound_amount_fragmentation",
+        "value": 3
+      },
+      {
+        "signal": "distribution_window_hours",
+        "value": 2.9
+      },
+      {
+        "signal": "transaction_profile_deviation",
+        "value": 5.68
+      },
+      {
+        "signal": "network_depth",
+        "value": 3
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-08-13T17:07:08",
+    "linked_case_id": "CASE-E58D3345"
+  },
+  {
+    "alert_id": "ALERT-SMUR-E57446E4",
+    "account_id": "ACC000152",
+    "transaction_id": "TXN001566",
+    "typology": "smurfing",
+    "triggered": true,
+    "alert_score": 80,
+    "severity": "critical",
+    "triggering_rules": [
+      "SMF-001",
+      "SMF-002",
+      "SMF-003",
+      "SMF-005",
+      "SMF-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "multiple_inbound_counterparties",
+        "value": 4,
+        "threshold": 3
+      },
+      {
+        "signal": "aggregate_inbound_amount",
+        "value": 297290.71,
+        "currency": "INR"
+      },
+      {
+        "signal": "rapid_onward_transfer",
+        "value": true,
+        "maximum_hours": 6
+      },
+      {
+        "signal": "transaction_profile_deviation",
+        "value": 3.43
+      },
+      {
+        "signal": "network_depth",
+        "value": 3
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-03-17T07:41:02",
+    "linked_case_id": "CASE-36453E64"
+  },
+  {
+    "alert_id": "ALERT-MONE-EF90C00B",
+    "account_id": "ACC000152",
+    "transaction_id": "TXN001566",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 100,
+    "severity": "critical",
+    "triggering_rules": [
+      "MM-001",
+      "MM-002",
+      "MM-003",
+      "MM-004",
+      "MM-005",
+      "MM-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 4
+      },
+      {
+        "signal": "outgoing_incoming_ratio",
+        "value": 0.9
+      },
+      {
+        "signal": "median_inbound_to_outbound_minutes",
+        "value": 127.7
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 5,
+        "threshold": 4
+      },
+      {
+        "signal": "profile_deviation",
+        "value": 3.43
+      },
+      {
+        "signal": "low_retention_of_received_funds",
+        "value": 0.9
+      },
+      {
+        "signal": "new_beneficiary_after_inbound",
+        "value": true
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-03-17T05:33:20",
+    "linked_case_id": "CASE-36453E64"
+  },
+  {
+    "alert_id": "ALERT-ACCO-70EC46F9",
+    "account_id": "ACC000176",
+    "transaction_id": "TXN001597",
+    "typology": "account_swap",
+    "triggered": true,
+    "alert_score": 100,
+    "severity": "critical",
+    "triggering_rules": [
+      "AS-001",
+      "AS-002",
+      "AS-003",
+      "AS-004",
+      "AS-005",
+      "AS-007",
+      "AS-008"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "sim_change_detected",
+        "value": true
+      },
+      {
+        "signal": "new_device",
+        "value": true
+      },
+      {
+        "signal": "device_fingerprint_change",
+        "value": true
+      },
+      {
+        "signal": "distance_from_last_location_km",
+        "value": 3023.0
+      },
+      {
+        "signal": "time_difference_hours",
+        "value": 0.55
+      },
+      {
+        "signal": "registered_country_mismatch",
+        "value": true
+      },
+      {
+        "signal": "transaction_amount",
+        "value": 825715.6,
+        "currency": "INR"
+      },
+      {
+        "signal": "compound_account_takeover_signal",
+        "value": true
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-05-11T12:44:06",
+    "linked_case_id": "CASE-983DEB89"
+  },
+  {
+    "alert_id": "ALERT-SMUR-E56FED02",
+    "account_id": "ACC000183",
+    "transaction_id": "TXN001590",
+    "typology": "smurfing",
+    "triggered": true,
+    "alert_score": 65,
+    "severity": "high",
+    "triggering_rules": [
+      "SMF-001",
+      "SMF-003",
+      "SMF-005",
+      "SMF-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "multiple_inbound_counterparties",
+        "value": 7,
+        "threshold": 3
+      },
+      {
+        "signal": "rapid_onward_transfer",
+        "value": true,
+        "maximum_hours": 6
+      },
+      {
+        "signal": "transaction_profile_deviation",
+        "value": 5.5
+      },
+      {
+        "signal": "network_depth",
+        "value": 3
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-09-20T21:47:45",
+    "linked_case_id": "CASE-15E26CB9"
+  },
+  {
+    "alert_id": "ALERT-MONE-795C386D",
+    "account_id": "ACC000183",
+    "transaction_id": "TXN001590",
+    "typology": "money_mule",
+    "triggered": true,
+    "alert_score": 90,
+    "severity": "critical",
+    "triggering_rules": [
+      "MM-001",
+      "MM-002",
+      "MM-003",
+      "MM-004",
+      "MM-005"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "inbound_transaction_count",
+        "value": 7
+      },
+      {
+        "signal": "outgoing_incoming_ratio",
+        "value": 0.9
+      },
+      {
+        "signal": "median_inbound_to_outbound_minutes",
+        "value": 17.3
+      },
+      {
+        "signal": "unique_counterparties",
+        "value": 8,
+        "threshold": 4
+      },
+      {
+        "signal": "profile_deviation",
+        "value": 5.5
+      },
+      {
+        "signal": "low_retention_of_received_funds",
+        "value": 0.9
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-09-20T21:30:26",
+    "linked_case_id": "CASE-15E26CB9"
+  },
+  {
+    "alert_id": "ALERT-REVE-7ACF8EA0",
+    "account_id": "ACC000205",
+    "transaction_id": "TXN001494",
+    "typology": "reverse_smurfing",
+    "triggered": true,
+    "alert_score": 80,
+    "severity": "critical",
+    "triggering_rules": [
+      "RSMF-001",
+      "RSMF-002",
+      "RSMF-003",
+      "RSMF-005",
+      "RSMF-006"
+    ],
+    "evidence_signals": [
+      {
+        "signal": "unique_outbound_receivers",
+        "value": 3,
+        "threshold": 3
+      },
+      {
+        "signal": "outbound_amount_fragmentation",
+        "value": 3
+      },
+      {
+        "signal": "distribution_window_hours",
+        "value": 2.64
+      },
+      {
+        "signal": "transaction_profile_deviation",
+        "value": 11.77
+      },
+      {
+        "signal": "network_depth",
+        "value": 3
+      }
+    ],
+    "recommended_initial_action": "escalate",
+    "case_required": true,
+    "created_at": "2025-09-16T17:12:13",
+    "linked_case_id": "CASE-CF5EA69D"
+  }
+]

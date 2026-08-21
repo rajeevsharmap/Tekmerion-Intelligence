@@ -464,9 +464,9 @@ if __name__ == "__main__":
     import json
 
     parser = argparse.ArgumentParser(description="Generate network evidence for detected cases.")
-    parser.add_argument("--data_dir", default="../mock_data")
-    parser.add_argument("--cases_file", default="../mock_data/detected_cases.json")
-    parser.add_argument("--out_dir", default="../mock_data")
+    parser.add_argument("--data_dir", default="mock_data")
+    parser.add_argument("--cases_file", default="mock_data/detected_cases.json")
+    parser.add_argument("--out_dir", default="mock_data")
     parser.add_argument("--limit", type=int, default=8, help="max cases to render (keeps demo output small)")
     args = parser.parse_args()
 

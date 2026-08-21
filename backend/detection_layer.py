@@ -604,8 +604,8 @@ if __name__ == "__main__":
     import json
 
     parser = argparse.ArgumentParser(description="Run the Detection Agent over a mock data directory.")
-    parser.add_argument("--data_dir", default="../mock_data")
-    parser.add_argument("--out_dir", default="../mock_data")
+    parser.add_argument("--data_dir", default="mock_data")
+    parser.add_argument("--out_dir", default="mock_data")
     args = parser.parse_args()
 
     store = DataStore(args.data_dir)

@@ -129,8 +129,8 @@ def _fmt_amount(amount):
 # Main entry point
 # ----------------------------------------------------------------------
 def visualize_case_network(
-    data_dir="../mock_data",
-    cases_file="../mock_data/detected_cases.json",
+    data_dir="mock_data",
+    cases_file="mock_data/detected_cases.json",
     case_id=None,
     typology=None,
     max_depth=MAX_DEPTH,
@@ -231,8 +231,8 @@ def visualize_case_network(
 
 
 def visualize_case_timeline(
-    data_dir="../mock_data",
-    cases_file="../mock_data/detected_cases.json",
+    data_dir="mock_data",
+    cases_file="mock_data/detected_cases.json",
     case_id=None,
     typology="money_mule",
     save_path=None,
