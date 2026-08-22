@@ -1,0 +1,97 @@
+{
+  "evidence_id": "EVID-7189E7C8",
+  "case_id": "CASE-F01A9B97",
+  "evidence_type": "network_analysis",
+  "typology": "money_mule",
+  "source": "network_evidence_layer",
+  "confidence": "high",
+  "data": {
+    "visualization_type": "transaction_timeline",
+    "transactions": [
+      {
+        "transaction_id": "TXN001563",
+        "timestamp": "2025-03-17T03:03:20",
+        "direction": "in",
+        "counterparty": "ACC000003",
+        "amount": 45309.36,
+        "currency": "INR",
+        "channel": "UPI",
+        "beneficiary_id": "BENE000009",
+        "device_id": "DEV000005",
+        "geo_event_id": "GEO000011"
+      },
+      {
+        "transaction_id": "TXN001565",
+        "timestamp": "2025-03-17T03:08:20",
+        "direction": "in",
+        "counterparty": "ACC000081",
+        "amount": 56588.09,
+        "currency": "INR",
+        "channel": "UPI",
+        "beneficiary_id": "BENE000199",
+        "device_id": "DEV000121",
+        "geo_event_id": "GEO000275"
+      },
+      {
+        "transaction_id": "TXN001562",
+        "timestamp": "2025-03-17T04:25:20",
+        "direction": "in",
+        "counterparty": "ACC000088",
+        "amount": 120889.19,
+        "currency": "INR",
+        "channel": "net_banking",
+        "beneficiary_id": "BENE000216",
+        "device_id": "DEV000131",
+        "geo_event_id": "GEO000307"
+      },
+      {
+        "transaction_id": "TXN001564",
+        "timestamp": "2025-03-17T05:33:20",
+        "direction": "in",
+        "counterparty": "ACC000124",
+        "amount": 74504.07,
+        "currency": "INR",
+        "channel": "IMPS",
+        "beneficiary_id": "BENE000309",
+        "device_id": "DEV000192",
+        "geo_event_id": "GEO000431"
+      },
+      {
+        "transaction_id": "TXN001566",
+        "timestamp": "2025-03-17T07:41:02",
+        "direction": "out",
+        "counterparty": "ACC000012",
+        "amount": 267561.64,
+        "currency": "INR",
+        "channel": "net_banking",
+        "beneficiary_id": "BENE000389",
+        "device_id": "DEV000235",
+        "geo_event_id": "GEO000516"
+      },
+      {
+        "transaction_id": "TXN001408",
+        "timestamp": "2025-03-19T00:03:57",
+        "direction": "in",
+        "counterparty": "ACC000220",
+        "amount": 31035.06,
+        "currency": "INR",
+        "channel": "ATM",
+        "beneficiary_id": "BENE000550",
+        "device_id": "DEV000336",
+        "geo_event_id": "GEO000752"
+      }
+    ],
+    "summary": {
+      "total_inbound": 328325.77,
+      "total_outbound": 267561.64,
+      "outbound_to_inbound_ratio": 0.815,
+      "median_inbound_to_outbound_minutes": 127.7
+    },
+    "patterns": [
+      "rapid_fund_pass_through",
+      "high_outbound_inbound_ratio",
+      "multiple_counterparties"
+    ]
+  },
+  "generated_at": "2026-08-22T08:36:55.136945"
+}

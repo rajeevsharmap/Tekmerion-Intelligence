@@ -4,8 +4,8 @@ network_layer.py
 Network Evidence Layer for the Autonomous Financial Crime Investigation
 hackathon MVP.
 
-Answers "what happened AROUND this account?" - never "is this suspicious?"
-(that's detection_layer.py's job). This layer:
+Answers "what happened AROUND this account, for THIS case?" - never "is
+this suspicious?" (that's detection_layer.py's job). This layer:
 
     SMURFING / REVERSE_SMURFING -> NetworkX DiGraph, max depth 3,
                                     traversed against the GLOBAL transaction
@@ -13,16 +13,26 @@ Answers "what happened AROUND this account?" - never "is this suspicious?"
                                     alerted transactions) -> Cytoscape.js JSON
 
     MONEY_MULE                 -> inflow/outflow transaction timeline
+                                   (NOT a graph)
 
-    ACCOUNT_SWAP                -> security + transaction timeline
-                                    (SIM / device / geo / beneficiary / txn)
+    ACCOUNT_SWAP                -> behavioral transaction-vs-time timeline:
+                                   SIM/device/geo events plotted alongside
+                                   transaction amount/frequency, with a
+                                   baseline-vs-recent behavioral_summary
+                                   (NOT a graph)
+
+Every call to generate_network_evidence(store, case) is scoped to exactly
+ONE case - it returns one case-specific evidence response, never a batch.
+Persisting many cases' evidence (see __main__ below) means calling it once
+per case and writing one file per case_id, not building one shared object
+for all cases.
 
 Per spec section 19: discovering X -> Y -> Z -> A during traversal does
 NOT retroactively add TXN(Y,Z) / TXN(Z,A) to the originating case's alert
 list. Those become *contextual network evidence* only, wrapped separately
 via wrap_as_evidence(). If Z independently trips a rule, that's the
 Detection Agent's job to raise as its own alert/case - this layer never
-creates alerts or cases.
+creates alerts or cases, and never mutates the `case` object it's given.
 """
 
 import statistics
@@ -248,10 +258,20 @@ def build_money_mule_timeline(store, account_id, time_window=None):
 
 
 # ----------------------------------------------------------------------
-# 4. Account swap security + transaction timeline (NOT a graph)
+# 4. Account swap: behavioral transaction-vs-time timeline (NOT a graph)
 # ----------------------------------------------------------------------
-def build_account_swap_timeline(store, account_id, time_window=None):
+def build_account_swap_timeline(store, account_id, time_window=None, anchor_time=None):
+    """Security + transaction events over time, PLUS a behavioral_summary
+    comparing the account's normal baseline activity (value & frequency)
+    against the period right around the suspicious event - this is what
+    lets a "sudden increase in transaction value/frequency" actually be
+    observed rather than just listed as raw events. Bar/timeline chart
+    ready: each transaction event carries amount + timestamp + direction,
+    and behavioral_summary gives the before/after comparison to annotate it
+    with."""
     events = []
+    all_txns = sorted(store.inbound_by_account.get(account_id, []) + store.outbound_by_account.get(account_id, []),
+                       key=lambda t: t["timestamp"])
 
     for g in store.geo_by_account.get(account_id, []):
         events.append({
@@ -281,22 +301,24 @@ def build_account_swap_timeline(store, account_id, time_window=None):
                 "sim_change_detected": True,
             })
 
-    for t in store.outbound_by_account.get(account_id, []):
-        bene = store.bene_by_id.get(t.get("beneficiary_id"))
+    for t in all_txns:
+        is_out = t["sender_account_id"] == account_id
+        bene = store.bene_by_id.get(t.get("beneficiary_id")) if is_out else None
         events.append({
             "event_id": t["transaction_id"],
             "timestamp": t["timestamp"],
             "event_type": "transaction",
-            "direction": "out",
+            "direction": "out" if is_out else "in",
             "amount": t["amount"],
             "currency": t["currency"],
-            "beneficiary_id": t.get("beneficiary_id") or None,
+            "beneficiary_id": (t.get("beneficiary_id") or None) if is_out else None,
             "is_first_time_beneficiary": bool(bene and bene["is_first_time_beneficiary"]),
         })
 
     if time_window:
         start, end = time_window["start"], time_window["end"]
         events = [e for e in events if start <= e["timestamp"] <= end]
+        all_txns = [t for t in all_txns if start <= t["timestamp"] <= end]
 
     events.sort(key=lambda e: e["timestamp"])
 
@@ -305,8 +327,10 @@ def build_account_swap_timeline(store, account_id, time_window=None):
     device_events = [e for e in events if e["event_type"] == "device_change" and not e["is_trusted_device"]]
     geo_jumps = [e for e in events if e["event_type"] == "geo" and e["distance_from_last_location_km"] > 500]
     txn_events = [e for e in events if e["event_type"] == "transaction"]
+    out_txn_events = [e for e in txn_events if e["direction"] == "out"]
 
-    for txn in txn_events:
+    account = store.accounts_by_id.get(account_id)
+    for txn in out_txn_events:
         if any(s["timestamp"] <= txn["timestamp"] and (txn["timestamp"] - s["timestamp"]) <= timedelta(hours=24) for s in sim_events):
             patterns.append("sim_change_before_transaction")
         if any(d["timestamp"] <= txn["timestamp"] and (txn["timestamp"] - d["timestamp"]) <= timedelta(hours=24) for d in device_events):
@@ -315,9 +339,17 @@ def build_account_swap_timeline(store, account_id, time_window=None):
             patterns.append("rapid_geographic_change")
         if txn.get("is_first_time_beneficiary"):
             patterns.append("new_beneficiary")
-        account = store.accounts_by_id.get(account_id)
         if account and txn["amount"] > 3 * account["avg_monthly_txn_amount"]:
             patterns.append("high_value_transaction")
+
+    # Behavioral baseline vs. the window right around the anchor event - this is
+    # what makes "sudden increase in value/frequency" an observable number, not
+    # just a qualitative pattern label.
+    behavioral_summary = _compute_behavioral_summary(all_txns, anchor_time)
+    if behavioral_summary.get("amount_deviation_ratio") and behavioral_summary["amount_deviation_ratio"] >= 3:
+        patterns.append("sudden_value_increase")
+    if behavioral_summary.get("frequency_deviation_ratio") and behavioral_summary["frequency_deviation_ratio"] >= 3:
+        patterns.append("sudden_frequency_increase")
     patterns = sorted(set(patterns))
 
     for e in events:
@@ -326,9 +358,50 @@ def build_account_swap_timeline(store, account_id, time_window=None):
     return {
         "account_id": account_id,
         "events": events,
+        "behavioral_summary": behavioral_summary,
         "patterns": patterns,
         "source_transactions": [e["event_id"] for e in txn_events],
     }
+
+
+def _compute_behavioral_summary(all_txns, anchor_time, recent_window_hours=48):
+    """Splits an account's transactions into "baseline" (everything more than
+    `recent_window_hours` from the anchor) and "recent" (within that window)
+    and compares average amount and daily frequency between the two - the
+    numeric backbone for a "normal activity vs sudden change" bar/timeline
+    chart."""
+    if not all_txns or anchor_time is None:
+        return {"baseline_avg_amount": None, "baseline_avg_daily_count": None,
+                "recent_avg_amount": None, "recent_daily_count": None,
+                "amount_deviation_ratio": None, "frequency_deviation_ratio": None,
+                "anchor_time": anchor_time.isoformat() if anchor_time else None}
+
+    lo = anchor_time - timedelta(hours=recent_window_hours)
+    hi = anchor_time + timedelta(hours=recent_window_hours)
+    baseline = [t for t in all_txns if not (lo <= t["timestamp"] <= hi)]
+    recent = [t for t in all_txns if lo <= t["timestamp"] <= hi]
+
+    baseline_span_days = max(1.0, (all_txns[-1]["timestamp"] - all_txns[0]["timestamp"]).total_seconds() / 86400
+                              - (2 * recent_window_hours / 24))
+    baseline_avg_amount = round(statistics.mean(t["amount"] for t in baseline), 2) if baseline else None
+    baseline_avg_daily_count = round(len(baseline) / baseline_span_days, 3) if baseline else None
+    recent_span_days = max(1.0, (2 * recent_window_hours) / 24)
+    recent_avg_amount = round(statistics.mean(t["amount"] for t in recent), 2) if recent else None
+    recent_daily_count = round(len(recent) / recent_span_days, 3) if recent else None
+
+    amount_ratio = round(recent_avg_amount / baseline_avg_amount, 2) if (recent_avg_amount and baseline_avg_amount) else None
+    freq_ratio = round(recent_daily_count / baseline_avg_daily_count, 2) if (recent_daily_count and baseline_avg_daily_count) else None
+
+    return {
+        "baseline_avg_amount": baseline_avg_amount,
+        "baseline_avg_daily_count": baseline_avg_daily_count,
+        "recent_avg_amount": recent_avg_amount,
+        "recent_daily_count": recent_daily_count,
+        "amount_deviation_ratio": amount_ratio,
+        "frequency_deviation_ratio": freq_ratio,
+        "anchor_time": anchor_time.isoformat(),
+    }
+
 
 
 # ----------------------------------------------------------------------
@@ -387,9 +460,21 @@ def _longest_path_from(graph, root, max_len=MAX_DEPTH + 1):
 # 6. Dispatcher + common response contract + Evidence Store wrapping
 # ----------------------------------------------------------------------
 def generate_network_evidence(store, case, time_window=None):
-    """POST /api/cases/{case_id}/network-evidence - picks the typology
-    strategy internally and returns the common response contract
-    (spec section 16)."""
+    """Case-scoped Network Evidence Layer entry point - the internal
+    equivalent of `GET /api/cases/{case_id}/network-evidence`.
+
+    ONE CASE IN -> ONE CASE-SCOPED EVIDENCE RESPONSE OUT. `case` must carry
+    at least case_id, account_id, primary_trigger, and created_at (the real
+    case object from bundle_alerts_into_cases, or a mock_data ground-truth
+    row - both shapes work since evidence_builder.gather_evidence() passes
+    the case straight through rather than reconstructing a subset of it).
+
+    Typology dispatch is intentionally a flat, explicit if/elif chain - one
+    branch per known typology, each calling exactly one builder function, no
+    shared "everything else" branch and no double-negative boolean logic.
+    An unrecognized typology gets its own explicit, clearly-labeled fallback
+    (network_type="unclassified") rather than silently being treated as
+    money_mule or anything else."""
     typology = case.get("primary_trigger") or (case.get("typologies") or [None])[0]
     account_id = case["account_id"]
     case_id = case["case_id"]
@@ -400,31 +485,35 @@ def generate_network_evidence(store, case, time_window=None):
                                       anchor_time=anchor_time)
         visualization_type, network_type = "network", "smurfing"
         evidence = {k: result[k] for k in ("root_account", "max_depth", "nodes", "edges")}
+
     elif typology == "reverse_smurfing":
         result = build_reverse_smurf_network(store, account_id, max_depth=MAX_DEPTH, anchor_time=anchor_time)
         visualization_type, network_type = "network", "reverse_smurfing"
         evidence = {k: result[k] for k in ("root_account", "max_depth", "nodes", "edges")}
-    else:
-        # money_mule / account_swap / fallback are per-account timelines, not graph
-        # traversals, so they can't explode combinatorially the way BFS can - but a
-        # full year of history still dilutes the signal, so default to a window
-        # around the anchor event unless the caller passed an explicit one.
-        default_window = None
-        if time_window is None and anchor_time is not None:
-            # money_mule pass-through happens within hours (MM-002: <=6h) - a 7-day
-            # window would dilute the median-gap signal with unrelated later activity.
-            span_days = 2 if typology == "money_mule" else 7
-            default_window = {"start": anchor_time - timedelta(days=span_days), "end": anchor_time + timedelta(days=span_days)}
-        effective_window = time_window or default_window
 
-        if typology == "money_mule" or typology not in ("smurfing", "reverse_smurfing", "account_swap"):
-            result = build_money_mule_timeline(store, account_id, time_window=effective_window)
-            visualization_type, network_type = "transaction_timeline", typology or "money_mule"
-            evidence = {"transactions": result["transactions"], "summary": result["summary"]}
-        else:  # account_swap
-            result = build_account_swap_timeline(store, account_id, time_window=effective_window)
-            visualization_type, network_type = "security_transaction_timeline", "account_swap"
-            evidence = {"events": result["events"]}
+    elif typology == "money_mule":
+        # rapid pass-through happens within hours (MM-002: <=6h) - a 7-day window
+        # would dilute the median-gap signal with unrelated later activity.
+        effective_window = time_window or _default_window(anchor_time, days=2)
+        result = build_money_mule_timeline(store, account_id, time_window=effective_window)
+        visualization_type, network_type = "transaction_timeline", "money_mule"
+        evidence = {"transactions": result["transactions"], "summary": result["summary"]}
+
+    elif typology == "account_swap":
+        effective_window = time_window or _default_window(anchor_time, days=7)
+        result = build_account_swap_timeline(store, account_id, time_window=effective_window, anchor_time=anchor_time)
+        visualization_type, network_type = "behavioral_transaction_timeline", "account_swap"
+        evidence = {"events": result["events"], "behavioral_summary": result["behavioral_summary"]}
+
+    else:
+        # explicit, honest fallback for anything that isn't one of the 4 known
+        # typologies (e.g. the mock dataset's "behavioral_deviation" ground-truth
+        # label) - a plain transaction timeline, clearly marked as unclassified
+        # rather than silently mislabeled as money_mule.
+        effective_window = time_window or _default_window(anchor_time, days=7)
+        result = build_money_mule_timeline(store, account_id, time_window=effective_window)
+        visualization_type, network_type = "transaction_timeline", "unclassified"
+        evidence = {"transactions": result["transactions"], "summary": result["summary"]}
 
     return {
         "case_id": case_id,
@@ -438,6 +527,12 @@ def generate_network_evidence(store, case, time_window=None):
         "generated_at": datetime.now().isoformat(),
         "network_scope": {"max_depth": MAX_DEPTH, "time_window_hours": CASE_BUNDLE_WINDOW_HOURS},
     }
+
+
+def _default_window(anchor_time, days):
+    if anchor_time is None:
+        return None
+    return {"start": anchor_time - timedelta(days=days), "end": anchor_time + timedelta(days=days)}
 
 
 def wrap_as_evidence(network_response, confidence="high"):
@@ -462,25 +557,35 @@ def wrap_as_evidence(network_response, confidence="high"):
 if __name__ == "__main__":
     import argparse
     import json
+    import os
 
-    parser = argparse.ArgumentParser(description="Generate network evidence for detected cases.")
+    parser = argparse.ArgumentParser(description="Generate CASE-SCOPED network evidence for detection_layer.py's "
+                                                   "own cases.csv output. Writes ONE evidence file per case_id - "
+                                                   "for the full Detection -> Case -> Evidence chain in one process, "
+                                                   "use run_pipeline.py instead.")
     parser.add_argument("--data_dir", default="mock_data")
-    parser.add_argument("--cases_file", default="mock_data/detected_cases.json")
-    parser.add_argument("--out_dir", default="mock_data")
-    parser.add_argument("--limit", type=int, default=8, help="max cases to render (keeps demo output small)")
+    parser.add_argument("--cases_file", default="pipeline_output/cases.json")
+    parser.add_argument("--out_dir", default="pipeline_output/evidence")
+    parser.add_argument("--limit", type=int, default=None, help="max cases to render (omit for all)")
     args = parser.parse_args()
+    os.makedirs(args.out_dir, exist_ok=True)
 
     store = DataStore(args.data_dir)
     with open(args.cases_file) as f:
         cases = json.load(f)
+    if args.limit:
+        cases = cases[: args.limit]
 
-    evidence_objects = []
-    for case in cases[: args.limit]:
+    for case in cases:
+        # ONE case in -> ONE case-scoped evidence response out. Each case is
+        # requested and persisted independently - never batched into one
+        # shared object.
         net = generate_network_evidence(store, case)
-        evidence_objects.append(wrap_as_evidence(net))
+        evidence = wrap_as_evidence(net)
+        with open(f"{args.out_dir}/{case['case_id']}.json", "w") as f:
+            json.dump(evidence, f, indent=2, default=str)
         print(f"{case['case_id']} [{case['primary_trigger']}] -> "
-              f"{net['visualization_type']}, {len(net['patterns'])} pattern(s), "
-              f"{len(net['source_transactions'])} source txn(s)")
+              f"{net['visualization_type']} ({net['network_type']}), {len(net['patterns'])} pattern(s), "
+              f"{len(net['source_transactions'])} source txn(s) -> {args.out_dir}/{case['case_id']}.json")
 
-    with open(f"{args.out_dir}/network_evidence.json", "w") as f:
-        json.dump(evidence_objects, f, indent=2, default=str)
+    print(f"\nWrote {len(cases)} case-scoped evidence file(s) to {args.out_dir}/")

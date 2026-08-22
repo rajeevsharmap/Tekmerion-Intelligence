@@ -1,0 +1,15 @@
+escalation_id,case_id,evidence_gap,completeness_score_at_escalation,primary_trigger,evidence_signals,escalated_at,escalated_by,ground_truth_label,ground_truth_recommended_action,status
+ESC000001,CASE000003,pending confirmation from telecom SIM-swap registry,86,account_swap,geo_impossible_travel,2025-03-18 04:56:41,A. Sharma,fraud,block,block
+ESC000002,CASE000005,pending confirmation from telecom SIM-swap registry,79,account_swap,sim_swap_detected,2025-05-26 01:06:04,A. Sharma,fraud,block,block
+ESC000003,CASE000007,beneficiary network ownership unverified beyond hop 2,72,money_mule,pass_through_velocity|unrelated_sender_concentration,2025-07-23 20:55:22,R. Verma,fraud,block,block
+ESC000004,CASE000010,source-of-funds documentation incomplete for structuring senders,60,smurfing,high_velocity_fan_in|structuring_below_threshold,2025-05-16 20:48:25,A. Sharma,fraud,block,escalated
+ESC000005,CASE000011,final-tier cash-out accounts not yet KYC-linked,36,reverse_smurfing,rapid_dispersal|structuring_fan_out,2025-10-16 04:24:20,R. Verma,fraud,block,block
+ESC000006,CASE000013,final-tier cash-out accounts not yet KYC-linked,67,reverse_smurfing,rapid_dispersal,2025-03-04 04:09:34,A. Sharma,fraud,monitor,escalated
+ESC000007,CASE000016,beneficiary network ownership unverified beyond hop 2,66,money_mule,pass_through_velocity|unrelated_sender_concentration,2025-09-21 05:30:26,P. Nair,legitimate,monitor,escalated
+ESC000008,CASE000017,pending confirmation from telecom SIM-swap registry,83,account_swap,untrusted_device_high_value_txn,2025-08-12 05:12:45,R. Verma,fraud,block,block
+ESC000009,CASE000018,pending confirmation from telecom SIM-swap registry,95,account_swap,untrusted_device_high_value_txn,2025-09-11 13:03:30,M. Reddy,fraud,block,block
+ESC000010,CASE000019,source-of-funds documentation incomplete for structuring senders,71,smurfing,high_velocity_fan_in|structuring_below_threshold,2025-05-01 20:13:39,R. Verma,fraud,escalate,escalated
+ESC000011,CASE000021,beneficiary network ownership unverified beyond hop 2,66,money_mule,unrelated_sender_concentration,2025-03-17 16:41:02,A. Sharma,fraud,block,escalated
+ESC000012,CASE000023,pending confirmation from telecom SIM-swap registry,91,account_swap,untrusted_device_high_value_txn,2025-03-04 19:26:08,P. Nair,fraud,block,escalated
+ESC000013,CASE000024,final-tier cash-out accounts not yet KYC-linked,46,reverse_smurfing,rapid_dispersal|structuring_fan_out,2025-10-26 22:24:24,A. Sharma,fraud,escalate,escalated
+ESC000014,CASE000035,additional transaction history required for full pattern confirmation,63,behavioral_deviation,new_channel_used,2025-08-03 07:54:07,S. Iyer,fraud,escalate,escalated

@@ -1,0 +1,371 @@
+{
+  "evidence_id": "EVID-9961DA53",
+  "case_id": "CASE-16635D67",
+  "evidence_type": "network_analysis",
+  "typology": "reverse_smurfing",
+  "source": "network_evidence_layer",
+  "confidence": "high",
+  "data": {
+    "visualization_type": "network",
+    "root_account": "ACC000141",
+    "max_depth": 3,
+    "nodes": [
+      {
+        "data": {
+          "id": "ACC000141",
+          "label": "ACC000141",
+          "role": "root",
+          "risk": "high"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000007",
+          "label": "ACC000007",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000166",
+          "label": "ACC000166",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000131",
+          "label": "ACC000131",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000026",
+          "label": "ACC000026",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000178",
+          "label": "ACC000178",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000021",
+          "label": "ACC000021",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000114",
+          "label": "ACC000114",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000009",
+          "label": "ACC000009",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000051",
+          "label": "ACC000051",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000053",
+          "label": "ACC000053",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000219",
+          "label": "ACC000219",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000032",
+          "label": "ACC000032",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000204",
+          "label": "ACC000204",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000119",
+          "label": "ACC000119",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000172",
+          "label": "ACC000172",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000047",
+          "label": "ACC000047",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000212",
+          "label": "ACC000212",
+          "role": "distribution_target",
+          "risk": "unknown"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "data": {
+          "id": "TXN001508",
+          "source": "ACC000141",
+          "target": "ACC000007",
+          "amount": 205765.46,
+          "currency": "INR",
+          "timestamp": "2025-08-13T17:07:08",
+          "depth": 1
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001509",
+          "source": "ACC000141",
+          "target": "ACC000166",
+          "amount": 208084.85,
+          "currency": "INR",
+          "timestamp": "2025-08-13T18:36:10",
+          "depth": 1
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001510",
+          "source": "ACC000141",
+          "target": "ACC000131",
+          "amount": 211255.47,
+          "currency": "INR",
+          "timestamp": "2025-08-13T20:01:25",
+          "depth": 1
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001511",
+          "source": "ACC000007",
+          "target": "ACC000026",
+          "amount": 47827.17,
+          "currency": "INR",
+          "timestamp": "2025-08-13T20:50:25",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001512",
+          "source": "ACC000007",
+          "target": "ACC000178",
+          "amount": 47166.62,
+          "currency": "INR",
+          "timestamp": "2025-08-13T23:22:51",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001513",
+          "source": "ACC000166",
+          "target": "ACC000021",
+          "amount": 43415.84,
+          "currency": "INR",
+          "timestamp": "2025-08-14T01:13:33",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001514",
+          "source": "ACC000166",
+          "target": "ACC000114",
+          "amount": 42102.47,
+          "currency": "INR",
+          "timestamp": "2025-08-14T03:56:19",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001515",
+          "source": "ACC000131",
+          "target": "ACC000009",
+          "amount": 48684.51,
+          "currency": "INR",
+          "timestamp": "2025-08-14T07:42:01",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001516",
+          "source": "ACC000131",
+          "target": "ACC000051",
+          "amount": 39857.96,
+          "currency": "INR",
+          "timestamp": "2025-08-14T08:14:46",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001517",
+          "source": "ACC000026",
+          "target": "ACC000053",
+          "amount": 32429.32,
+          "currency": "INR",
+          "timestamp": "2025-08-14T11:13:46",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001153",
+          "source": "ACC000178",
+          "target": "ACC000219",
+          "amount": 59088.58,
+          "currency": "INR",
+          "timestamp": "2025-08-11T17:27:22",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001152",
+          "source": "ACC000178",
+          "target": "ACC000032",
+          "amount": 14619.64,
+          "currency": "INR",
+          "timestamp": "2025-08-12T13:39:49",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001518",
+          "source": "ACC000178",
+          "target": "ACC000204",
+          "amount": 25438.31,
+          "currency": "INR",
+          "timestamp": "2025-08-14T14:44:02",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001519",
+          "source": "ACC000021",
+          "target": "ACC000119",
+          "amount": 22770.64,
+          "currency": "INR",
+          "timestamp": "2025-08-14T18:52:57",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001520",
+          "source": "ACC000114",
+          "target": "ACC000172",
+          "amount": 21516.83,
+          "currency": "INR",
+          "timestamp": "2025-08-14T22:14:56",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001521",
+          "source": "ACC000009",
+          "target": "ACC000047",
+          "amount": 41169.6,
+          "currency": "INR",
+          "timestamp": "2025-08-15T01:36:13",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001522",
+          "source": "ACC000051",
+          "target": "ACC000212",
+          "amount": 25182.01,
+          "currency": "INR",
+          "timestamp": "2025-08-15T02:57:09",
+          "depth": 3
+        }
+      }
+    ],
+    "patterns": [
+      {
+        "type": "one_to_many",
+        "source": "ACC000141",
+        "target_count": 3
+      },
+      {
+        "type": "amount_fragmentation",
+        "source": "ACC000141",
+        "transaction_count": 3
+      },
+      {
+        "type": "multi_hop_flow",
+        "path": [
+          "ACC000141",
+          "ACC000131",
+          "ACC000051",
+          "ACC000212"
+        ],
+        "depth": 3
+      }
+    ]
+  },
+  "generated_at": "2026-08-22T08:36:55.132873"
+}

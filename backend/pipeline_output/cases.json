@@ -1,11 +1,11 @@
 [
   {
-    "case_id": "CASE-5846664D",
+    "case_id": "CASE-3E9A1C25",
     "account_id": "ACC000001",
     "created_at": "2025-02-24T09:26:10",
     "primary_trigger": "money_mule",
     "alert_ids": [
-      "ALERT-MONE-7CB7CC8C"
+      "ALERT-MONE-C593D47A"
     ],
     "evidence_signals": [
       "inbound_transaction_count",
@@ -14,19 +14,16 @@
     "typologies": [
       "money_mule"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-C5AA26BB",
+    "case_id": "CASE-421022C2",
     "account_id": "ACC000002",
     "created_at": "2025-08-17T00:39:36",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-4418896F",
-      "ALERT-MONE-EC2BA869"
+      "ALERT-SMUR-D29AD271",
+      "ALERT-MONE-938E803E"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -40,18 +37,15 @@
       "money_mule",
       "smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-7A41D843",
+    "case_id": "CASE-62F7DEE9",
     "account_id": "ACC000006",
     "created_at": "2025-08-11T06:12:45",
     "primary_trigger": "account_swap",
     "alert_ids": [
-      "ALERT-ACCO-7AE0C880"
+      "ALERT-ACCO-68FB74FB"
     ],
     "evidence_signals": [
       "compound_account_takeover_signal",
@@ -66,19 +60,16 @@
     "typologies": [
       "account_swap"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-4DF6BEE2",
+    "case_id": "CASE-28B1C984",
     "account_id": "ACC000008",
     "created_at": "2025-07-22T18:55:22",
     "primary_trigger": "money_mule",
     "alert_ids": [
-      "ALERT-MONE-495F673B",
-      "ALERT-SMUR-1CE85CC5"
+      "ALERT-MONE-E5718464",
+      "ALERT-SMUR-64781CB3"
     ],
     "evidence_signals": [
       "inbound_transaction_count",
@@ -95,18 +86,15 @@
       "money_mule",
       "smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-2A0D8718",
+    "case_id": "CASE-41C64C33",
     "account_id": "ACC000010",
     "created_at": "2025-10-14T07:24:07",
     "primary_trigger": "reverse_smurfing",
     "alert_ids": [
-      "ALERT-REVE-7D9ED067"
+      "ALERT-REVE-6FCF0796"
     ],
     "evidence_signals": [
       "distribution_window_hours",
@@ -118,19 +106,16 @@
     "typologies": [
       "reverse_smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-FD16CAF9",
+    "case_id": "CASE-D832AF47",
     "account_id": "ACC000020",
     "created_at": "2025-05-15T00:18:25",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-263C17E1",
-      "ALERT-MONE-B9544495"
+      "ALERT-SMUR-AD6E7380",
+      "ALERT-MONE-B5691324"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -142,19 +127,16 @@
       "money_mule",
       "smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-41FB3398",
+    "case_id": "CASE-597BBE77",
     "account_id": "ACC000053",
     "created_at": "2025-05-18T13:11:49",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-E373553E",
-      "ALERT-MONE-F630D117"
+      "ALERT-SMUR-A3678874",
+      "ALERT-MONE-162267B8"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -168,18 +150,15 @@
       "money_mule",
       "smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-6EF457C5",
+    "case_id": "CASE-4FF60D4D",
     "account_id": "ACC000061",
     "created_at": "2025-10-26T08:15:42",
     "primary_trigger": "reverse_smurfing",
     "alert_ids": [
-      "ALERT-REVE-4DB98DC0"
+      "ALERT-REVE-1957C5AF"
     ],
     "evidence_signals": [
       "distribution_window_hours",
@@ -190,19 +169,16 @@
     "typologies": [
       "reverse_smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-A501AE47",
+    "case_id": "CASE-9F19DD87",
     "account_id": "ACC000080",
     "created_at": "2025-03-13T08:35:44",
     "primary_trigger": "money_mule",
     "alert_ids": [
-      "ALERT-MONE-92C7C3E3",
-      "ALERT-SMUR-FD9A985E"
+      "ALERT-MONE-1232741A",
+      "ALERT-SMUR-F717DD8B"
     ],
     "evidence_signals": [
       "inbound_transaction_count",
@@ -221,18 +197,15 @@
       "money_mule",
       "smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-7AE1940F",
+    "case_id": "CASE-D88F917C",
     "account_id": "ACC000095",
     "created_at": "2025-08-10T10:24:58",
     "primary_trigger": "account_swap",
     "alert_ids": [
-      "ALERT-ACCO-5EE15B60"
+      "ALERT-ACCO-9FCA004E"
     ],
     "evidence_signals": [
       "compound_account_takeover_signal",
@@ -248,18 +221,15 @@
     "typologies": [
       "account_swap"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-440123E6",
+    "case_id": "CASE-60DB9164",
     "account_id": "ACC000101",
     "created_at": "2025-03-03T09:09:48",
     "primary_trigger": "reverse_smurfing",
     "alert_ids": [
-      "ALERT-REVE-180D3D59"
+      "ALERT-REVE-12B35E03"
     ],
     "evidence_signals": [
       "distribution_window_hours",
@@ -271,18 +241,15 @@
     "typologies": [
       "reverse_smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-3AB10E91",
+    "case_id": "CASE-700F9CCD",
     "account_id": "ACC000103",
     "created_at": "2025-05-25T10:06:04",
     "primary_trigger": "account_swap",
     "alert_ids": [
-      "ALERT-ACCO-608E4B4D"
+      "ALERT-ACCO-F2DA7DA3"
     ],
     "evidence_signals": [
       "compound_account_takeover_signal",
@@ -297,19 +264,16 @@
     "typologies": [
       "account_swap"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-0889FCDE",
+    "case_id": "CASE-D799149E",
     "account_id": "ACC000109",
     "created_at": "2025-06-13T20:13:28",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-922E6E9E",
-      "ALERT-MONE-686E9A57"
+      "ALERT-SMUR-2AB1A89F",
+      "ALERT-MONE-725A6F95"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -323,19 +287,16 @@
       "money_mule",
       "smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-3EA8A4C5",
+    "case_id": "CASE-552778FC",
     "account_id": "ACC000115",
     "created_at": "2025-04-30T20:13:39",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-89E480E9",
-      "ALERT-MONE-BA8FBD85"
+      "ALERT-SMUR-CA20EA87",
+      "ALERT-MONE-28C6E433"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -347,18 +308,15 @@
       "money_mule",
       "smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-294A3EED",
+    "case_id": "CASE-94E6CFE7",
     "account_id": "ACC000115",
     "created_at": "2025-05-02T10:06:10",
     "primary_trigger": "account_swap",
     "alert_ids": [
-      "ALERT-ACCO-300C6AF8"
+      "ALERT-ACCO-59D47378"
     ],
     "evidence_signals": [
       "compound_account_takeover_signal",
@@ -373,19 +331,16 @@
     "typologies": [
       "account_swap"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-90745CF9",
+    "case_id": "CASE-7E3BDB16",
     "account_id": "ACC000120",
     "created_at": "2025-03-26T22:29:18",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-BD0689EB",
-      "ALERT-MONE-C66A466D"
+      "ALERT-SMUR-EACA47CF",
+      "ALERT-MONE-E952A194"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -397,18 +352,15 @@
       "money_mule",
       "smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-E58D3345",
+    "case_id": "CASE-16635D67",
     "account_id": "ACC000141",
     "created_at": "2025-08-13T17:07:08",
     "primary_trigger": "reverse_smurfing",
     "alert_ids": [
-      "ALERT-REVE-DB592543"
+      "ALERT-REVE-5C7A28C4"
     ],
     "evidence_signals": [
       "distribution_window_hours",
@@ -420,19 +372,16 @@
     "typologies": [
       "reverse_smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-36453E64",
+    "case_id": "CASE-F01A9B97",
     "account_id": "ACC000152",
     "created_at": "2025-03-17T05:33:20",
     "primary_trigger": "money_mule",
     "alert_ids": [
-      "ALERT-MONE-EF90C00B",
-      "ALERT-SMUR-E57446E4"
+      "ALERT-MONE-A19A9FFA",
+      "ALERT-SMUR-49E647BF"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -452,18 +401,15 @@
       "money_mule",
       "smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-983DEB89",
+    "case_id": "CASE-02B2367B",
     "account_id": "ACC000176",
     "created_at": "2025-05-11T12:44:06",
     "primary_trigger": "account_swap",
     "alert_ids": [
-      "ALERT-ACCO-70EC46F9"
+      "ALERT-ACCO-97D8FBE4"
     ],
     "evidence_signals": [
       "compound_account_takeover_signal",
@@ -478,19 +424,16 @@
     "typologies": [
       "account_swap"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-15E26CB9",
+    "case_id": "CASE-2C59C42E",
     "account_id": "ACC000183",
     "created_at": "2025-09-20T21:30:26",
     "primary_trigger": "money_mule",
     "alert_ids": [
-      "ALERT-MONE-795C386D",
-      "ALERT-SMUR-E56FED02"
+      "ALERT-MONE-1004D9D7",
+      "ALERT-SMUR-918EA546"
     ],
     "evidence_signals": [
       "inbound_transaction_count",
@@ -508,18 +451,15 @@
       "money_mule",
       "smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   },
   {
-    "case_id": "CASE-CF5EA69D",
+    "case_id": "CASE-4506B821",
     "account_id": "ACC000205",
     "created_at": "2025-09-16T17:12:13",
     "primary_trigger": "reverse_smurfing",
     "alert_ids": [
-      "ALERT-REVE-7ACF8EA0"
+      "ALERT-REVE-31199B13"
     ],
     "evidence_signals": [
       "distribution_window_hours",
@@ -531,9 +471,6 @@
     "typologies": [
       "reverse_smurfing"
     ],
-    "completeness_score": 0,
-    "assigned_investigator_tier": "junior",
-    "escalated": false,
     "status": "open"
   }
 ]

@@ -89,6 +89,7 @@ class Registry:
         self.cases = []
         self.case_escalations = []
         self._counters = {}
+        self.txn_by_id = {}
 
     def next_id(self, prefix):
         self._counters[prefix] = self._counters.get(prefix, 0) + 1
@@ -281,6 +282,7 @@ def make_txn(sender_id, receiver_id, ts, amount, ttype, channel, bene_id, device
         "balance_after": round(random.uniform(1000, 500000), 2),
     }
     REG.transactions.append(txn)
+    REG.txn_by_id[tid] = txn
     return txn
 
 
@@ -557,6 +559,11 @@ def generate_suspected_alerts_for_network(net):
     for txn_id in net["transactions"][:6]:  # cap alerts per network to keep volume sane
         rule, lo, hi = random.choice(rules)
         aid = REG.next_id("ALRT")
+        # anchor the alert to the ACTUAL transaction it's about, not an independent
+        # random date - the case's evidence-window anchor (built later from this
+        # timestamp) must point at the real event, or network_layer's time-windowed
+        # traversal ends up scoped to the wrong part of the year entirely.
+        txn_ts = REG.txn_by_id[txn_id]["timestamp"]
         alert = {
             "alert_id": aid,
             "account_id": acc_id,
@@ -564,7 +571,7 @@ def generate_suspected_alerts_for_network(net):
             "alert_type": net["typology"],
             "triggering_rule": rule,
             "alert_score": random.randint(lo, hi),
-            "created_at": rand_date(datetime(2025, 2, 1), END_DATE).strftime("%Y-%m-%d %H:%M:%S"),
+            "created_at": txn_ts,
             "linked_case_id": "",  # filled in once cases are built
         }
         alerts.append(alert)
@@ -588,7 +595,7 @@ def generate_background_alerts(accounts, n=15):
             "alert_type": "behavioral_deviation",
             "triggering_rule": random.choice(["amount_above_avg", "new_channel_used", "off_hours_txn"]),
             "alert_score": random.randint(20, 45),
-            "created_at": rand_date(datetime(2025, 2, 1), END_DATE).strftime("%Y-%m-%d %H:%M:%S"),
+            "created_at": t["timestamp"],  # anchor to the actual flagged transaction, not a random date
             "linked_case_id": "",
         }
         alerts.append(alert)
@@ -627,7 +634,6 @@ def build_case_from_network(net, alerts):
             random.choice(["block", "escalate", "monitor"])
 
     escalated = ground_truth_required_tier == "senior" or completeness < 55
-    assigned_tier = "junior"  # junior always sees it first per workflow
     status = "open"
     if escalated:
         status = "escalated"
@@ -639,12 +645,20 @@ def build_case_from_network(net, alerts):
     case = {
         "case_id": case_id,
         "account_id": acc_id,
-        "created_at": rand_date(datetime(2025, 2, 1), END_DATE).strftime("%Y-%m-%d %H:%M:%S"),
+        # anchor to when the flagged activity actually happened (latest alert in the
+        # cluster), not an independent random date - this is later used as the anchor
+        # for network-evidence time-windowing, so it must point at the real event.
+        "created_at": max(a["created_at"] for a in alerts),
         "primary_trigger": primary_trigger,
         "evidence_signals": "|".join(evidence_signals),
         "completeness_score": completeness,
-        "assigned_investigator_tier": "senior" if escalated else "junior",
-        "escalated": escalated,
+        # NOTE: no assigned_investigator_tier / escalated column here on purpose.
+        # Investigator tier assignment and escalation are a human-in-the-loop /
+        # action-stage decision, not something Case Intake or this ground-truth
+        # generator should assert as a "live" fact. `status` below is this file's
+        # ground-truth OUTCOME (what the full system eventually arrived at, for
+        # evaluation) - it is not something the live Detection/Case-Intake pipeline
+        # ever produces.
         "status": status,
         "ground_truth_label": ground_truth_label,
         "ground_truth_required_tier": ground_truth_required_tier,
@@ -694,8 +708,6 @@ def build_case_from_background_alert(alert, accounts_by_id):
         "primary_trigger": "behavioral_deviation",
         "evidence_signals": alert["triggering_rule"],
         "completeness_score": completeness,
-        "assigned_investigator_tier": "senior" if escalated else "junior",
-        "escalated": escalated,
         "status": status,
         "ground_truth_label": ground_truth_label,
         "ground_truth_required_tier": "senior" if escalated else "junior",
@@ -740,7 +752,7 @@ FIELDNAMES = {
                        "date_added", "is_first_time_beneficiary", "is_verified", "beneficiary_risk_flag",
                        "total_transfers_to_date"],
     "cases": ["case_id", "account_id", "created_at", "primary_trigger", "evidence_signals",
-              "completeness_score", "assigned_investigator_tier", "escalated", "status",
+              "completeness_score", "status",
               "ground_truth_label", "ground_truth_required_tier", "ground_truth_recommended_action"],
     "case_escalations": ["escalation_id", "case_id", "evidence_gap", "completeness_score_at_escalation",
                           "primary_trigger", "evidence_signals", "escalated_at", "escalated_by",
@@ -749,9 +761,24 @@ FIELDNAMES = {
                           "alert_score", "created_at", "linked_case_id"],
 }
 
+# The 3 tables above (cases, case_escalations, suspected_alerts) are GROUND TRUTH for
+# offline evaluation only - they represent what a hypothetical fully-built system
+# (Detection + Investigation + human-in-the-loop escalation) would have concluded.
+# They are written with a `ground_truth_` prefix on disk specifically so they can
+# never be mistaken for the live pipeline's own output (see run_pipeline.py, which
+# writes the REAL suspected_alerts.csv / cases.csv from actual detection_layer.py +
+# detection_layer.bundle_alerts_into_cases() output). Live detection/case-intake code
+# must never read these files or the ground_truth_* columns within them.
+GROUND_TRUTH_FILENAME_OVERRIDES = {
+    "cases": "ground_truth_cases",
+    "case_escalations": "ground_truth_case_escalations",
+    "suspected_alerts": "ground_truth_alerts",
+}
+
 
 def write_csv(rows, table_name, outdir):
-    path = os.path.join(outdir, f"{table_name}.csv")
+    filename = GROUND_TRUTH_FILENAME_OVERRIDES.get(table_name, table_name)
+    path = os.path.join(outdir, f"{filename}.csv")
     with open(path, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=FIELDNAMES[table_name])
         writer.writeheader()

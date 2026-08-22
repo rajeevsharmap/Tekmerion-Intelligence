@@ -2,7 +2,9 @@
 eval_pipeline.py
 ===================
 Runs the full investigation pipeline (Path A / Path B / Contradiction Agent)
-against every case in mock_data/cases.csv.
+against every case in mock_data/ground_truth_cases.csv (the mock generator's
+ground-truth labels - never the live pipeline's own suspected_alerts.csv/
+cases.csv output, which have no ground_truth_label to score against).
 
 Terminal display behavior:
     - Shows each case immediately when it starts.
@@ -48,7 +50,7 @@ from agents.contradiction_agent import resolve_contradiction
 CALL_SPACING_SECONDS = 8
 
 RESULTS_FILE = "mock_data/eval_results.csv"
-CASES_FILE = "mock_data/cases.csv"
+CASES_FILE = "mock_data/ground_truth_cases.csv"
 DATA_DIR = "mock_data"
 
 

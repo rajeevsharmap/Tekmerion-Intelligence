@@ -1,0 +1,85 @@
+{
+  "evidence_id": "EVID-56103FA9",
+  "case_id": "CASE-9F19DD87",
+  "evidence_type": "network_analysis",
+  "typology": "money_mule",
+  "source": "network_evidence_layer",
+  "confidence": "high",
+  "data": {
+    "visualization_type": "transaction_timeline",
+    "transactions": [
+      {
+        "transaction_id": "TXN001570",
+        "timestamp": "2025-03-13T07:07:44",
+        "direction": "in",
+        "counterparty": "ACC000009",
+        "amount": 133902.23,
+        "currency": "INR",
+        "channel": "UPI",
+        "beneficiary_id": "BENE000027",
+        "device_id": "DEV000015",
+        "geo_event_id": "GEO000033"
+      },
+      {
+        "transaction_id": "TXN001568",
+        "timestamp": "2025-03-13T08:08:44",
+        "direction": "in",
+        "counterparty": "ACC000085",
+        "amount": 105300.43,
+        "currency": "INR",
+        "channel": "net_banking",
+        "beneficiary_id": "BENE000207",
+        "device_id": "DEV000127",
+        "geo_event_id": "GEO000289"
+      },
+      {
+        "transaction_id": "TXN001567",
+        "timestamp": "2025-03-13T08:31:44",
+        "direction": "in",
+        "counterparty": "ACC000201",
+        "amount": 21354.85,
+        "currency": "INR",
+        "channel": "UPI",
+        "beneficiary_id": "BENE000508",
+        "device_id": "DEV000306",
+        "geo_event_id": "GEO000687"
+      },
+      {
+        "transaction_id": "TXN001569",
+        "timestamp": "2025-03-13T08:35:44",
+        "direction": "in",
+        "counterparty": "ACC000018",
+        "amount": 130918.05,
+        "currency": "INR",
+        "channel": "UPI",
+        "beneficiary_id": "BENE000048",
+        "device_id": "DEV000028",
+        "geo_event_id": "GEO000063"
+      },
+      {
+        "transaction_id": "TXN001571",
+        "timestamp": "2025-03-13T13:54:09",
+        "direction": "out",
+        "counterparty": "ACC000200",
+        "amount": 352328.0,
+        "currency": "INR",
+        "channel": "net_banking",
+        "beneficiary_id": "BENE000197",
+        "device_id": "DEV000120",
+        "geo_event_id": "GEO000273"
+      }
+    ],
+    "summary": {
+      "total_inbound": 391475.56,
+      "total_outbound": 352328.0,
+      "outbound_to_inbound_ratio": 0.9,
+      "median_inbound_to_outbound_minutes": 318.4
+    },
+    "patterns": [
+      "rapid_fund_pass_through",
+      "high_outbound_inbound_ratio",
+      "multiple_counterparties"
+    ]
+  },
+  "generated_at": "2026-08-22T08:36:55.106822"
+}

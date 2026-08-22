@@ -1,6 +1,6 @@
 [
   {
-    "alert_id": "ALERT-MONE-7CB7CC8C",
+    "alert_id": "ALERT-MONE-C593D47A",
     "account_id": "ACC000001",
     "transaction_id": "TXN001576",
     "typology": "money_mule",
@@ -25,10 +25,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-02-24T09:26:10",
-    "linked_case_id": "CASE-5846664D"
+    "linked_case_id": "CASE-3E9A1C25"
   },
   {
-    "alert_id": "ALERT-SMUR-4418896F",
+    "alert_id": "ALERT-SMUR-D29AD271",
     "account_id": "ACC000002",
     "transaction_id": "TXN001455",
     "typology": "smurfing",
@@ -59,10 +59,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-08-17T00:39:36",
-    "linked_case_id": "CASE-C5AA26BB"
+    "linked_case_id": "CASE-421022C2"
   },
   {
-    "alert_id": "ALERT-MONE-EC2BA869",
+    "alert_id": "ALERT-MONE-938E803E",
     "account_id": "ACC000002",
     "transaction_id": "TXN001455",
     "typology": "money_mule",
@@ -92,10 +92,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-08-17T00:39:36",
-    "linked_case_id": "CASE-C5AA26BB"
+    "linked_case_id": "CASE-421022C2"
   },
   {
-    "alert_id": "ALERT-ACCO-7AE0C880",
+    "alert_id": "ALERT-ACCO-68FB74FB",
     "account_id": "ACC000006",
     "transaction_id": "TXN001591",
     "typology": "account_swap",
@@ -148,10 +148,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-08-11T06:12:45",
-    "linked_case_id": "CASE-7A41D843"
+    "linked_case_id": "CASE-62F7DEE9"
   },
   {
-    "alert_id": "ALERT-SMUR-1CE85CC5",
+    "alert_id": "ALERT-SMUR-64781CB3",
     "account_id": "ACC000008",
     "transaction_id": "TXN001561",
     "typology": "smurfing",
@@ -182,10 +182,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-07-22T21:32:23",
-    "linked_case_id": "CASE-4DF6BEE2"
+    "linked_case_id": "CASE-28B1C984"
   },
   {
-    "alert_id": "ALERT-MONE-495F673B",
+    "alert_id": "ALERT-MONE-E5718464",
     "account_id": "ACC000008",
     "transaction_id": "TXN001561",
     "typology": "money_mule",
@@ -229,10 +229,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-07-22T18:55:22",
-    "linked_case_id": "CASE-4DF6BEE2"
+    "linked_case_id": "CASE-28B1C984"
   },
   {
-    "alert_id": "ALERT-REVE-7D9ED067",
+    "alert_id": "ALERT-REVE-6FCF0796",
     "account_id": "ACC000010",
     "transaction_id": "TXN001476",
     "typology": "reverse_smurfing",
@@ -272,10 +272,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-10-14T07:24:07",
-    "linked_case_id": "CASE-2A0D8718"
+    "linked_case_id": "CASE-41C64C33"
   },
   {
-    "alert_id": "ALERT-SMUR-263C17E1",
+    "alert_id": "ALERT-SMUR-AD6E7380",
     "account_id": "ACC000020",
     "transaction_id": "TXN001440",
     "typology": "smurfing",
@@ -301,10 +301,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-05-15T00:18:25",
-    "linked_case_id": "CASE-FD16CAF9"
+    "linked_case_id": "CASE-D832AF47"
   },
   {
-    "alert_id": "ALERT-MONE-B9544495",
+    "alert_id": "ALERT-MONE-B5691324",
     "account_id": "ACC000020",
     "transaction_id": "TXN001440",
     "typology": "money_mule",
@@ -329,10 +329,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-05-15T00:18:25",
-    "linked_case_id": "CASE-FD16CAF9"
+    "linked_case_id": "CASE-D832AF47"
   },
   {
-    "alert_id": "ALERT-SMUR-E373553E",
+    "alert_id": "ALERT-SMUR-A3678874",
     "account_id": "ACC000053",
     "transaction_id": "TXN001424",
     "typology": "smurfing",
@@ -363,10 +363,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-05-18T13:11:49",
-    "linked_case_id": "CASE-41FB3398"
+    "linked_case_id": "CASE-597BBE77"
   },
   {
-    "alert_id": "ALERT-MONE-F630D117",
+    "alert_id": "ALERT-MONE-162267B8",
     "account_id": "ACC000053",
     "transaction_id": "TXN001424",
     "typology": "money_mule",
@@ -396,10 +396,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-05-18T13:11:49",
-    "linked_case_id": "CASE-41FB3398"
+    "linked_case_id": "CASE-597BBE77"
   },
   {
-    "alert_id": "ALERT-REVE-4DB98DC0",
+    "alert_id": "ALERT-REVE-1957C5AF",
     "account_id": "ACC000061",
     "transaction_id": "TXN001541",
     "typology": "reverse_smurfing",
@@ -434,10 +434,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-10-26T08:15:42",
-    "linked_case_id": "CASE-6EF457C5"
+    "linked_case_id": "CASE-4FF60D4D"
   },
   {
-    "alert_id": "ALERT-SMUR-FD9A985E",
+    "alert_id": "ALERT-SMUR-F717DD8B",
     "account_id": "ACC000080",
     "transaction_id": "TXN001571",
     "typology": "smurfing",
@@ -473,10 +473,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-03-13T13:54:09",
-    "linked_case_id": "CASE-A501AE47"
+    "linked_case_id": "CASE-9F19DD87"
   },
   {
-    "alert_id": "ALERT-MONE-92C7C3E3",
+    "alert_id": "ALERT-MONE-1232741A",
     "account_id": "ACC000080",
     "transaction_id": "TXN001571",
     "typology": "money_mule",
@@ -525,10 +525,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-03-13T08:35:44",
-    "linked_case_id": "CASE-A501AE47"
+    "linked_case_id": "CASE-9F19DD87"
   },
   {
-    "alert_id": "ALERT-ACCO-5EE15B60",
+    "alert_id": "ALERT-ACCO-9FCA004E",
     "account_id": "ACC000095",
     "transaction_id": "TXN001593",
     "typology": "account_swap",
@@ -587,10 +587,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-08-10T10:24:58",
-    "linked_case_id": "CASE-7AE1940F"
+    "linked_case_id": "CASE-D88F917C"
   },
   {
-    "alert_id": "ALERT-REVE-180D3D59",
+    "alert_id": "ALERT-REVE-12B35E03",
     "account_id": "ACC000101",
     "transaction_id": "TXN001524",
     "typology": "reverse_smurfing",
@@ -630,10 +630,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-03-03T09:09:48",
-    "linked_case_id": "CASE-440123E6"
+    "linked_case_id": "CASE-60DB9164"
   },
   {
-    "alert_id": "ALERT-ACCO-608E4B4D",
+    "alert_id": "ALERT-ACCO-F2DA7DA3",
     "account_id": "ACC000103",
     "transaction_id": "TXN001594",
     "typology": "account_swap",
@@ -686,10 +686,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-05-25T10:06:04",
-    "linked_case_id": "CASE-3AB10E91"
+    "linked_case_id": "CASE-700F9CCD"
   },
   {
-    "alert_id": "ALERT-SMUR-922E6E9E",
+    "alert_id": "ALERT-SMUR-2AB1A89F",
     "account_id": "ACC000109",
     "transaction_id": "TXN001471",
     "typology": "smurfing",
@@ -720,10 +720,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-06-13T20:13:28",
-    "linked_case_id": "CASE-0889FCDE"
+    "linked_case_id": "CASE-D799149E"
   },
   {
-    "alert_id": "ALERT-MONE-686E9A57",
+    "alert_id": "ALERT-MONE-725A6F95",
     "account_id": "ACC000109",
     "transaction_id": "TXN001471",
     "typology": "money_mule",
@@ -753,10 +753,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-06-13T20:13:28",
-    "linked_case_id": "CASE-0889FCDE"
+    "linked_case_id": "CASE-D799149E"
   },
   {
-    "alert_id": "ALERT-SMUR-89E480E9",
+    "alert_id": "ALERT-SMUR-CA20EA87",
     "account_id": "ACC000115",
     "transaction_id": "TXN001449",
     "typology": "smurfing",
@@ -782,10 +782,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-04-30T20:13:39",
-    "linked_case_id": "CASE-3EA8A4C5"
+    "linked_case_id": "CASE-552778FC"
   },
   {
-    "alert_id": "ALERT-MONE-BA8FBD85",
+    "alert_id": "ALERT-MONE-28C6E433",
     "account_id": "ACC000115",
     "transaction_id": "TXN001449",
     "typology": "money_mule",
@@ -810,10 +810,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-04-30T20:13:39",
-    "linked_case_id": "CASE-3EA8A4C5"
+    "linked_case_id": "CASE-552778FC"
   },
   {
-    "alert_id": "ALERT-ACCO-300C6AF8",
+    "alert_id": "ALERT-ACCO-59D47378",
     "account_id": "ACC000115",
     "transaction_id": "TXN001595",
     "typology": "account_swap",
@@ -866,10 +866,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-05-02T10:06:10",
-    "linked_case_id": "CASE-294A3EED"
+    "linked_case_id": "CASE-94E6CFE7"
   },
   {
-    "alert_id": "ALERT-SMUR-BD0689EB",
+    "alert_id": "ALERT-SMUR-EACA47CF",
     "account_id": "ACC000120",
     "transaction_id": "TXN001414",
     "typology": "smurfing",
@@ -895,10 +895,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-03-26T22:29:18",
-    "linked_case_id": "CASE-90745CF9"
+    "linked_case_id": "CASE-7E3BDB16"
   },
   {
-    "alert_id": "ALERT-MONE-C66A466D",
+    "alert_id": "ALERT-MONE-E952A194",
     "account_id": "ACC000120",
     "transaction_id": "TXN001414",
     "typology": "money_mule",
@@ -923,10 +923,10 @@
     "recommended_initial_action": "monitor",
     "case_required": true,
     "created_at": "2025-03-26T22:29:18",
-    "linked_case_id": "CASE-90745CF9"
+    "linked_case_id": "CASE-7E3BDB16"
   },
   {
-    "alert_id": "ALERT-REVE-DB592543",
+    "alert_id": "ALERT-REVE-5C7A28C4",
     "account_id": "ACC000141",
     "transaction_id": "TXN001510",
     "typology": "reverse_smurfing",
@@ -966,10 +966,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-08-13T17:07:08",
-    "linked_case_id": "CASE-E58D3345"
+    "linked_case_id": "CASE-16635D67"
   },
   {
-    "alert_id": "ALERT-SMUR-E57446E4",
+    "alert_id": "ALERT-SMUR-49E647BF",
     "account_id": "ACC000152",
     "transaction_id": "TXN001566",
     "typology": "smurfing",
@@ -1011,10 +1011,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-03-17T07:41:02",
-    "linked_case_id": "CASE-36453E64"
+    "linked_case_id": "CASE-F01A9B97"
   },
   {
-    "alert_id": "ALERT-MONE-EF90C00B",
+    "alert_id": "ALERT-MONE-A19A9FFA",
     "account_id": "ACC000152",
     "transaction_id": "TXN001566",
     "typology": "money_mule",
@@ -1063,10 +1063,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-03-17T05:33:20",
-    "linked_case_id": "CASE-36453E64"
+    "linked_case_id": "CASE-F01A9B97"
   },
   {
-    "alert_id": "ALERT-ACCO-70EC46F9",
+    "alert_id": "ALERT-ACCO-97D8FBE4",
     "account_id": "ACC000176",
     "transaction_id": "TXN001597",
     "typology": "account_swap",
@@ -1120,10 +1120,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-05-11T12:44:06",
-    "linked_case_id": "CASE-983DEB89"
+    "linked_case_id": "CASE-02B2367B"
   },
   {
-    "alert_id": "ALERT-SMUR-E56FED02",
+    "alert_id": "ALERT-SMUR-918EA546",
     "account_id": "ACC000183",
     "transaction_id": "TXN001590",
     "typology": "smurfing",
@@ -1159,10 +1159,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-09-20T21:47:45",
-    "linked_case_id": "CASE-15E26CB9"
+    "linked_case_id": "CASE-2C59C42E"
   },
   {
-    "alert_id": "ALERT-MONE-795C386D",
+    "alert_id": "ALERT-MONE-1004D9D7",
     "account_id": "ACC000183",
     "transaction_id": "TXN001590",
     "typology": "money_mule",
@@ -1206,10 +1206,10 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-09-20T21:30:26",
-    "linked_case_id": "CASE-15E26CB9"
+    "linked_case_id": "CASE-2C59C42E"
   },
   {
-    "alert_id": "ALERT-REVE-7ACF8EA0",
+    "alert_id": "ALERT-REVE-31199B13",
     "account_id": "ACC000205",
     "transaction_id": "TXN001494",
     "typology": "reverse_smurfing",
@@ -1249,6 +1249,6 @@
     "recommended_initial_action": "escalate",
     "case_required": true,
     "created_at": "2025-09-16T17:12:13",
-    "linked_case_id": "CASE-CF5EA69D"
+    "linked_case_id": "CASE-4506B821"
   }
 ]

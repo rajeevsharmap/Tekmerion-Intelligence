@@ -549,8 +549,18 @@ def run_detection_pipeline(store):
 def bundle_alerts_into_cases(alerts, window_hours=CASE_BUNDLE_WINDOW_HOURS):
     """Case Intake (spec section 9): bundle triggered alerts for the same
     account_id that occur within CASE_BUNDLE_WINDOW_HOURS of each other into
-    a single case. Sets completeness_score=0 and status='open' - those are
-    the Investigation Auditor's job downstream, not the Detection Agent's."""
+    a single case.
+
+    Case Intake's job stops at: bundle alerts, assign a case_id, set status to
+    "open". It does NOT decide completeness (that's the Investigation
+    Auditor's job downstream) and it does NOT assign an investigator tier or
+    decide escalation (that's a human-in-the-loop / action-stage decision,
+    made only after the investigation has produced evidence - not something
+    Detection/Case-Intake can know at bundling time). Earlier versions of
+    this function set assigned_investigator_tier="junior" and escalated=False
+    here; both were removed because Case Intake has no basis to assert either
+    - "junior" was never actually decided by anything, just hardcoded, and a
+    case that's 30 seconds old cannot be "escalated" or not yet."""
     from datetime import datetime as _dt
     by_account = {}
     for a in alerts:
@@ -588,9 +598,6 @@ def bundle_alerts_into_cases(alerts, window_hours=CASE_BUNDLE_WINDOW_HOURS):
                 "alert_ids": [a["alert_id"] for a in cl],
                 "evidence_signals": evidence_signals,
                 "typologies": typologies,
-                "completeness_score": 0,
-                "assigned_investigator_tier": "junior",
-                "escalated": False,
                 "status": "open",
             }
             for a in cl:
@@ -599,14 +606,71 @@ def bundle_alerts_into_cases(alerts, window_hours=CASE_BUNDLE_WINDOW_HOURS):
     return cases
 
 
+# ----------------------------------------------------------------------
+# Persistence - the REAL, live pipeline's own output.
+#
+# This is deliberately separate from mock_data/ground_truth_*.csv (written by
+# generate_mock_data.py), which are synthetic ground-truth labels for offline
+# evaluation only. These two functions write what the Detection Agent and
+# Case Intake actually produced by running the rules against the DataStore -
+# no ground_truth_* fields exist here because live code never has access to
+# them and must never fabricate them.
+# ----------------------------------------------------------------------
+ALERT_CSV_FIELDS = ["alert_id", "account_id", "transaction_id", "typology", "triggered",
+                     "alert_score", "severity", "triggering_rules", "evidence_signals",
+                     "recommended_initial_action", "case_required", "created_at", "linked_case_id"]
+
+CASE_CSV_FIELDS = ["case_id", "account_id", "created_at", "primary_trigger", "alert_ids",
+                    "evidence_signals", "typologies", "status"]
+
+
+def persist_alerts_csv(alerts, path):
+    """Writes the Detection Agent's own live alerts to CSV - this project's
+    real suspected_alerts.csv."""
+    import csv
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=ALERT_CSV_FIELDS)
+        writer.writeheader()
+        for a in alerts:
+            row = dict(a)
+            row["triggering_rules"] = "|".join(a.get("triggering_rules", []))
+            row["evidence_signals"] = "|".join(s["signal"] for s in a.get("evidence_signals", []))
+            row["linked_case_id"] = a.get("linked_case_id", "")
+            writer.writerow({k: row.get(k, "") for k in ALERT_CSV_FIELDS})
+    return path
+
+
+def persist_cases_csv(cases, path):
+    """Writes Case Intake's own live cases to CSV - this project's real
+    cases.csv. Deliberately has NO status beyond "open"/whatever
+    bundle_alerts_into_cases set, no investigator tier, no escalation flag -
+    those belong to the human-in-the-loop/action stage, not here."""
+    import csv
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=CASE_CSV_FIELDS)
+        writer.writeheader()
+        for c in cases:
+            row = dict(c)
+            row["alert_ids"] = "|".join(c.get("alert_ids", []))
+            row["evidence_signals"] = "|".join(c.get("evidence_signals", []))
+            row["typologies"] = "|".join(c.get("typologies", []))
+            writer.writerow({k: row.get(k, "") for k in CASE_CSV_FIELDS})
+    return path
+
+
 if __name__ == "__main__":
     import argparse
     import json
+    import os
 
-    parser = argparse.ArgumentParser(description="Run the Detection Agent over a mock data directory.")
+    parser = argparse.ArgumentParser(description="Run the Detection Agent + Case Intake over a mock data directory. "
+                                                   "For the full Detection -> Case -> Evidence chain in one process, "
+                                                   "use run_pipeline.py instead - this entry point is for standalone "
+                                                   "testing of the Detection Layer alone.")
     parser.add_argument("--data_dir", default="mock_data")
-    parser.add_argument("--out_dir", default="mock_data")
+    parser.add_argument("--out_dir", default="pipeline_output")
     args = parser.parse_args()
+    os.makedirs(args.out_dir, exist_ok=True)
 
     store = DataStore(args.data_dir)
     alerts = run_detection_pipeline(store)
@@ -620,7 +684,10 @@ if __name__ == "__main__":
     print(f"Alerts triggered:   {len(alerts)}  {by_typology}")
     print(f"Cases created:      {len(cases)}")
 
-    with open(f"{args.out_dir}/detected_alerts.json", "w") as f:
+    persist_alerts_csv(alerts, f"{args.out_dir}/suspected_alerts.csv")
+    persist_cases_csv(cases, f"{args.out_dir}/cases.csv")
+    with open(f"{args.out_dir}/suspected_alerts.json", "w") as f:
         json.dump(alerts, f, indent=2, default=str)
-    with open(f"{args.out_dir}/detected_cases.json", "w") as f:
+    with open(f"{args.out_dir}/cases.json", "w") as f:
         json.dump(cases, f, indent=2, default=str)
+    print(f"Wrote {args.out_dir}/suspected_alerts.csv, cases.csv (+ .json copies)")

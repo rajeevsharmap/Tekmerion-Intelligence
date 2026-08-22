@@ -1,301 +1,1322 @@
 """
 visualize_network.py
-======================
-Quick NetworkX + matplotlib visualization of a case's fraud network -
-purely to eyeball what the graph looks like before wiring up a real
-frontend (Cytoscape.js etc). Reuses the exact same BFS traversal as
-network_layer.py's build_smurf_network / build_reverse_smurf_network,
-so what you see here is exactly what the Network Evidence Layer would
-hand to the frontend, just rendered with matplotlib instead of JSON.
+====================
 
-Usage (all arguments have sensible defaults - just run it):
+Case-scoped financial crime visualizer.
 
-    python3 visualize_network.py
+Visualization rules
+-------------------
 
-    # or from another script:
-    from visualize_network import visualize_case_network
-    visualize_case_network()                          # first smurfing/reverse_smurfing case found
-    visualize_case_network(typology="money_mule")      # first money-mule case, drawn as a timeline
-    visualize_case_network(case_id="CASE-9672AB3B")     # a specific case
+smurfing
+    -> directed NetworkX fraud network
+
+reverse_smurfing
+    -> directed NetworkX fraud network
+
+money_mule
+    -> transaction amount vs time
+
+account_swap
+    -> behavioral transaction amount vs time
+
+Important
+---------
+
+This script ONLY visualizes already-generated evidence.
+
+It does NOT:
+    - run detection
+    - regenerate evidence
+    - traverse the transaction database
+    - create PNG files
+    - modify cases
+
+Evidence source:
+
+    pipeline_output/evidence/<CASE_ID>.json
 """
 
 import json
 import os
+from datetime import datetime
 
-import matplotlib
-matplotlib.use("Agg")  # headless-safe; still writes a PNG you can open
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import networkx as nx
 
-from data_store import DataStore
-from network_layer import (
-    build_smurf_network,
-    build_reverse_smurf_network,
-    build_money_mule_timeline,
-    build_account_swap_timeline,
-    MAX_DEPTH,
+
+# ----------------------------------------------------------------------
+# Configuration
+# ----------------------------------------------------------------------
+
+EVIDENCE_DIR = os.path.join(
+    "pipeline_output",
+    "evidence",
 )
-from datetime import datetime, timedelta
+
+GRAPH_TYPOLOGIES = {
+    "smurfing",
+    "reverse_smurfing",
+}
+
+TIMELINE_TYPOLOGIES = {
+    "money_mule",
+    "account_swap",
+}
 
 ROLE_COLORS = {
-    "root": "#d62728",               # red
-    "source": "#1f77b4",             # blue  (feeds into the root - smurfing senders)
-    "downstream": "#2ca02c",         # green (root sends onward - smurfing chain)
-    "distribution_target": "#2ca02c",  # green (reverse-smurfing fan-out targets)
-    "related": "#7f7f7f",            # grey  (anything else picked up in traversal)
+    "root": "#d62728",
+    "source": "#1f77b4",
+    "downstream": "#2ca02c",
+    "distribution_target": "#2ca02c",
+    "related": "#7f7f7f",
 }
 
 
 # ----------------------------------------------------------------------
-# Helpers
+# Generic helpers
 # ----------------------------------------------------------------------
-def _pick_default_case(cases, typology=None, case_id=None):
-    if case_id:
-        for c in cases:
-            if c["case_id"] == case_id:
-                return c
-        raise ValueError(f"case_id {case_id!r} not found in the loaded cases file.")
 
-    graph_typologies = ("smurfing", "reverse_smurfing")
-    pool = [c for c in cases if (c.get("primary_trigger") == typology if typology else
-                                  c.get("primary_trigger") in graph_typologies)]
-    if not pool:
-        available = sorted({c.get("primary_trigger") for c in cases})
-        raise ValueError(f"No case found for typology={typology!r}. Typologies present: {available}")
-    return pool[0]
+def _load_case_evidence(case_id):
+    """Load persisted case evidence."""
+
+    path = os.path.join(
+        EVIDENCE_DIR,
+        f"{case_id}.json",
+    )
+
+    if not os.path.isfile(path):
+        raise FileNotFoundError(
+            f"No evidence file found for case {case_id}.\n"
+            f"Expected:\n{path}"
+        )
+
+    with open(
+        path,
+        "r",
+        encoding="utf-8",
+    ) as f:
+        evidence = json.load(f)
+
+    if not isinstance(evidence, dict):
+        raise ValueError(
+            "Evidence file does not contain a JSON object."
+        )
+
+    return evidence, path
 
 
-def _layered_positions(graph, root):
-    """Arrange nodes left-to-right by hop distance from root: senders feeding
-    the root sit to the left (negative depth), funds moving onward from the
-    root sit to the right (positive depth) - so fund flow reads left-to-right
-    like the spec's ASCII diagrams."""
-    depth = {root: 0}
+def _parse_time(value):
+    """Parse ISO timestamp."""
 
-    frontier, visited, d = [root], {root}, 0
-    while True:
-        d -= 1
-        nxt = []
-        for n in frontier:
-            for p in graph.predecessors(n):
-                if p not in visited:
-                    depth[p] = d
-                    visited.add(p)
-                    nxt.append(p)
-        if not nxt:
-            break
-        frontier = nxt
+    if not value:
+        return None
 
-    frontier, visited, d = [root], {root}, 0
-    while True:
-        d += 1
-        nxt = []
-        for n in frontier:
-            for s in graph.successors(n):
-                if s not in visited:
-                    depth[s] = d
-                    visited.add(s)
-                    nxt.append(s)
-        if not nxt:
-            break
-        frontier = nxt
+    if isinstance(value, datetime):
+        return value
 
-    for n in graph.nodes():
-        depth.setdefault(n, 0)
-
-    levels = {}
-    for n, dd in depth.items():
-        levels.setdefault(dd, []).append(n)
-
-    pos = {}
-    for dd, nodes_at_level in levels.items():
-        nodes_at_level = sorted(nodes_at_level)
-        n = len(nodes_at_level)
-        for i, node in enumerate(nodes_at_level):
-            pos[node] = (dd, i - (n - 1) / 2)
-    return pos
+    return datetime.fromisoformat(value)
 
 
 def _fmt_amount(amount):
+    """Format INR transaction amounts."""
+
+    if amount is None:
+        return ""
+
+    amount = float(amount)
+
     if amount >= 100000:
-        return f"₹{amount/100000:.1f}L"
+        return f"₹{amount / 100000:.1f}L"
+
     if amount >= 1000:
-        return f"₹{amount/1000:.0f}k"
+        return f"₹{amount / 1000:.0f}k"
+
     return f"₹{amount:.0f}"
 
 
-# ----------------------------------------------------------------------
-# Main entry point
-# ----------------------------------------------------------------------
-def visualize_case_network(
-    data_dir="mock_data",
-    cases_file="mock_data/detected_cases.json",
-    case_id=None,
-    typology=None,
-    max_depth=MAX_DEPTH,
-    window_hours=72,
-    save_path=None,
-    show_edge_labels=True,
-    figsize=(12, 7),
-):
-    """Build and draw the network graph for one case, purely with NetworkX +
-    matplotlib. Defaults to the first smurfing/reverse_smurfing case in
-    `cases_file` if no case_id/typology is given, so it runs out of the box
-    against the mock data already generated for this project.
-
-    Returns a dict with the case metadata, the underlying nx.DiGraph, and
-    the path the PNG was saved to.
+def _extract_pattern_text(pattern):
     """
-    store = DataStore(data_dir)
-    with open(cases_file) as f:
-        cases = json.load(f)
+    Convert structured pattern dictionaries into readable text.
 
-    case = _pick_default_case(cases, typology=typology, case_id=case_id)
-    root = case["account_id"]
-    ctyp = case.get("primary_trigger")
-    anchor_time = datetime.fromisoformat(case["created_at"]) if case.get("created_at") else None
+    Handles:
 
-    if ctyp == "smurfing":
-        result = build_smurf_network(store, root, max_depth=max_depth, direction="both",
-                                      anchor_time=anchor_time, window_hours=window_hours)
-    elif ctyp == "reverse_smurfing":
-        result = build_reverse_smurf_network(store, root, max_depth=max_depth,
-                                              anchor_time=anchor_time, window_hours=window_hours)
-    else:
-        raise ValueError(f"visualize_case_network draws a GRAPH - case {case['case_id']} is "
-                          f"typology={ctyp!r}, which network_layer renders as a timeline, not a "
-                          f"graph. Use visualize_case_timeline() instead.")
+        {"type": "many_to_one", ...}
+
+    as well as:
+
+        "many_to_one"
+    """
+
+    if isinstance(pattern, str):
+        return pattern
+
+    if not isinstance(pattern, dict):
+        return str(pattern)
+
+    pattern_type = pattern.get(
+        "type",
+        "unknown",
+    )
+
+    details = []
+
+    for key, value in pattern.items():
+
+        if key == "type":
+            continue
+
+        if isinstance(value, list):
+
+            if all(
+                isinstance(item, str)
+                for item in value
+            ):
+                value_text = ", ".join(value)
+
+            else:
+                value_text = str(value)
+
+        else:
+            value_text = str(value)
+
+        details.append(
+            f"{key}={value_text}"
+        )
+
+    if details:
+        return (
+            f"{pattern_type} "
+            f"({'; '.join(details)})"
+        )
+
+    return pattern_type
+
+
+def _pattern_summary(patterns):
+    """Create readable pattern summary."""
+
+    if not patterns:
+        return "No named patterns detected"
+
+    return "\n".join(
+        f"• {_extract_pattern_text(pattern)}"
+        for pattern in patterns
+    )
+
+
+# ----------------------------------------------------------------------
+# Network evidence
+# ----------------------------------------------------------------------
+
+def _build_graph(data):
+    """
+    Build NetworkX DiGraph directly from persisted evidence.
+    """
 
     graph = nx.DiGraph()
-    for e in result["edges"]:
-        d = e["data"]
-        graph.add_edge(d["source"], d["target"], amount=d["amount"], transaction_id=d["id"],
-                        timestamp=d["timestamp"], depth=d["depth"])
-    roles = {n["data"]["id"]: n["data"]["role"] for n in result["nodes"]}
 
-    pos = _layered_positions(graph, root)
-    node_colors = [ROLE_COLORS.get(roles.get(n, "related"), "#7f7f7f") for n in graph.nodes()]
-    node_sizes = [1400 if n == root else 800 for n in graph.nodes()]
+    # --------------------------------------------------------------
+    # Nodes
+    # --------------------------------------------------------------
 
-    amounts = [d["amount"] for _, _, d in graph.edges(data=True)] or [1]
-    lo, hi = min(amounts), max(amounts)
-    def _edge_width(a):
-        if hi == lo:
-            return 2.5
-        return 1.2 + 4.5 * (a - lo) / (hi - lo)
-    edge_widths = [_edge_width(d["amount"]) for _, _, d in graph.edges(data=True)]
+    for node in data.get("nodes", []):
 
-    fig, ax = plt.subplots(figsize=figsize)
-    nx.draw_networkx_nodes(graph, pos, node_color=node_colors, node_size=node_sizes,
-                            edgecolors="black", linewidths=1.2, ax=ax)
-    nx.draw_networkx_labels(graph, pos, font_size=8, font_weight="bold", ax=ax)
-    nx.draw_networkx_edges(graph, pos, width=edge_widths, edge_color="#555555",
-                            arrows=True, arrowsize=16, arrowstyle="-|>",
-                            connectionstyle="arc3,rad=0.08", ax=ax)
+        node_data = node.get(
+            "data",
+            {},
+        )
 
-    if show_edge_labels and graph.number_of_edges() <= 20:
-        edge_labels = {(u, v): _fmt_amount(d["amount"]) for u, v, d in graph.edges(data=True)}
-        nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels, font_size=7,
-                                      label_pos=0.5, ax=ax)
+        node_id = node_data.get("id")
 
-    legend_handles = [mpatches.Patch(color=c, label=r.replace("_", " ").title())
-                       for r, c in {"root": ROLE_COLORS["root"], "source": ROLE_COLORS["source"],
-                                     "downstream / distribution target": ROLE_COLORS["downstream"],
-                                     "related": ROLE_COLORS["related"]}.items()]
-    ax.legend(handles=legend_handles, loc="upper center", bbox_to_anchor=(0.5, -0.03), ncol=4, frameon=False)
+        if not node_id:
+            continue
 
-    pattern_summary = ", ".join(p["type"] for p in result["patterns"]) or "no named patterns detected"
-    ax.set_title(f"{ctyp.replace('_', ' ').title()} network — {case['case_id']}  (root: {root})\n"
-                 f"patterns: {pattern_summary}", fontsize=11)
+        graph.add_node(
+            node_id,
+            label=node_data.get(
+                "label",
+                node_id,
+            ),
+            role=node_data.get(
+                "role",
+                "related",
+            ),
+            risk=node_data.get(
+                "risk",
+                "unknown",
+            ),
+        )
+
+    # --------------------------------------------------------------
+    # Edges
+    # --------------------------------------------------------------
+
+    for edge in data.get("edges", []):
+
+        edge_data = edge.get(
+            "data",
+            {},
+        )
+
+        source = edge_data.get(
+            "source"
+        )
+
+        target = edge_data.get(
+            "target"
+        )
+
+        if not source or not target:
+            continue
+
+        graph.add_edge(
+            source,
+            target,
+            transaction_id=edge_data.get("id"),
+            amount=edge_data.get("amount"),
+            currency=edge_data.get(
+                "currency",
+                "INR",
+            ),
+            timestamp=edge_data.get(
+                "timestamp"
+            ),
+            depth=edge_data.get(
+                "depth"
+            ),
+        )
+
+    return graph
+
+
+def _layered_positions(graph, root):
+    """
+    Arrange graph around root.
+
+    Negative X:
+        upstream
+
+    Zero:
+        root
+
+    Positive X:
+        downstream
+    """
+
+    depth = {
+        root: 0
+    }
+
+    # --------------------------------------------------------------
+    # Upstream
+    # --------------------------------------------------------------
+
+    frontier = [root]
+    visited = {root}
+    current_depth = 0
+
+    while frontier:
+
+        current_depth -= 1
+        next_frontier = []
+
+        for node in frontier:
+
+            for predecessor in graph.predecessors(
+                node
+            ):
+
+                if predecessor not in visited:
+
+                    visited.add(predecessor)
+
+                    depth[
+                        predecessor
+                    ] = current_depth
+
+                    next_frontier.append(
+                        predecessor
+                    )
+
+        frontier = next_frontier
+
+    # --------------------------------------------------------------
+    # Downstream
+    # --------------------------------------------------------------
+
+    frontier = [root]
+    visited = {root}
+    current_depth = 0
+
+    while frontier:
+
+        current_depth += 1
+        next_frontier = []
+
+        for node in frontier:
+
+            for successor in graph.successors(
+                node
+            ):
+
+                if successor not in visited:
+
+                    visited.add(successor)
+
+                    depth[
+                        successor
+                    ] = current_depth
+
+                    next_frontier.append(
+                        successor
+                    )
+
+        frontier = next_frontier
+
+    # --------------------------------------------------------------
+    # Disconnected nodes
+    # --------------------------------------------------------------
+
+    for node in graph.nodes():
+
+        depth.setdefault(
+            node,
+            0,
+        )
+
+    # --------------------------------------------------------------
+    # Position nodes
+    # --------------------------------------------------------------
+
+    levels = {}
+
+    for node, level in depth.items():
+
+        levels.setdefault(
+            level,
+            [],
+        ).append(node)
+
+    positions = {}
+
+    for level, nodes in levels.items():
+
+        nodes = sorted(nodes)
+
+        count = len(nodes)
+
+        for index, node in enumerate(nodes):
+
+            positions[node] = (
+                level,
+                index - (count - 1) / 2,
+            )
+
+    return positions
+
+
+def visualize_network(
+    case_id,
+    evidence,
+):
+    """Render smurfing/reverse-smurfing network."""
+
+    data = evidence.get(
+        "data",
+        {},
+    )
+
+    root = data.get(
+        "root_account"
+    )
+
+    if not root:
+        raise ValueError(
+            f"Network evidence for {case_id} "
+            "does not contain root_account."
+        )
+
+    graph = _build_graph(
+        data
+    )
+
+    if not graph.nodes:
+        raise ValueError(
+            "Network evidence contains no nodes."
+        )
+
+    if not graph.edges:
+        raise ValueError(
+            "Network evidence contains no edges."
+        )
+
+    if root not in graph:
+        raise ValueError(
+            f"Root account {root} "
+            "is not present in graph."
+        )
+
+    typology = evidence.get(
+        "typology",
+        "unknown",
+    )
+
+    # --------------------------------------------------------------
+    # Layout
+    # --------------------------------------------------------------
+
+    pos = _layered_positions(
+        graph,
+        root,
+    )
+
+    # --------------------------------------------------------------
+    # Node styling
+    # --------------------------------------------------------------
+
+    node_colors = []
+
+    node_sizes = []
+
+    for node in graph.nodes():
+
+        role = graph.nodes[node].get(
+            "role",
+            "related",
+        )
+
+        node_colors.append(
+            ROLE_COLORS.get(
+                role,
+                ROLE_COLORS["related"],
+            )
+        )
+
+        node_sizes.append(
+            1800
+            if node == root
+            else 1000
+        )
+
+    # --------------------------------------------------------------
+    # Edge widths
+    # --------------------------------------------------------------
+
+    amounts = [
+        float(
+            data.get("amount") or 0
+        )
+        for _, _, data
+        in graph.edges(
+            data=True
+        )
+    ]
+
+    minimum = (
+        min(amounts)
+        if amounts
+        else 0
+    )
+
+    maximum = (
+        max(amounts)
+        if amounts
+        else 0
+    )
+
+    edge_widths = []
+
+    for _, _, edge_data in graph.edges(
+        data=True
+    ):
+
+        amount = float(
+            edge_data.get("amount") or 0
+        )
+
+        if maximum == minimum:
+
+            width = 2.5
+
+        else:
+
+            width = (
+                1.2
+                + 4.5
+                * (
+                    amount - minimum
+                )
+                / (
+                    maximum - minimum
+                )
+            )
+
+        edge_widths.append(
+            width
+        )
+
+    # --------------------------------------------------------------
+    # Figure
+    # --------------------------------------------------------------
+
+    fig, ax = plt.subplots(
+        figsize=(15, 9)
+    )
+
+    # Nodes
+
+    nx.draw_networkx_nodes(
+        graph,
+        pos,
+        node_color=node_colors,
+        node_size=node_sizes,
+        edgecolors="black",
+        linewidths=1.2,
+        ax=ax,
+    )
+
+    # Labels
+
+    labels = {
+        node: graph.nodes[node].get(
+            "label",
+            node,
+        )
+        for node in graph.nodes()
+    }
+
+    nx.draw_networkx_labels(
+        graph,
+        pos,
+        labels=labels,
+        font_size=8,
+        font_weight="bold",
+        ax=ax,
+    )
+
+    # Directed edges
+
+    nx.draw_networkx_edges(
+        graph,
+        pos,
+        width=edge_widths,
+        edge_color="#555555",
+        arrows=True,
+        arrowsize=18,
+        arrowstyle="-|>",
+        connectionstyle="arc3,rad=0.08",
+        node_size=node_sizes,
+        ax=ax,
+    )
+
+    # --------------------------------------------------------------
+    # Amount labels
+    # --------------------------------------------------------------
+
+    if graph.number_of_edges() <= 30:
+
+        edge_labels = {}
+
+        for source, target, edge_data in graph.edges(
+            data=True
+        ):
+
+            edge_labels[
+                (source, target)
+            ] = _fmt_amount(
+                edge_data.get(
+                    "amount"
+                )
+            )
+
+        nx.draw_networkx_edge_labels(
+            graph,
+            pos,
+            edge_labels=edge_labels,
+            font_size=7,
+            label_pos=0.5,
+            ax=ax,
+        )
+
+    # --------------------------------------------------------------
+    # Legend
+    # --------------------------------------------------------------
+
+    legend_definitions = [
+        ("Root account", "root"),
+        ("Source account", "source"),
+        (
+            "Downstream / target",
+            "downstream",
+        ),
+        ("Related account", "related"),
+    ]
+
+    handles = [
+        mpatches.Patch(
+            color=ROLE_COLORS[role],
+            label=label,
+        )
+        for label, role
+        in legend_definitions
+    ]
+
+    ax.legend(
+        handles=handles,
+        loc="upper center",
+        bbox_to_anchor=(0.5, -0.03),
+        ncol=4,
+        frameon=False,
+    )
+
+    # --------------------------------------------------------------
+    # Patterns
+    # --------------------------------------------------------------
+
+    pattern_text = _pattern_summary(
+        data.get(
+            "patterns",
+            [],
+        )
+    )
+
+    # --------------------------------------------------------------
+    # Title
+    # --------------------------------------------------------------
+
+    ax.set_title(
+        f"{typology.replace('_', ' ').title()} Network\n"
+        f"Case: {case_id} | Root: {root}\n"
+        f"Nodes: {graph.number_of_nodes()} | "
+        f"Transactions: {graph.number_of_edges()}",
+        fontsize=13,
+        fontweight="bold",
+        pad=20,
+    )
+
+    # --------------------------------------------------------------
+    # Pattern panel
+    # --------------------------------------------------------------
+
+    ax.text(
+        1.02,
+        0.5,
+        "Detected Patterns\n\n"
+        + pattern_text,
+        transform=ax.transAxes,
+        fontsize=8,
+        verticalalignment="center",
+        bbox=dict(
+            boxstyle="round,pad=0.5",
+            facecolor="white",
+            edgecolor="gray",
+            alpha=0.9,
+        ),
+    )
+
     ax.axis("off")
+
     plt.tight_layout()
 
-    if save_path is None:
-        save_dir = os.path.join(data_dir, "graphs")
-        os.makedirs(save_dir, exist_ok=True)
-        save_path = os.path.join(save_dir, f"{case['case_id']}_{ctyp}.png")
-    plt.savefig(save_path, dpi=150)
-    plt.close(fig)
+    # No PNG.
+    plt.show()
 
     return {
-        "case_id": case["case_id"],
-        "typology": ctyp,
-        "root_account": root,
+        "case_id": case_id,
+        "account_id": root,
+        "typology": typology,
         "num_nodes": graph.number_of_nodes(),
         "num_edges": graph.number_of_edges(),
-        "patterns": result["patterns"],
+        "patterns": data.get(
+            "patterns",
+            [],
+        ),
         "graph": graph,
-        "image_path": save_path,
     }
 
 
-def visualize_case_timeline(
-    data_dir="mock_data",
-    cases_file="mock_data/detected_cases.json",
-    case_id=None,
-    typology="money_mule",
-    save_path=None,
-    figsize=(12, 5),
+# ----------------------------------------------------------------------
+# Money mule
+# ----------------------------------------------------------------------
+
+def visualize_money_mule(
+    case_id,
+    evidence,
 ):
-    """Companion function for the two non-graph typologies (money_mule,
-    account_swap) so the whole demo runs end to end without needing the
-    frontend - draws a simple matplotlib timeline instead of a NetworkX
-    graph, since that's what network_layer.py itself returns for these."""
-    store = DataStore(data_dir)
-    with open(cases_file) as f:
-        cases = json.load(f)
-    case = _pick_default_case(cases, typology=typology, case_id=case_id)
-    root = case["account_id"]
-    ctyp = case.get("primary_trigger")
-    anchor_time = datetime.fromisoformat(case["created_at"]) if case.get("created_at") else None
-    window = {"start": anchor_time - timedelta(days=7), "end": anchor_time + timedelta(days=7)} if anchor_time else None
+    """
+    Visualize money-mule evidence as transaction amount vs time.
 
-    fig, ax = plt.subplots(figsize=figsize)
-    if ctyp == "money_mule":
-        result = build_money_mule_timeline(store, root, time_window=window)
-        for t in result["transactions"]:
-            ts = datetime.fromisoformat(t["timestamp"])
-            color = "#2ca02c" if t["direction"] == "in" else "#d62728"
-            ax.scatter(ts, t["amount"], color=color, s=60, zorder=3)
-        ax.scatter([], [], color="#2ca02c", label="inbound")
-        ax.scatter([], [], color="#d62728", label="outbound")
-        ax.set_ylabel("Amount (INR)")
-        ax.set_title(f"Money mule timeline — {case['case_id']} (account: {root})\n"
-                     f"ratio out/in: {result['summary']['outbound_to_inbound_ratio']}, "
-                     f"patterns: {', '.join(result['patterns']) or 'none'}")
-    elif ctyp == "account_swap":
-        result = build_account_swap_timeline(store, root, time_window=window)
-        type_y = {"geo": 0, "device_change": 1, "sim_change": 2, "transaction": 3}
-        type_color = {"geo": "#1f77b4", "device_change": "#9467bd", "sim_change": "#d62728", "transaction": "#2ca02c"}
-        for e in result["events"]:
-            ts = datetime.fromisoformat(e["timestamp"])
-            ax.scatter(ts, type_y[e["event_type"]], color=type_color[e["event_type"]], s=80, zorder=3)
-        ax.set_yticks(list(type_y.values()))
-        ax.set_yticklabels(list(type_y.keys()))
-        ax.set_title(f"Account-swap security timeline — {case['case_id']} (account: {root})\n"
-                     f"patterns: {', '.join(result['patterns']) or 'none'}")
-    else:
-        raise ValueError(f"typology={ctyp!r} is graph-based - use visualize_case_network() instead.")
+    Expected evidence structure:
 
-    ax.legend(loc="upper right", frameon=False)
+        data:
+            visualization_type:
+                transaction_timeline
+
+            transactions:
+                [...]
+    """
+
+    data = evidence.get(
+        "data",
+        {},
+    )
+
+    transactions = data.get(
+        "transactions",
+        [],
+    )
+
+    if not transactions:
+        raise ValueError(
+            f"No transactions found in money-mule "
+            f"evidence for {case_id}."
+        )
+
+    inbound_x = []
+    inbound_y = []
+
+    outbound_x = []
+    outbound_y = []
+
+    for transaction in transactions:
+
+        timestamp = _parse_time(
+            transaction.get(
+                "timestamp"
+            )
+        )
+
+        amount = transaction.get(
+            "amount"
+        )
+
+        if timestamp is None or amount is None:
+            continue
+
+        direction = transaction.get(
+            "direction"
+        )
+
+        if direction == "in":
+
+            inbound_x.append(
+                timestamp
+            )
+
+            inbound_y.append(
+                float(amount)
+            )
+
+        elif direction == "out":
+
+            outbound_x.append(
+                timestamp
+            )
+
+            outbound_y.append(
+                float(amount)
+            )
+
+    fig, ax = plt.subplots(
+        figsize=(14, 6)
+    )
+
+    ax.scatter(
+        inbound_x,
+        inbound_y,
+        s=70,
+        label="Inbound",
+    )
+
+    ax.scatter(
+        outbound_x,
+        outbound_y,
+        s=70,
+        label="Outbound",
+    )
+
+    ax.set_xlabel(
+        "Time"
+    )
+
+    ax.set_ylabel(
+        "Transaction Amount (INR)"
+    )
+
+    ax.set_title(
+        f"Money Mule — Transaction Timeline\n"
+        f"Case: {case_id}"
+    )
+
+    ax.legend()
+
     fig.autofmt_xdate()
+
     plt.tight_layout()
 
-    if save_path is None:
-        save_dir = os.path.join(data_dir, "graphs")
-        os.makedirs(save_dir, exist_ok=True)
-        save_path = os.path.join(save_dir, f"{case['case_id']}_{ctyp}.png")
-    plt.savefig(save_path, dpi=150)
-    plt.close(fig)
+    plt.show()
 
-    return {"case_id": case["case_id"], "typology": ctyp, "image_path": save_path, "patterns": result["patterns"]}
+    return {
+        "case_id": case_id,
+        "account_id": data.get(
+            "account_id"
+        ),
+        "typology": "money_mule",
+        "patterns": data.get(
+            "patterns",
+            [],
+        ),
+    }
+
+
+# ----------------------------------------------------------------------
+# Account swap
+# ----------------------------------------------------------------------
+
+def visualize_account_swap(
+    case_id,
+    evidence,
+):
+    """
+    Visualize account-swap behavioral evidence.
+
+    Transactions:
+        scatter points
+
+    Device / SIM / GEO:
+        vertical event markers
+
+    Baseline:
+        horizontal behavioral baseline
+    """
+
+    data = evidence.get(
+        "data",
+        {},
+    )
+
+    events = data.get(
+        "events",
+        [],
+    )
+
+    behavioral = data.get(
+        "behavioral_summary",
+        {},
+    )
+
+    if not events:
+        raise ValueError(
+            f"No events found in account-swap "
+            f"evidence for {case_id}."
+        )
+
+    # --------------------------------------------------------------
+    # Separate events
+    # --------------------------------------------------------------
+
+    transaction_times = []
+    transaction_amounts = []
+
+    event_times = []
+    event_labels = []
+
+    for event in events:
+
+        timestamp = _parse_time(
+            event.get(
+                "timestamp"
+            )
+        )
+
+        if timestamp is None:
+            continue
+
+        event_type = event.get(
+            "event_type",
+            "event",
+        )
+
+        if event_type == "transaction":
+
+            amount = event.get(
+                "amount"
+            )
+
+            if amount is not None:
+
+                transaction_times.append(
+                    timestamp
+                )
+
+                transaction_amounts.append(
+                    float(amount)
+                )
+
+        else:
+
+            event_times.append(
+                timestamp
+            )
+
+            event_labels.append(
+                event_type.replace(
+                    "_",
+                    " ",
+                )
+            )
+
+    # --------------------------------------------------------------
+    # Figure
+    # --------------------------------------------------------------
+
+    fig, ax = plt.subplots(
+        figsize=(15, 7)
+    )
+
+    # Transactions
+
+    ax.scatter(
+        transaction_times,
+        transaction_amounts,
+        s=90,
+        label="Transactions",
+        zorder=4,
+    )
+
+    # Transaction labels
+
+    for timestamp, amount in zip(
+        transaction_times,
+        transaction_amounts,
+    ):
+
+        ax.annotate(
+            _fmt_amount(amount),
+            (
+                timestamp,
+                amount,
+            ),
+            xytext=(5, 7),
+            textcoords="offset points",
+            fontsize=8,
+        )
+
+    # Behavioral events
+
+    event_y = 0
+
+    for timestamp, label in zip(
+        event_times,
+        event_labels,
+    ):
+
+        ax.axvline(
+            timestamp,
+            linestyle="--",
+            alpha=0.45,
+        )
+
+        ax.annotate(
+            label,
+            xy=(
+                timestamp,
+                event_y,
+            ),
+            xytext=(
+                0,
+                15,
+            ),
+            textcoords="offset points",
+            rotation=90,
+            va="bottom",
+            ha="center",
+            fontsize=8,
+        )
+
+    # --------------------------------------------------------------
+    # Baseline
+    # --------------------------------------------------------------
+
+    baseline_amount = behavioral.get(
+        "baseline_avg_amount"
+    )
+
+    if baseline_amount is not None:
+
+        ax.axhline(
+            float(baseline_amount),
+            linestyle=":",
+            linewidth=1.8,
+            label=(
+                "Baseline avg amount "
+                f"₹{float(baseline_amount):,.2f}"
+            ),
+        )
+
+    # --------------------------------------------------------------
+    # Title
+    # --------------------------------------------------------------
+
+    amount_ratio = behavioral.get(
+        "amount_deviation_ratio"
+    )
+
+    title = (
+        "Account Swap — Behavioral "
+        "Transaction Timeline\n"
+        f"Case: {case_id}"
+    )
+
+    if amount_ratio is not None:
+
+        title += (
+            f"\nAmount deviation: "
+            f"{float(amount_ratio):.2f}× baseline"
+        )
+
+    ax.set_title(
+        title,
+        fontsize=12,
+    )
+
+    ax.set_xlabel(
+        "Time"
+    )
+
+    ax.set_ylabel(
+        "Transaction Amount (INR)"
+    )
+
+    ax.legend(
+        loc="upper left"
+    )
+
+    fig.autofmt_xdate()
+
+    plt.tight_layout()
+
+    plt.show()
+
+    return {
+        "case_id": case_id,
+        "account_id": data.get(
+            "account_id"
+        ),
+        "typology": "account_swap",
+        "patterns": data.get(
+            "patterns",
+            [],
+        ),
+        "behavioral_summary": behavioral,
+    }
+
+
+# ----------------------------------------------------------------------
+# Unified dispatcher
+# ----------------------------------------------------------------------
+
+def visualize_case(case_id):
+
+    evidence, evidence_path = (
+        _load_case_evidence(
+            case_id
+        )
+    )
+
+    typology = evidence.get(
+        "typology"
+    )
+
+    if not typology:
+        raise ValueError(
+            f"Evidence for {case_id} "
+            "does not contain typology."
+        )
+
+    data = evidence.get(
+        "data",
+        {},
+    )
+
+    # --------------------------------------------------------------
+    # Account resolution
+    # --------------------------------------------------------------
+
+    account_id = (
+        data.get("root_account")
+        or data.get("account_id")
+    )
+
+    print()
+    print("=" * 70)
+    print("CASE VISUALIZATION")
+    print("=" * 70)
+
+    print(
+        f"Case ID       : {case_id}"
+    )
+
+    print(
+        f"Account ID    : {account_id}"
+    )
+
+    print(
+        f"Typology      : {typology}"
+    )
+
+    print(
+        f"Evidence file : {evidence_path}"
+    )
+
+    print()
+
+    # --------------------------------------------------------------
+    # Dispatch
+    # --------------------------------------------------------------
+
+    if typology in GRAPH_TYPOLOGIES:
+
+        return visualize_network(
+            case_id,
+            evidence,
+        )
+
+    if typology == "money_mule":
+
+        return visualize_money_mule(
+            case_id,
+            evidence,
+        )
+
+    if typology == "account_swap":
+
+        return visualize_account_swap(
+            case_id,
+            evidence,
+        )
+
+    raise ValueError(
+        f"Unsupported typology: {typology!r}"
+    )
+
+
+# ----------------------------------------------------------------------
+# CLI
+# ----------------------------------------------------------------------
+
+def main():
+
+    print()
+    print("=" * 70)
+    print("FINANCIAL CRIME CASE VISUALIZER")
+    print("=" * 70)
+    print()
+
+    if not os.path.isdir(
+        EVIDENCE_DIR
+    ):
+
+        print(
+            "Evidence directory not found:"
+        )
+
+        print(
+            EVIDENCE_DIR
+        )
+
+        return
+
+    evidence_files = [
+        filename
+        for filename in os.listdir(
+            EVIDENCE_DIR
+        )
+        if filename.endswith(".json")
+    ]
+
+    print(
+        f"Available case-scoped evidence: "
+        f"{len(evidence_files)} cases"
+    )
+
+    print()
+    print(
+        "Enter a case ID manually."
+    )
+
+    print(
+        "Example: CASE-597BBE77"
+    )
+
+    print()
+
+    case_id = input(
+        "Case ID: "
+    ).strip()
+
+    if not case_id:
+
+        print(
+            "\nNo case ID entered."
+        )
+
+        return
+
+    try:
+
+        result = visualize_case(
+            case_id
+        )
+
+        print()
+        print("=" * 70)
+        print("VISUALIZATION COMPLETE")
+        print("=" * 70)
+
+        print(
+            f"Case ID    : "
+            f"{result['case_id']}"
+        )
+
+        print(
+            f"Account ID : "
+            f"{result.get('account_id')}"
+        )
+
+        print(
+            f"Typology   : "
+            f"{result['typology']}"
+        )
+
+        if "num_nodes" in result:
+
+            print(
+                f"Nodes      : "
+                f"{result['num_nodes']}"
+            )
+
+            print(
+                f"Edges      : "
+                f"{result['num_edges']}"
+            )
+
+        print()
+
+    except Exception as exc:
+
+        print()
+        print("=" * 70)
+        print("VISUALIZATION FAILED")
+        print("=" * 70)
+
+        print(
+            str(exc)
+        )
+
+        print()
 
 
 if __name__ == "__main__":
-    for typ in ("smurfing", "reverse_smurfing"):
-        info = visualize_case_network(typology=typ)
-        print(f"{typ}: {info['case_id']} -> {info['num_nodes']} nodes, {info['num_edges']} edges -> {info['image_path']}")
-    for typ in ("money_mule", "account_swap"):
-        info = visualize_case_timeline(typology=typ)
-        print(f"{typ}: {info['case_id']} -> {info['image_path']}")
+    main()

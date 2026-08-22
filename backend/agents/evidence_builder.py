@@ -50,14 +50,22 @@ def gather_evidence(store: DataStore, case: dict) -> dict:
     typology = case.get("primary_trigger")
 
     alerts = detect_all(store, account_id)
-    alerts_for_typology = [a for a in alerts if a["typology"] == typology] or alerts
+    # only attach alerts that actually match this case's typology - falling back to
+    # "whatever else this account triggered" would misattribute a genuinely unrelated
+    # alert (e.g. a different case's money-mule pattern on the same reused account)
+    # to this case's evidence. An empty list here is a valid, honest signal: "the
+    # live detector didn't independently flag anything for this specific typology."
+    alerts_for_typology = [a for a in alerts if a["typology"] == typology]
 
+    # Pass the case straight through (case_id/account_id/primary_trigger/created_at
+    # all travel together) rather than hand-building a subset dict here - that
+    # subset-dict pattern previously dropped `created_at` silently, which disabled
+    # all of network_layer's time-window anchoring without raising any error. One
+    # case object, one source of truth for its own correlation key.
     network_evidence = None
     if typology in ("smurfing", "reverse_smurfing", "money_mule", "account_swap"):
         try:
-            network_evidence = generate_network_evidence(
-                store, {"case_id": case["case_id"], "account_id": account_id, "primary_trigger": typology}
-            )
+            network_evidence = generate_network_evidence(store, case)
         except Exception as e:
             network_evidence = {"error": str(e)}
 

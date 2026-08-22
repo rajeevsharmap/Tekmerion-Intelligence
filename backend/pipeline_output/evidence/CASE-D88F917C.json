@@ -1,0 +1,74 @@
+{
+  "evidence_id": "EVID-EDBB60A7",
+  "case_id": "CASE-D88F917C",
+  "evidence_type": "network_analysis",
+  "typology": "account_swap",
+  "source": "network_evidence_layer",
+  "confidence": "high",
+  "data": {
+    "visualization_type": "behavioral_transaction_timeline",
+    "events": [
+      {
+        "event_id": "TXN000676",
+        "timestamp": "2025-08-08T05:09:54",
+        "event_type": "transaction",
+        "direction": "in",
+        "amount": 34934.45,
+        "currency": "INR",
+        "beneficiary_id": null,
+        "is_first_time_beneficiary": false
+      },
+      {
+        "event_id": "DEV000146",
+        "timestamp": "2025-08-10T08:15:23",
+        "event_type": "device_change",
+        "device_id": "DEV000146",
+        "is_trusted_device": false
+      },
+      {
+        "event_id": "DEV000146-SIM",
+        "timestamp": "2025-08-10T08:15:23",
+        "event_type": "sim_change",
+        "sim_change_detected": true
+      },
+      {
+        "event_id": "GEO000330",
+        "timestamp": "2025-08-10T10:01:58",
+        "event_type": "geo",
+        "city": "Singapore",
+        "country": "Singapore",
+        "distance_from_last_location_km": 3317.9,
+        "registered_country_match": false,
+        "is_vpn_or_proxy": true
+      },
+      {
+        "event_id": "TXN001593",
+        "timestamp": "2025-08-10T10:24:58",
+        "event_type": "transaction",
+        "direction": "out",
+        "amount": 374130.7,
+        "currency": "INR",
+        "beneficiary_id": "BENE000231",
+        "is_first_time_beneficiary": true
+      }
+    ],
+    "behavioral_summary": {
+      "baseline_avg_amount": 34934.45,
+      "baseline_avg_daily_count": 1.0,
+      "recent_avg_amount": 374130.7,
+      "recent_daily_count": 0.25,
+      "amount_deviation_ratio": 10.71,
+      "frequency_deviation_ratio": 0.25,
+      "anchor_time": "2025-08-10T10:24:58"
+    },
+    "patterns": [
+      "high_value_transaction",
+      "new_beneficiary",
+      "new_device_before_transaction",
+      "rapid_geographic_change",
+      "sim_change_before_transaction",
+      "sudden_value_increase"
+    ]
+  },
+  "generated_at": "2026-08-22T08:36:55.109101"
+}

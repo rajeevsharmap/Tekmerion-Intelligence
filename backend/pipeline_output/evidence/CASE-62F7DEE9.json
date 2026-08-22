@@ -1,0 +1,83 @@
+{
+  "evidence_id": "EVID-243CDAEF",
+  "case_id": "CASE-62F7DEE9",
+  "evidence_type": "network_analysis",
+  "typology": "account_swap",
+  "source": "network_evidence_layer",
+  "confidence": "high",
+  "data": {
+    "visualization_type": "behavioral_transaction_timeline",
+    "events": [
+      {
+        "event_id": "TXN000040",
+        "timestamp": "2025-08-05T18:14:59",
+        "event_type": "transaction",
+        "direction": "out",
+        "amount": 39926.36,
+        "currency": "INR",
+        "beneficiary_id": null,
+        "is_first_time_beneficiary": false
+      },
+      {
+        "event_id": "GEO000020",
+        "timestamp": "2025-08-09T16:44:35",
+        "event_type": "geo",
+        "city": "Mumbai",
+        "country": "India",
+        "distance_from_last_location_km": 3.4,
+        "registered_country_match": true,
+        "is_vpn_or_proxy": false
+      },
+      {
+        "event_id": "DEV000011",
+        "timestamp": "2025-08-11T04:33:47",
+        "event_type": "device_change",
+        "device_id": "DEV000011",
+        "is_trusted_device": false
+      },
+      {
+        "event_id": "DEV000011-SIM",
+        "timestamp": "2025-08-11T04:33:47",
+        "event_type": "sim_change",
+        "sim_change_detected": true
+      },
+      {
+        "event_id": "GEO000021",
+        "timestamp": "2025-08-11T05:28:45",
+        "event_type": "geo",
+        "city": "Singapore",
+        "country": "Singapore",
+        "distance_from_last_location_km": 8303.5,
+        "registered_country_match": false,
+        "is_vpn_or_proxy": false
+      },
+      {
+        "event_id": "TXN001591",
+        "timestamp": "2025-08-11T06:12:45",
+        "event_type": "transaction",
+        "direction": "out",
+        "amount": 489260.33,
+        "currency": "INR",
+        "beneficiary_id": "BENE000018",
+        "is_first_time_beneficiary": true
+      }
+    ],
+    "behavioral_summary": {
+      "baseline_avg_amount": 39926.36,
+      "baseline_avg_daily_count": 0.667,
+      "recent_avg_amount": 489260.33,
+      "recent_daily_count": 0.25,
+      "amount_deviation_ratio": 12.25,
+      "frequency_deviation_ratio": 0.37,
+      "anchor_time": "2025-08-11T06:12:45"
+    },
+    "patterns": [
+      "new_beneficiary",
+      "new_device_before_transaction",
+      "rapid_geographic_change",
+      "sim_change_before_transaction",
+      "sudden_value_increase"
+    ]
+  },
+  "generated_at": "2026-08-22T08:36:55.077019"
+}
