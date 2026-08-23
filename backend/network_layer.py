@@ -584,6 +584,7 @@ if __name__ == "__main__":
     os.makedirs(args.out_dir, exist_ok=True)
 
     from evidence_model import build_evidence_items, compute_completeness
+    from authority_policy import assess_authority
 
     store = DataStore(args.data_dir)
     with open(args.cases_file) as f:
@@ -600,6 +601,17 @@ if __name__ == "__main__":
         evidence_items = build_evidence_items(store, case, net)
         evidence["evidence_items"] = evidence_items
         evidence["completeness"] = compute_completeness(evidence_items)
+        # CHECKPOINT 4: same authority decision run_pipeline.py computes -
+        # kept wired into both live entry points so they don't silently
+        # diverge (same pattern Checkpoint 2 used for evidence_items/
+        # completeness). This entry point has no alerts.json on hand (only
+        # cases.json), so `case_alerts` is omitted - the junior_action_limit
+        # signal degrades gracefully to False here (documented in
+        # authority_policy.py's _junior_action_limit_exceeded docstring),
+        # never guessed.
+        account = store.accounts_by_id.get(case["account_id"])
+        evidence["authority"] = assess_authority(case, evidence_items, evidence["completeness"],
+                                                   net=net, account=account)
         with open(f"{args.out_dir}/{case['case_id']}.json", "w") as f:
             json.dump(evidence, f, indent=2, default=str)
         print(f"{case['case_id']} [{case['primary_trigger']}] -> "

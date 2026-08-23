@@ -58,6 +58,7 @@ LIVE_MODULES = [
     "detection_layer.py",
     "evidence_model.py",
     "network_layer.py",
+    "authority_policy.py",
     "run_pipeline.py",
     "main.py",
     os.path.join("agents", "contradiction_agent.py"),

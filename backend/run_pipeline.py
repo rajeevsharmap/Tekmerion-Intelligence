@@ -49,6 +49,7 @@ from detection_layer import (
 )
 from network_layer import generate_network_evidence, wrap_as_evidence
 from evidence_model import build_evidence_items, compute_completeness
+from authority_policy import assess_authority
 
 
 def run_pipeline(data_dir="mock_data", out_dir="pipeline_output"):
@@ -90,6 +91,17 @@ def run_pipeline(data_dir="mock_data", out_dir="pipeline_output"):
         evidence_items = build_evidence_items(store, case, network_evidence)
         evidence["evidence_items"] = evidence_items
         evidence["completeness"] = compute_completeness(evidence_items)
+        # CHECKPOINT 4: investigator authority / escalation policy decision,
+        # built from THIS case's already-computed evidence_items/completeness
+        # (above) plus the real network evidence/account/alerts already in
+        # scope here - never a second independent evidence-gathering pass,
+        # never random, never read from ground truth. See authority_policy.py.
+        case_alerts = [a for a in alerts if a["alert_id"] in case["alert_ids"]]
+        account = store.accounts_by_id.get(case["account_id"])
+        evidence["authority"] = assess_authority(
+            case, evidence_items, evidence["completeness"],
+            net=network_evidence, account=account, case_alerts=case_alerts,
+        )
         evidence_path = os.path.join(evidence_dir, f"{case['case_id']}.json")
         with open(evidence_path, "w") as f:
             json.dump(evidence, f, indent=2, default=str)

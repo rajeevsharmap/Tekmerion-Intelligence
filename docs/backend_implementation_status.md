@@ -44,8 +44,8 @@ the 9-stage pipeline and current status:
 | Investigation (evidence gathering) | 🟡 [PARTIALLY IMPLEMENTED] (two separate, unmerged entry points — see section 3; unchanged this checkpoint) |
 | Evidence (structured object model) | ✅ [IMPLEMENTED] [VERIFIED] — typed `EvidenceItem`s (`backend/evidence_model.py`), additive to the existing `data` blob. Unchanged this checkpoint (out of scope). **Known limitation (unchanged):** `evidence_id`/`generated_at` are non-deterministic (`uuid.uuid4()`/`datetime.now()`) — see section 4. |
 | Evidence completeness | ✅ [IMPLEMENTED] [VERIFIED] — deterministic, weighted, computed from real evidence every run; zero randomness in live code. Unchanged this checkpoint. |
-| Investigator authority | ❌ [NOT IMPLEMENTED] in live code (ground-truth-only field; live code correctly asserts nothing — out of scope, Checkpoint 4) |
-| Action / escalation | ❌ [NOT IMPLEMENTED] (out of scope, Checkpoint 4) |
+| Investigator authority | ✅ [IMPLEMENTED] [VERIFIED] (**Checkpoint 4**) — deterministic policy engine (`backend/authority_policy.py`), wired into both live entry points (`run_pipeline.py`, `network_layer.py`'s standalone `__main__`); computes `junior`/`senior` from real evidence completeness, typology risk, high-value transaction, network complexity, and (if supplied) contradiction/confidence signals — never randomly assigned, never hardcoded, never decided by Detection/Case Intake. |
+| Action / escalation | 🟡 [PARTIALLY IMPLEMENTED] — the authority *decision* (`can_resolve`/`decision`/`reasons`) is computed and persisted per case (Checkpoint 4); a downstream enforcement/UI layer that gates an actual investigator's attempted action against this decision, plus the Audit Trail/Human Review/Investigator Action pipeline stages themselves, do not exist yet in live code (out of scope, later checkpoints). |
 
 ## 2. Completed changes (CHECKPOINT 3, this session)
 
@@ -635,10 +635,83 @@ pre-Checkpoint-3 (31 alerts → 21 cases) — the fix changes *why* cases are
 bundled and makes it inspectable, not how many bundles occur on this
 particular generated dataset.
 
+**CHECKPOINT 4 (this session): Investigator Authority / Escalation Policy
+Engine. [COMPLETE] [VERIFIED].** Adds `backend/authority_policy.py`: a
+single deterministic decision function, `assess_authority()`, that reads
+only already-computed upstream signals (Checkpoint 2's `evidence_items`/
+`completeness`, `network_layer.py`'s `net`/pattern output, the case's own
+already-computed alert severities) and returns a structured
+`junior`/`senior` routing decision with machine-readable reason codes
+(`critical_evidence_missing`, `high_risk_typology`, `high_value_transaction`,
+`complex_network`, `unresolved_contradiction`, `junior_action_limit_exceeded`,
+or the three positive reasons when junior-authorized) — never free text,
+never random, never reads ground truth. Wired additively into both live
+entry points (`run_pipeline.py` per-case loop and `network_layer.py`'s
+standalone `__main__`) as `evidence["authority"]`, so every persisted
+evidence JSON now carries the authority decision alongside its evidence
+items — the representation the later SAR/reporting stage will consume.
+`test_ground_truth_isolation.py`'s `LIVE_MODULES` list now includes
+`authority_policy.py`.
+
+Two genuine defects found and fixed while finishing the module a prior
+session in this same checkpoint had left mid-flight:
+1. **Structural false-positive on `critical_evidence_missing`.** The
+   `source_of_funds` evidence type is permanently unavailable dataset-wide
+   (`evidence_model.py`'s own honest, documented gap — its checker returns
+   not-available unconditionally for every case/typology, not just some).
+   Because its severity is "critical", the original `critical_missing`
+   check fired on *every single case in the system*, making junior
+   authorization structurally unreachable regardless of how clean or
+   complete the rest of a case's evidence was — this is what the prior
+   session's investigation into node/edge counts was chasing without
+   finding the real cause. Fixed by adding
+   `AUTHORITY_POLICY["structural_gap_reasons"]`, a config set of
+   missing-evidence reason codes that represent a dataset-wide permanent
+   limitation rather than a case-specific gap; those items are excluded
+   from the `critical_evidence_missing` trigger (they still appear
+   untouched in `missing_evidence` for transparency). This is a real
+   implementation fix, not a threshold tuned to hit a distribution —
+   confirmed by two hand-built fixture tests
+   (`test_clean_low_risk_case_is_junior`,
+   `test_moderate_only_missing_evidence_stays_junior_if_above_threshold`).
+2. **Three static-guard test failures** (`test_never_uses_random_module`,
+   `test_never_uses_uuid_or_wall_clock`,
+   `test_source_never_mentions_ground_truth_outside_docstrings`) caused by
+   the module's own docstrings literally containing the banned substrings
+   they were describing (e.g. "no `import random`" inside a docstring
+   trips a whole-file substring scan for `"import random"`). Fixed by
+   rewording the documentation only — no behavior change.
+
+All 77 backend tests pass (23 in `test_authority_policy.py` + 54 existing).
+Verified via a fresh end-to-end pipeline run (220 accounts → 31 alerts →
+21 cases → 21 evidence records, every one carrying a well-formed
+`authority` block) and direct inspection of persisted evidence JSON.
+
+**Known, documented limitation carried forward (not a defect):** on the
+checked-in mock dataset, all 21 real cases currently route to `senior`
+(via `high_value_transaction`/`complex_network`/`high_risk_typology`/
+`junior_action_limit_exceeded` — never via the fixed structural-gap bug
+above). This is a property of the mock data's fraud-detection thresholds
+naturally producing higher-severity alerts, not a policy defect — the
+policy's junior path is proven correct and reachable via hand-built
+fixtures in `test_authority_policy.py` (`test_clean_low_risk_case_is_junior`
+et al.), per this checkpoint's own instruction not to tune fraud-detection
+thresholds or the policy just to manufacture a junior case on this
+particular dataset. Confidence and contradiction-state signals are also
+still approximated (`confidence_source: "derived_from_evidence_quality"`,
+`contradiction_state: "not_evaluated"`) because the LLM contradiction/
+hypothesis agents are not yet wired into `run_pipeline.py`'s live
+per-case loop — documented in `authority_policy.py`'s own docstring, not
+hidden.
+
 Remaining checkpoints, reserved for future sessions:
-- CHECKPOINT 4: investigator authority / escalation policy engine
 - CHECKPOINT 5: ground-truth network model + `eval_pipeline.py` rebuild
 - CHECKPOINT 6: tests and final verification across all stages
 - (unscheduled) evidence-stage determinism fix (`evidence_id`/
   `generated_at` in `network_layer.py`/`evidence_model.py`) — see section
   4, item 8
+- (unscheduled) downstream authority *enforcement* (gating an actual
+  investigator's attempted action against `assess_authority()`'s
+  decision) and the Audit Trail/Human Review/Investigator Action pipeline
+  stages themselves — Checkpoint 4 computes and persists the decision;
+  consuming it to block/allow a real action is not yet built.
