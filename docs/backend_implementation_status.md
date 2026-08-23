@@ -9,13 +9,26 @@ prior session notes. **A prior session's claim in this exact file (a
 see section 9 below.** Treat every status in this file as re-verifiable:
 run the commands in section 6 yourself if in doubt.
 
-**This session implemented CHECKPOINT 2 (Evidence Architecture)**: a
+**This session implemented CHECKPOINT 3 (Detection + Alert + Case Bundling
+Correction)**: corrected `bundle_alerts_into_cases()` to actually verify
+correlation (not just account+time coincidence) and record a structured
+`bundle_reason`; added `relevant_transaction_ids` to alerts (additive) so
+that correlation signal exists; fixed a genuine determinism bug where
+`alert_id`/`case_id` used `uuid.uuid4()` (non-deterministic, draws from
+`os.urandom`, unaffected by `random.seed(42)`) — both are now deterministic
+content hashes; added 30 new automated tests (ground-truth isolation +
+case-correlation policy). Evidence-object generation
+(`evidence_model.py`/`network_layer.py`) was explicitly left untouched
+(out of scope; its own `evidence_id`/`generated_at` nondeterminism is a
+known, documented limitation, not a Checkpoint 3 blocker).
+
+*(Prior session implemented CHECKPOINT 2 (Evidence Architecture): a
 canonical, typed `EvidenceItem` model, per-typology-configurable required
 evidence, deterministic weighted completeness, structured missing
-evidence, and a 17-test suite — all new code in `backend/evidence_model.py`,
-wired additively into `run_pipeline.py`. Investigator authority, action
-routing, and large-scale evaluation were explicitly NOT started (per the
-governing instruction) and remain `[NOT IMPLEMENTED]`.
+evidence, and a 17-test suite — all in `backend/evidence_model.py`, wired
+additively into `run_pipeline.py`. Investigator authority, action routing,
+and large-scale evaluation were explicitly NOT started and remain
+`[NOT IMPLEMENTED]`.)*
 
 ## 1. Architecture
 
@@ -25,16 +38,64 @@ the 9-stage pipeline and current status:
 | Stage | Status |
 |---|---|
 | Raw data (`DataStore`) | ✅ [IMPLEMENTED] [VERIFIED] |
-| Detection (4 typology detectors) | ✅ [IMPLEMENTED] [VERIFIED] |
+| Detection (4 typology detectors) | ✅ [IMPLEMENTED] [VERIFIED] — alerts now also carry `relevant_transaction_ids` (additive, **NEW Checkpoint 3**) and a deterministic content-hash `alert_id` (**fixed, Checkpoint 3** — was `uuid.uuid4()`) |
 | Alerts | ✅ [IMPLEMENTED] [VERIFIED] |
-| Case bundling | 🟡 [PARTIALLY IMPLEMENTED] (account_id + time window only; no `bundle_reason`, no typology/shared-transaction correlation — unchanged this session, Checkpoint 3 scope) |
-| Investigation (evidence gathering) | 🟡 [PARTIALLY IMPLEMENTED] (two separate, unmerged entry points — see section 3; unchanged this session) |
-| Evidence (structured object model) | ✅ [IMPLEMENTED] [VERIFIED] — typed `EvidenceItem`s (`backend/evidence_model.py`), additive to the existing `data` blob. **NEW this session.** |
-| Evidence completeness | ✅ [IMPLEMENTED] [VERIFIED] — deterministic, weighted, computed from real evidence every run; zero randomness in live code. **NEW this session.** |
-| Investigator authority | ❌ [NOT IMPLEMENTED] in live code (ground-truth-only field; live code correctly asserts nothing — out of scope this session by explicit instruction) |
-| Action / escalation | ❌ [NOT IMPLEMENTED] (out of scope this session) |
+| Case bundling | ✅ [IMPLEMENTED] [VERIFIED] (**Checkpoint 3**) — temporal window (configurable, recorded as `correlation_window_hours`) + actual correlation check (same typology, or shared `relevant_transaction_ids`) before merging; structured, deterministic `bundle_reason` on every case; `case_id` is now a deterministic content hash (was `uuid.uuid4()`) |
+| Investigation (evidence gathering) | 🟡 [PARTIALLY IMPLEMENTED] (two separate, unmerged entry points — see section 3; unchanged this checkpoint) |
+| Evidence (structured object model) | ✅ [IMPLEMENTED] [VERIFIED] — typed `EvidenceItem`s (`backend/evidence_model.py`), additive to the existing `data` blob. Unchanged this checkpoint (out of scope). **Known limitation (unchanged):** `evidence_id`/`generated_at` are non-deterministic (`uuid.uuid4()`/`datetime.now()`) — see section 4. |
+| Evidence completeness | ✅ [IMPLEMENTED] [VERIFIED] — deterministic, weighted, computed from real evidence every run; zero randomness in live code. Unchanged this checkpoint. |
+| Investigator authority | ❌ [NOT IMPLEMENTED] in live code (ground-truth-only field; live code correctly asserts nothing — out of scope, Checkpoint 4) |
+| Action / escalation | ❌ [NOT IMPLEMENTED] (out of scope, Checkpoint 4) |
 
-## 2. Completed changes (CHECKPOINT 2, this session)
+## 2. Completed changes (CHECKPOINT 3, this session)
+
+1. **`relevant_transaction_ids` added to every live alert** (additive —
+   `transaction_id` unchanged/preserved) in `detection_layer.py`: the full
+   set of transactions each detector actually examined (its rolling
+   window/pass-through set), not just the single anchor transaction. Wired
+   into smurfing, reverse_smurfing, money_mule (account_swap already
+   anchors to a single transaction; left as-is). Exists so (a) alerts are
+   independently explainable without re-deriving the detector's window,
+   and (b) case bundling can check real evidence overlap instead of only
+   account+time.
+2. **`bundle_alerts_into_cases()` rewritten** to stop merging purely on
+   `account_id` + 24h window. New two-step policy: (i) `_temporal_clusters()`
+   — same greedy time-window clustering as before, factored out;
+   (ii) `_split_cluster_by_correlation()` — within a temporal cluster,
+   union-find over `_pairwise_correlation()` (same typology, or overlapping
+   `relevant_transaction_ids`) splits out alerts that only coincide on
+   account+time but aren't actually related. A single-alert case now says
+   so honestly (`bundle_reason: ["single_alert_case"]`) instead of implying
+   a correlation decision that was never made.
+3. **`bundle_reason` (structured, deterministic) added to every case** —
+   `sorted({"same_primary_account", "within_case_window"} | correlation
+   reasons)`, or `["single_alert_case"]`. **`correlation_window_hours`
+   added to every case** recording the (configurable) window actually
+   used. Both new CSV columns are additive (appended), existing columns
+   unchanged/preserved (`case_id`, `account_id`, `alert_ids`,
+   `primary_trigger`, `status` all untouched per the governing instruction).
+4. **Determinism bug fixed:** `alert_id`/`case_id` generation switched from
+   `uuid.uuid4()` (drawn from `os.urandom`, silently non-deterministic —
+   see section 9 for the empirical proof) to a SHA-256 content hash of each
+   object's own already-deterministic fields. Verified: two full pipeline
+   runs against identical `mock_data/` now produce byte-identical
+   `suspected_alerts.json`/`cases.json` (via `json.dumps(...,
+   sort_keys=True)` equality — not just matching counts).
+5. **30 new automated tests added** (`tests/test_ground_truth_isolation.py`
+   — 13 tests, AST-based static scan of every live module + a dynamic
+   proof that deleting all `ground_truth_*.csv` files changes nothing
+   about live output; `tests/test_case_bundling.py` — 17 tests, covering
+   all 10 required TEST cases from the Checkpoint 3 spec plus the
+   account-swap causal-linkage regression guard). Full suite: **47/47
+   passing** (17 pre-existing from Checkpoint 2 + 30 new).
+6. **`evidence_model.py` and `network_layer.py` deliberately NOT modified**
+   — per the governing instruction, evidence generation is downstream of
+   Case Bundling and out of this checkpoint's scope. Their pre-existing
+   `uuid.uuid4()`/`datetime.now()` non-determinism in `evidence_id`/
+   `generated_at` is documented as a known limitation (section 4), not
+   silently left undocumented and not "fixed" outside scope.
+
+
 
 1. **Verified documentation against actual code and a real pipeline run**
    before changing anything (per the governing instruction) — see section
@@ -122,27 +183,27 @@ produces the same severity, verified by
 
 ## 4. Remaining work
 
-In priority order, matching `ARCHITECTURE.md`'s stage list. Items 1–3
-from the prior version of this document are DONE (this checkpoint);
-renumbered from the original item 4 onward:
+In priority order, matching `ARCHITECTURE.md`'s stage list. Item 2 (bundle
+reason) from the prior version of this document is now DONE (Checkpoint
+3); renumbered/updated accordingly:
 
 1. **Investigator authority policy engine** — a real function computing
-   junior/senior from completeness (now real, computed by this
-   checkpoint's `evidence_model.py`) + typology risk + confidence +
-   contradiction state. Must not live in `detection_layer.py` (confirmed
-   correct exclusion, preserve it). **Explicitly out of scope for this
-   session — do not start until instructed.**
-2. **Bundle reason** on `bundle_alerts_into_cases()` output — additive
-   `bundle_reason: [...]` field; see `ARCHITECTURE.md`'s "Bundle reason"
-   section for the open question about false-merging unrelated same-
-   account alerts within the same 24h window. Unchanged this session.
+   junior/senior from completeness (real, computed by Checkpoint 2's
+   `evidence_model.py`) + typology risk + confidence + contradiction
+   state. Must not live in `detection_layer.py` (confirmed correct
+   exclusion, preserve it). **Explicitly out of scope for Checkpoint 3 —
+   Checkpoint 4.**
+2. ~~Bundle reason on `bundle_alerts_into_cases()` output~~ — **DONE
+   (Checkpoint 3).** See section 2 above and `ARCHITECTURE.md`'s "Bundle
+   reason" section.
 3. **Ground-truth network model with stable IDs** (`GT-SMURF-001` etc.,
    `fraud_networks.json`) — needed before network-level evaluation
    metrics can exist. Touches only `generate_mock_data.py` and
-   evaluation code, never live detection/investigation code.
+   evaluation code, never live detection/investigation code. Unchanged
+   this checkpoint.
 4. **Action/escalation stage** — depends on 1 above existing first.
 5. **Missing-evidence-driven escalation policy** — the structured
-   `missing_reason`/`severity` this checkpoint added is the direct input
+   `missing_reason`/`severity` Checkpoint 2 added is the direct input
    this policy needs; the policy itself (what to do given a `critical`
    gap) is not yet built.
 6. **`eval_pipeline.py` rebuild** — the file is currently intentionally
@@ -153,41 +214,68 @@ renumbered from the original item 4 onward:
    explicit instruction.**
 7. **LLM privacy/masking architecture** — lower priority; no prior version
    exists to restore (see `ARCHITECTURE.md`'s "API/LLM safety" section).
-8. **Remaining test coverage** — 17/17 of this checkpoint's own tests pass
-   (evidence model + completeness). `ARCHITECTURE.md`'s full test list
-   (section "Testing requirements") covers stages beyond evidence
-   (detection, bundling, authority, evaluation) that this checkpoint
-   didn't touch — those tests remain to be written when those stages are
-   built.
+8. **Evidence-stage determinism** (`evidence_id`/`generated_at` in
+   `network_layer.py`/`evidence_model.py` use `uuid.uuid4()`/
+   `datetime.now()`) — verified this checkpoint to be the *only* source of
+   non-determinism in the full pipeline's output (stripping just these two
+   keys from every `evidence/*.json` file makes two runs byte-identical;
+   confirmed across all 21 generated evidence files). **Deliberately not
+   fixed this checkpoint** — evidence generation is downstream of Case
+   Bundling and explicitly out of Checkpoint 3's scope; fixing it means
+   editing `evidence_model.py`/`network_layer.py`, which the governing
+   instruction reserves for a future checkpoint that explicitly owns the
+   Evidence stage.
+9. **Broader correlation signals for case bundling** — the current
+   correlation policy (Checkpoint 3) only has `typology` and
+   `relevant_transaction_ids` to work with, because the `Alert` object
+   doesn't carry beneficiary/device/geo IDs. Shared-beneficiary,
+   shared-device, and network-connectivity correlation (all listed as
+   *potential* dimensions in `ARCHITECTURE.md`'s "Bundle reason" section)
+   remain unimplemented until either the alert schema is extended or case
+   bundling is allowed to peek at investigation-stage data (the latter
+   would blur the Detection/Case-Bundling vs. Investigation boundary and
+   needs an explicit decision, not a silent workaround).
+10. **Remaining test coverage** — 47/47 tests pass (17 evidence-model,
+    Checkpoint 2; 17 case-bundling + 13 ground-truth-isolation, Checkpoint
+    3). `ARCHITECTURE.md`'s full test list (section "Testing requirements")
+    still has open items requiring the authority/escalation engine and
+    network-layer/graph-reconstruction correctness checks (items 5, 6, 7,
+    9 partially, 10, 11, 12, 14, 15, 16) — out of Checkpoint 3's scope.
 
 ## 5. Tests passed / failed
 
-**17/17 passing** (`backend/tests/test_evidence_model.py`, run via
-`cd backend && python3 -m pytest tests/ -v`):
+**47/47 passing** (`backend/tests/`, run via `cd backend && python3 -m
+pytest tests/ -v`):
 
-| Test | Result |
-|---|---|
-| `test_weights_sum_to_one` | PASSED |
-| `test_every_required_evidence_type_has_a_checker` | PASSED |
-| `test_known_typologies_covered` | PASSED |
-| `test_unclassified_typology_returns_no_items` | PASSED |
-| `test_money_mule_full_evidence_available` | PASSED |
-| `test_money_mule_all_evidence_missing` | PASSED |
-| `test_missing_evidence_is_structured_not_free_text` | PASSED |
-| `test_severity_is_deterministic_function_of_weight` | PASSED |
-| `test_completeness_is_deterministic_across_repeated_calls` | PASSED |
-| `test_completeness_never_uses_random_module` | PASSED |
-| `test_wrap_as_evidence_preserves_scope_fields` | PASSED (regression guard — see section 9) |
-| `test_build_evidence_items_on_real_case[smurfing]` | PASSED |
-| `test_build_evidence_items_on_real_case[reverse_smurfing]` | PASSED |
-| `test_build_evidence_items_on_real_case[money_mule]` | PASSED |
-| `test_build_evidence_items_on_real_case[account_swap]` | PASSED |
-| `test_source_of_funds_always_missing_on_real_data` | PASSED |
-| `test_persisted_evidence_items_round_trip` | PASSED |
+| Test file | Count | Result |
+|---|---|---|
+| `test_evidence_model.py` (Checkpoint 2) | 17 | all PASSED |
+| `test_case_bundling.py` (**NEW, Checkpoint 3**) | 17 | all PASSED |
+| `test_ground_truth_isolation.py` (**NEW, Checkpoint 3**) | 13 | all PASSED |
 
-This is 17/17 of the tests this checkpoint added, not 17/17 of
-`ARCHITECTURE.md`'s full test list (that list spans stages this
-checkpoint didn't touch — see section 4, item 8).
+`test_case_bundling.py` covers all 10 required TEST cases from the
+Checkpoint 3 spec (multi-alert same-account merging; alerts outside the
+window staying separate; different typologies NOT merging on account+
+window alone, and DOING so when they share a transaction anchor;
+deterministic/explainable `bundle_reason`; no ground-truth/network_id
+field required for bundling; one account producing multiple live alerts;
+cases referencing only real input alert IDs; determinism of repeated
+pipeline runs and of `bundle_alerts_into_cases()` given a fixed/shuffled
+alert list; and the account-swap causal-linkage regression guard).
+
+`test_ground_truth_isolation.py` covers: an AST-based static scan of every
+live module (`data_store.py`, `detection_layer.py`, `evidence_model.py`,
+`network_layer.py`, `run_pipeline.py`, `main.py`, all four `agents/*.py`)
+for any ground-truth reference in actual code (imports, non-docstring
+string literals, attribute access, identifiers — docstrings/comments
+excluded, since those may legitimately describe the separation); a sanity
+check that `ground_truth_*.csv` files actually exist (so the isolation
+proof isn't vacuous); a dynamic proof that deleting every
+`ground_truth_*.csv` from a copy of `mock_data/` produces byte-identical
+live pipeline output; and a check that no live alert/case dict carries a
+`ground_truth`-prefixed key.
+
+This is 47/47 of all tests in the repository — not a subset.
 
 ## 6. Current pipeline command
 
@@ -198,10 +286,18 @@ python3 run_pipeline.py --demo_case
 python3 -m pytest tests/ -v
 ```
 
+**Note (Checkpoint 3):** the Checkpoint 3 spec's suggested command
+(`python generate_mock_data.py --seed 42`) does not match the actual CLI —
+there is no `--seed` flag (seed 42 is hardcoded at import time; see
+`ARCHITECTURE.md`'s "Determinism & reproducibility" section, "Recommended
+improvement" — unchanged, still not implemented). Ran the command above
+instead, which is what the file's own prior sections already documented as
+correct.
+
 `run_pipeline.py` is committed to the repo (added in commit `88068ce`,
-alongside this checkpoint's predecessor doc commit). This session's
-changes to it are additive (see section 2, item 3) — no existing
-behavior removed.
+alongside this checkpoint's predecessor doc commit). This checkpoint's
+changes to it are limited to the CSV field additions already described in
+section 2 (item 3) — no existing behavior removed.
 
 Evaluation (separate, not part of the live pipeline, and currently
 non-functional — see section 11):
@@ -500,7 +596,7 @@ and this file. No Python files touched in that session; `run_pipeline.py`
 committed alongside it (unchanged implementation code carried over, not
 new work product of that session).
 
-**CHECKPOINT 2 (this session): Evidence Architecture.** Adds
+**CHECKPOINT 2: Evidence Architecture.** Adds
 `backend/evidence_model.py` (canonical `EvidenceItem` model +
 deterministic weighted completeness), wires it additively into
 `run_pipeline.py` and `network_layer.py`'s standalone `__main__`, adds
@@ -512,10 +608,37 @@ run (220 accounts → 31 alerts → 21 cases → 21 evidence records, all with
 typed evidence items and a deterministic completeness score) and direct
 inspection of real persisted evidence JSON on disk. Investigator
 authority, action/escalation, and the evaluation rebuild were explicitly
-NOT started this session.
+NOT started that session.
+
+**CHECKPOINT 3 (this session): Detection + Alert + Case Bundling
+Correction. [COMPLETE] [VERIFIED].** Adds `relevant_transaction_ids` to
+live alerts (additive); rewrites `bundle_alerts_into_cases()` to require
+actual correlation (same typology, or a shared transaction anchor) before
+merging alerts beyond a single-alert case, instead of merging on
+account+time-window alone; adds structured, deterministic `bundle_reason`
+and `correlation_window_hours` to every case; fixes a genuine
+determinism bug (`alert_id`/`case_id` were `uuid.uuid4()`-based, silently
+non-deterministic across identical-input reruns — now SHA-256 content
+hashes); adds 30 new tests (`test_case_bundling.py`,
+`test_ground_truth_isolation.py`) — full suite now 47/47 passing.
+Verified via two full pipeline runs against identical `mock_data/`:
+`suspected_alerts.json`/`cases.json` are byte-identical (including IDs);
+`evidence/*.json` differs only in `evidence_id`/`generated_at` (confirmed
+across all 21 files), which is `evidence_model.py`/`network_layer.py`'s
+pre-existing, documented, and deliberately-untouched non-determinism —
+out of this checkpoint's scope. Ground-truth isolation reconfirmed
+repo-wide (Python + JS/TS/JSON/YAML), not just re-asserted. Did not touch
+`evidence_model.py`; did not restore `eval_pipeline.py`; did not start
+investigator authority, action/escalation, or the ground-truth network
+model. Alert/case counts on the checked-in dataset are unchanged from
+pre-Checkpoint-3 (31 alerts → 21 cases) — the fix changes *why* cases are
+bundled and makes it inspectable, not how many bundles occur on this
+particular generated dataset.
 
 Remaining checkpoints, reserved for future sessions:
-- CHECKPOINT 3: detection + case-bundling correction (`bundle_reason`)
 - CHECKPOINT 4: investigator authority / escalation policy engine
 - CHECKPOINT 5: ground-truth network model + `eval_pipeline.py` rebuild
 - CHECKPOINT 6: tests and final verification across all stages
+- (unscheduled) evidence-stage determinism fix (`evidence_id`/
+  `generated_at` in `network_layer.py`/`evidence_model.py`) — see section
+  4, item 8

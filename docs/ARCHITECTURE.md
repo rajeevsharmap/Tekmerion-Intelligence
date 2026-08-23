@@ -40,6 +40,19 @@ endpoint, or any LLM prompt. The only legitimate reader is evaluation code
 that compares ground truth against live output *after the fact*, purely
 to produce metrics.
 
+**[VERIFIED] (Checkpoint 3):** confirmed by an AST-based static scan of
+every live module (imports, non-docstring string literals, attribute
+access, identifiers — comments/docstrings excluded, since those may
+legitimately describe the separation in prose) plus a dynamic proof
+(running the real Detection → Case Bundling pipeline against a copy of
+`mock_data/` with every `ground_truth_*.csv` deleted and confirming
+byte-identical output) — see `tests/test_ground_truth_isolation.py`. A
+repo-wide grep across all `.py`/`.json`/`.js`/`.jsx`/`.ts`/`.tsx`/`.yaml`
+files (excluding `venv/`, `node_modules/`, `.git/`) found ground-truth
+references only in `generate_mock_data.py` (the generator, permitted),
+`run_pipeline.py`/`detection_layer.py` (comments only), and the test
+files themselves.
+
 ## Target directory layout
 
 ```
@@ -87,11 +100,15 @@ stage may read ground truth to shortcut its own computation.
    `detect_account_swap`), each a pure function of `DataStore` state. No
    randomness, no ground truth.
 3. **Alerts** — the output of stage 2: `{alert_id, account_id,
-   transaction_id, typology, triggering_rules, alert_score, ...}`. One
-   alert is not one case and is not one fraud network.
+   transaction_id, relevant_transaction_ids, typology, triggering_rules,
+   alert_score, ...}`. One alert is not one case and is not one fraud
+   network. `alert_id` is a deterministic hash of the alert's own content
+   (typology, account_id, transaction_id, triggering_rules, created_at) —
+   see "Determinism & reproducibility" below.
 4. **Case bundling** — `bundle_alerts_into_cases()`. Groups alerts that
-   plausibly describe the same underlying incident. Must record *why*
-   (see "Bundle reason" below) — not yet implemented, see status doc.
+   plausibly describe the same underlying incident and records *why* via a
+   structured `bundle_reason` field. [IMPLEMENTED] [VERIFIED] as of
+   Checkpoint 3 — see "Bundle reason" below.
 5. **Investigation** — gathering typology-specific evidence for a
    bundled case: transaction chain, beneficiary relationships,
    device/geo history, network traversal. Currently done by
@@ -272,14 +289,31 @@ Correlation attributes to consider: account_id, typology, temporal
 proximity, transaction relationships, shared evidence entities, network
 connectivity.
 
-**Current status:** `bundle_alerts_into_cases()` bundles purely on
-`account_id` + a fixed 24h window. This happens to produce
-`same_primary_account` + `within_case_window` reasoning implicitly, but
-never records it as structured output, and never considers
-typology-correlation or shared-transaction-chain as independent
-correlation signals (an account could plausibly have two *unrelated*
-alerts land in the same 24h window that shouldn't be merged — the current
-bundler cannot express that distinction).
+**Current status [IMPLEMENTED] [VERIFIED] (Checkpoint 3):**
+`bundle_alerts_into_cases()` now bundles in two steps: (1) a temporal
+cluster per `account_id` within a configurable `window_hours` (default
+24h, recorded on the case as `correlation_window_hours`), then (2) within
+that cluster, alerts are only merged if they are actually correlated —
+same `typology`, or a shared entry in `relevant_transaction_ids` (see
+`_pairwise_correlation()` / `_split_cluster_by_correlation()`). Same
+account + same window alone no longer merges two alerts of different,
+uncorrelated typologies — each becomes its own single-alert case with
+`bundle_reason: ["single_alert_case"]`. A merged case's `bundle_reason` is
+`sorted({"same_primary_account", "within_case_window"} | correlation
+reasons)`, e.g. `["same_primary_account", "same_typology",
+"within_case_window"]` or (when the correlation is cross-typology, via a
+shared transaction anchor) `["same_primary_account",
+"shared_transaction_chain", "within_case_window"]`. Verified against the
+real generated dataset: every existing cross-typology merge (money_mule +
+smurfing sharing an anchor transaction) turned out to already satisfy
+`shared_transaction_chain`, so case/alert counts are unchanged from before
+this checkpoint (31 alerts → 21 cases) — the correction changes *why* a
+merge happens and makes it inspectable, not *how many* merges happen on
+this particular dataset. Network connectivity, shared beneficiaries, and
+shared devices are not yet usable correlation signals because the `Alert`
+object itself doesn't carry beneficiary/device IDs — only
+`relevant_transaction_ids` — see "Known limitations" in
+`backend_implementation_status.md`.
 
 ## Evidence object model
 
@@ -515,11 +549,43 @@ prerequisite for the network-level metrics specifically.
 `generate_mock_data.py` seeds `Faker`/`random` with a fixed value at
 import time (`seed=42`, not currently exposed as a `--seed` CLI flag).
 Running it twice with the same `--num_accounts`/`--num_cases` produces
-byte-identical output. Live detection/case-bundling logic contains zero
-calls to `random` — given identical input data, output is always
-identical. Recommended improvement (not yet done): expose `--seed` as a
-CLI argument instead of a hardcoded module-level call, so different seeds
-can be tested without editing source.
+byte-identical output.
+
+**[VERIFIED] (Checkpoint 3):** Live detection/case-bundling logic contains
+zero calls to the `random` module, and — as of this checkpoint — zero
+calls to `uuid.uuid4()` either. Prior to Checkpoint 3, `detection_layer.py`
+generated `alert_id` and `case_id` via `uuid.uuid4()`, which draws from
+`os.urandom` and is **not** affected by `random.seed(42)`; this silently
+contradicted this section's own claim, since re-running the pipeline
+against identical `mock_data/` produced different alert/case IDs every
+time (confirmed empirically this checkpoint). Fixed: `alert_id` is now
+`sha256(typology, account_id, transaction_id, triggering_rules,
+created_at)[:8]`, and `case_id` is `sha256(account_id, sorted
+alert_ids)[:8]` — both pure functions of the alert's/case's own already-
+deterministic content. Verified: two full pipeline runs against the same
+`mock_data/` now produce byte-identical `suspected_alerts.json` and
+`cases.json` (including IDs), confirmed via `json.dumps(..., sort_keys=True)`
+equality, not just matching counts.
+
+**Known, intentionally out-of-scope non-determinism:** `evidence/*.json`
+output is **not** byte-identical across repeated runs — `network_layer.py`
+(`generated_at: datetime.now().isoformat()`, `evidence_id:
+uuid.uuid4()`) and `evidence_model.py` (each evidence item's `evidence_id:
+uuid.uuid4()`) both still use wall-clock time / non-seeded UUIDs. Verified
+this checkpoint: stripping only the `evidence_id`/`generated_at` keys from
+every evidence file produces byte-identical output across two runs (i.e.
+this is the *only* source of divergence — no completeness score, evidence
+type, or content field differs). Per Checkpoint 3's explicit scope
+(Detection → Alerts → Case Bundling only; evidence generation is
+downstream, see "Evidence object model" above and
+`docs/backend_implementation_status.md`), this was **not** fixed here —
+doing so would mean editing `network_layer.py`/`evidence_model.py` outside
+this checkpoint's stated boundary. Recommended for a future checkpoint
+that explicitly owns the Evidence stage.
+
+Recommended improvement (not yet done): expose `--seed` as a CLI argument
+instead of a hardcoded module-level call, so different seeds can be tested
+without editing source.
 
 ## Frontend contract (current)
 
@@ -536,16 +602,28 @@ built out, not after, to avoid rework.
 
 ## Testing requirements
 
-17 tests are specified (see `docs/backend_implementation_status.md` for
-current pass/fail status — as of this writing, **zero automated tests
-exist in this repository**, no `tests/` directory, nothing runs under
-pytest). Minimum required coverage, verbatim from the corrected
+17 tests are specified below (see `docs/backend_implementation_status.md`
+for current pass/fail status). **[VERIFIED] (Checkpoint 3):** 47 automated
+tests exist under `tests/` and pass under `pytest` — `test_evidence_model.py`
+(17, from Checkpoint 2), `test_case_bundling.py` (17, new this checkpoint —
+covers items 2, 3, 4, and 13 below), `test_ground_truth_isolation.py` (13,
+new this checkpoint — covers item 17 below). Items 5, 6, 7, 9 (partially),
+10, 11, 12, 14, 15, 16 remain unimplemented/unverified — they require
+ground-truth-vs-live comparison (5, 6), network-layer traversal correctness
+(7), or authority/escalation engines explicitly out of scope for this
+checkpoint (10, 11) — see `backend_implementation_status.md` "Known
+limitations". Minimum required coverage, verbatim from the corrected
 architecture spec:
 
 1. Mock data generates with all references resolving.
-2. Live detector never consumes ground truth.
-3. Case bundling can merge multiple alerts into one case.
-4. One network can produce multiple alerts.
+2. Live detector never consumes ground truth. **[VERIFIED]** —
+   `test_ground_truth_isolation.py`.
+3. Case bundling can merge multiple alerts into one case. **[VERIFIED]** —
+   `test_case_bundling.py`.
+4. One network can produce multiple alerts. **[VERIFIED, in live terms]**
+   — `test_case_bundling.py` confirms one account can produce multiple live
+   alerts; mapping this to ground-truth network IDs is evaluation's job,
+   out of scope here (see item 5/6).
 5. False positives are possible (a legitimate-labeled ground-truth case
    can still trigger a live alert).
 6. False negatives are measurable (a fraud-labeled ground-truth network
@@ -559,7 +637,8 @@ architecture spec:
 12. Contradiction evidence is based only on gathered evidence (no
     fabrication).
 13. Account-swap device/geo/transaction linkage holds (same account_id
-    connects all four).
+    connects all four). **[VERIFIED, causal-chain regression guard]** —
+    `test_case_bundling.py::test_account_swap_causal_linkage_intact_on_real_data`.
 14. Smurfing graph reconstruction is correct.
 15. Money-mule transaction timeline is correct.
 16. Reverse-smurfing graph reconstruction is correct.

@@ -24,8 +24,8 @@ never read ground_truth_* fields - those only exist in the mock cases.csv
 for offline evaluation and must never influence live scoring.
 """
 
+import hashlib
 import statistics
-import uuid
 from datetime import timedelta
 
 from data_store import DataStore
@@ -203,18 +203,46 @@ def compute_flow_depth(store, account_id, max_depth=3, _visited=None):
     return depth
 
 
-def _new_alert_id(typology):
-    return f"ALERT-{typology.upper()[:4]}-{uuid.uuid4().hex[:8].upper()}"
+def _new_alert_id(typology, *content_parts):
+    """CHECKPOINT 3 fix: alert_id used to be uuid.uuid4()-based, which draws
+    from os.urandom - NOT from the random.seed(42) that generate_mock_data.py
+    sets, and NOT deterministic across repeated runs on identical input data.
+    This silently violated docs/ARCHITECTURE.md's own "Determinism &
+    reproducibility" claim ("given identical input data, output is always
+    identical") for the one field most likely to be compared run-to-run.
+    Fixed here (not weakened/undocumented) per this checkpoint's Section 10
+    guidance: when the doc and the code genuinely disagree, correct the
+    code, and record the fix. content_parts must fully determine the alert's
+    identity (account_id, transaction_id, triggering_rules, created_at) so
+    two distinct alerts never collide and the same alert always gets the
+    same id."""
+    digest = hashlib.sha256("|".join(str(p) for p in content_parts).encode("utf-8")).hexdigest()
+    return f"ALERT-{typology.upper()[:4]}-{digest[:8].upper()}"
 
 
-def _make_alert(account_id, transaction_id, typology, rulebook, triggering_rules, evidence_signals, created_at, min_rules=1):
+def _make_alert(account_id, transaction_id, typology, rulebook, triggering_rules, evidence_signals, created_at,
+                 min_rules=1, relevant_transaction_ids=None):
     score = min(100, sum(rulebook[r]["score"] for r in triggering_rules))
     triggered = score >= 30 and len(triggering_rules) >= min_rules
     classification = classify_alert(score)
+    # relevant_transaction_ids: every observable transaction the detector actually
+    # examined while building this alert (the rolling window / pass-through set),
+    # not just the single anchor transaction_id. This is additive to the existing
+    # transaction_id field (never replaces it - preserves the existing contract)
+    # and exists so (a) the alert is independently explainable without re-deriving
+    # the detector's window, and (b) Case Bundling (CHECKPOINT 3) can check for
+    # real shared-evidence overlap between two alerts instead of only comparing
+    # account_id + a time window.
+    relevant_ids = sorted(set(relevant_transaction_ids)) if relevant_transaction_ids else [transaction_id]
+    if transaction_id not in relevant_ids:
+        relevant_ids = sorted(set(relevant_ids) | {transaction_id})
+    created_at_str = created_at.isoformat() if hasattr(created_at, "isoformat") else str(created_at)
+    alert_id = _new_alert_id(typology, account_id, transaction_id, tuple(triggering_rules), created_at_str)
     return {
-        "alert_id": _new_alert_id(typology),
+        "alert_id": alert_id,
         "account_id": account_id,
         "transaction_id": transaction_id,
+        "relevant_transaction_ids": relevant_ids,
         "typology": typology,
         "triggered": triggered,
         "alert_score": score,
@@ -223,7 +251,7 @@ def _make_alert(account_id, transaction_id, typology, rulebook, triggering_rules
         "evidence_signals": evidence_signals,
         "recommended_initial_action": classification["initial_action"] if triggered else "clear",
         "case_required": triggered and classification["initial_action"] in ("escalate", "monitor"),
-        "created_at": created_at.isoformat() if hasattr(created_at, "isoformat") else str(created_at),
+        "created_at": created_at_str,
     }
 
 
@@ -291,7 +319,11 @@ def detect_smurfing(store, account):
         return None
 
     root_txn_id = rapid_txn["transaction_id"] if rapid_txn else max(window, key=lambda t: t["amount"])["transaction_id"]
-    return _make_alert(account_id, root_txn_id, "smurfing", SMURFING_RULES, triggering, signals, anchor_time, min_rules=2)
+    relevant_txn_ids = ([t["transaction_id"] for t in window]
+                         + ([rapid_txn["transaction_id"]] if rapid_txn else [])
+                         + [t["transaction_id"] for t in out_window])
+    return _make_alert(account_id, root_txn_id, "smurfing", SMURFING_RULES, triggering, signals, anchor_time,
+                        min_rules=2, relevant_transaction_ids=relevant_txn_ids)
 
 
 # ----------------------------------------------------------------------
@@ -355,7 +387,9 @@ def detect_reverse_smurfing(store, account):
 
     root_txn_id = max(window, key=lambda t: t["amount"])["transaction_id"]
     anchor_time = min(t["timestamp"] for t in window)
-    return _make_alert(account_id, root_txn_id, "reverse_smurfing", REVERSE_SMURFING_RULES, triggering, signals, anchor_time, min_rules=2)
+    relevant_txn_ids = [t["transaction_id"] for t in window]
+    return _make_alert(account_id, root_txn_id, "reverse_smurfing", REVERSE_SMURFING_RULES, triggering, signals,
+                        anchor_time, min_rules=2, relevant_transaction_ids=relevant_txn_ids)
 
 
 # ----------------------------------------------------------------------
@@ -421,7 +455,9 @@ def detect_money_mule(store, account):
         return None
 
     root_txn_id = root_txn["transaction_id"] if root_txn else max(window, key=lambda t: t["amount"])["transaction_id"]
-    return _make_alert(account_id, root_txn_id, "money_mule", MONEY_MULE_RULES, triggering, signals, window_end, min_rules=2)
+    relevant_txn_ids = [t["transaction_id"] for t in window] + [t["transaction_id"] for t in out_6h]
+    return _make_alert(account_id, root_txn_id, "money_mule", MONEY_MULE_RULES, triggering, signals, window_end,
+                        min_rules=2, relevant_transaction_ids=relevant_txn_ids)
 
 
 # ----------------------------------------------------------------------
@@ -546,13 +582,124 @@ def run_detection_pipeline(store):
     return all_alerts
 
 
-def bundle_alerts_into_cases(alerts, window_hours=CASE_BUNDLE_WINDOW_HOURS):
-    """Case Intake (spec section 9): bundle triggered alerts for the same
-    account_id that occur within CASE_BUNDLE_WINDOW_HOURS of each other into
-    a single case.
+def _temporal_clusters(acc_alerts, window_hours):
+    """Group one account's alerts into candidate temporal clusters: a greedy
+    rolling window, exactly as before this checkpoint. This step alone is
+    NOT sufficient justification for a single case (see
+    _split_cluster_by_correlation below) - it just bounds which alerts are
+    even eligible to be considered together."""
+    from datetime import datetime as _dt
+    acc_alerts = sorted(acc_alerts, key=lambda a: a["created_at"])
+    clusters = []
+    cluster = []
+    for a in acc_alerts:
+        ts = _dt.fromisoformat(a["created_at"])
+        if not cluster:
+            cluster = [a]
+        elif (ts - _dt.fromisoformat(cluster[0]["created_at"])).total_seconds() <= window_hours * 3600:
+            cluster.append(a)
+        else:
+            clusters.append(cluster)
+            cluster = [a]
+    if cluster:
+        clusters.append(cluster)
+    return clusters
 
-    Case Intake's job stops at: bundle alerts, assign a case_id, set status to
-    "open". It does NOT decide completeness (that's the Investigation
+
+def _pairwise_correlation(a, b):
+    """Deterministic reasons two alerts (already known to share account_id
+    and to fall in the same temporal cluster) may be merged into the SAME
+    case, derived only from data already present on the alert objects
+    (typology, transaction anchors) - never ground truth, never a
+    mock-generator fraud-network id, never data pulled from a later
+    investigation/network-layer stage (case bundling is Stage 4; it must not
+    reach into Stage 5's evidence to justify its own grouping decision).
+
+    Returns a set of reason strings, or an empty set if these two alerts must
+    NOT be merged on this pairing alone (per docs/ARCHITECTURE.md's "Bundle
+    reason" section: same account + same time window is not, by itself,
+    sufficient - two genuinely unrelated alerts can coincidentally land on
+    the same account in the same window and must stay separate cases unless
+    they also share typology or an observable transaction anchor)."""
+    reasons = set()
+    if a["typology"] == b["typology"]:
+        reasons.add("same_typology")
+
+    a_txns = set(a.get("relevant_transaction_ids") or [a["transaction_id"]])
+    b_txns = set(b.get("relevant_transaction_ids") or [b["transaction_id"]])
+    if a_txns & b_txns:
+        reasons.add("shared_transaction_chain")
+
+    return reasons
+
+
+def _split_cluster_by_correlation(cluster):
+    """Within one temporal cluster (same account, same window), split into
+    the actual correlated sub-groups using union-find over pairwise
+    _pairwise_correlation() results, and return (alerts, reasons) per
+    sub-group. Two alerts end up in the same sub-group only if there is a
+    direct or transitive correlation edge between them - same account + same
+    window alone never creates an edge. This is what stops two unrelated
+    typologies that merely happen to land in the same window from being
+    silently merged (see docs/ARCHITECTURE.md "Bundle reason", TEST 3 in the
+    Checkpoint 3 spec)."""
+    n = len(cluster)
+    parent = list(range(n))
+
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+
+    def union(x, y):
+        rx, ry = find(x), find(y)
+        if rx != ry:
+            parent[rx] = ry
+
+    pair_reasons = {}
+    for i in range(n):
+        for j in range(i + 1, n):
+            reasons = _pairwise_correlation(cluster[i], cluster[j])
+            if reasons:
+                union(i, j)
+                pair_reasons[(i, j)] = reasons
+
+    groups = {}
+    for i in range(n):
+        groups.setdefault(find(i), []).append(i)
+
+    sub_clusters = []
+    for idxs in groups.values():
+        group_reasons = set()
+        for i in idxs:
+            for j in idxs:
+                if i < j and (i, j) in pair_reasons:
+                    group_reasons |= pair_reasons[(i, j)]
+        sub_clusters.append(([cluster[i] for i in idxs], group_reasons))
+    return sub_clusters
+
+
+def bundle_alerts_into_cases(alerts, window_hours=CASE_BUNDLE_WINDOW_HOURS):
+    """Case Intake (spec section 9, corrected in CHECKPOINT 3): bundle
+    triggered alerts into a single case only when they are BOTH (a) for the
+    same account_id within `window_hours` of each other, AND (b) actually
+    correlated - same typology, or a directly observable shared-evidence
+    anchor (currently: overlapping transaction IDs; see
+    _pairwise_correlation). "same account + same time window" alone is no
+    longer sufficient justification by itself (that was the pre-Checkpoint-3
+    behavior this corrects) - see docs/ARCHITECTURE.md's "Bundle reason"
+    section and docs/backend_implementation_status.md for why.
+
+    Every case records a structured, deterministic `bundle_reason: [...]`
+    explaining why its alerts were grouped, and a `correlation_window_hours`
+    field recording the (configurable) window actually used - never a
+    ground-truth network id, never a mock-generator scenario id (this
+    function never reads a `network_id`/ground-truth field of any kind; it
+    only ever sees the live alert dicts passed in).
+
+    Case Intake's job stops at: bundle alerts, assign a case_id, set status
+    to "open". It does NOT decide completeness (that's the Investigation
     Auditor's job downstream) and it does NOT assign an investigator tier or
     decide escalation (that's a human-in-the-loop / action-stage decision,
     made only after the investigation has produced evidence - not something
@@ -560,49 +707,57 @@ def bundle_alerts_into_cases(alerts, window_hours=CASE_BUNDLE_WINDOW_HOURS):
     this function set assigned_investigator_tier="junior" and escalated=False
     here; both were removed because Case Intake has no basis to assert either
     - "junior" was never actually decided by anything, just hardcoded, and a
-    case that's 30 seconds old cannot be "escalated" or not yet."""
-    from datetime import datetime as _dt
+    case that's 30 seconds old cannot be "escalated" or not yet. That
+    correction remains valid and is unchanged by this checkpoint."""
     by_account = {}
     for a in alerts:
         by_account.setdefault(a["account_id"], []).append(a)
 
     cases = []
     for account_id, acc_alerts in by_account.items():
-        acc_alerts.sort(key=lambda a: a["created_at"])
-        cluster = []
-        clusters = []
-        for a in acc_alerts:
-            ts = _dt.fromisoformat(a["created_at"])
-            if not cluster:
-                cluster = [a]
-                cluster_start = ts
-                continue
-            if (ts - _dt.fromisoformat(cluster[0]["created_at"])).total_seconds() <= window_hours * 3600:
-                cluster.append(a)
-            else:
-                clusters.append(cluster)
-                cluster = [a]
-        if cluster:
-            clusters.append(cluster)
+        for temporal_cluster in _temporal_clusters(acc_alerts, window_hours):
+            for cl, correlation_reasons in _split_cluster_by_correlation(temporal_cluster):
+                cl = sorted(cl, key=lambda a: a["created_at"])
+                primary = max(cl, key=lambda a: a["alert_score"])
+                evidence_signals = sorted({s["signal"] for a in cl for s in a["evidence_signals"]})
+                typologies = sorted({a["typology"] for a in cl})
+                # CHECKPOINT 3 fix: case_id used to be uuid.uuid4()-based (same
+                # os.urandom non-determinism issue as alert_id, above) - now a
+                # deterministic hash of the case's own fully-determined content
+                # (account_id + sorted alert_ids, which are themselves now
+                # deterministic), so repeated runs on identical input data
+                # produce identical case_ids, per docs/ARCHITECTURE.md's
+                # determinism requirement.
+                alert_ids_sorted = sorted(a["alert_id"] for a in cl)
+                case_digest = hashlib.sha256(
+                    "|".join([account_id] + alert_ids_sorted).encode("utf-8")
+                ).hexdigest()
+                case_id = f"CASE-{case_digest[:8].upper()}"
 
-        for cl in clusters:
-            primary = max(cl, key=lambda a: a["alert_score"])
-            evidence_signals = sorted({s["signal"] for a in cl for s in a["evidence_signals"]})
-            typologies = sorted({a["typology"] for a in cl})
-            case_id = f"CASE-{uuid.uuid4().hex[:8].upper()}"
-            case = {
-                "case_id": case_id,
-                "account_id": account_id,
-                "created_at": cl[0]["created_at"],
-                "primary_trigger": primary["typology"],
-                "alert_ids": [a["alert_id"] for a in cl],
-                "evidence_signals": evidence_signals,
-                "typologies": typologies,
-                "status": "open",
-            }
-            for a in cl:
-                a["linked_case_id"] = case_id
-            cases.append(case)
+                if len(cl) == 1:
+                    # No correlation decision was actually made - one alert
+                    # became one case. Say so honestly rather than claiming a
+                    # window/typology match that wasn't the deciding factor.
+                    bundle_reason = ["single_alert_case"]
+                else:
+                    bundle_reason = {"same_primary_account", "within_case_window"} | correlation_reasons
+                    bundle_reason = sorted(bundle_reason)
+
+                case = {
+                    "case_id": case_id,
+                    "account_id": account_id,
+                    "created_at": cl[0]["created_at"],
+                    "primary_trigger": primary["typology"],
+                    "alert_ids": [a["alert_id"] for a in cl],
+                    "evidence_signals": evidence_signals,
+                    "typologies": typologies,
+                    "status": "open",
+                    "bundle_reason": bundle_reason,
+                    "correlation_window_hours": window_hours,
+                }
+                for a in cl:
+                    a["linked_case_id"] = case_id
+                cases.append(case)
     return cases
 
 
@@ -616,12 +771,12 @@ def bundle_alerts_into_cases(alerts, window_hours=CASE_BUNDLE_WINDOW_HOURS):
 # no ground_truth_* fields exist here because live code never has access to
 # them and must never fabricate them.
 # ----------------------------------------------------------------------
-ALERT_CSV_FIELDS = ["alert_id", "account_id", "transaction_id", "typology", "triggered",
+ALERT_CSV_FIELDS = ["alert_id", "account_id", "transaction_id", "relevant_transaction_ids", "typology", "triggered",
                      "alert_score", "severity", "triggering_rules", "evidence_signals",
                      "recommended_initial_action", "case_required", "created_at", "linked_case_id"]
 
 CASE_CSV_FIELDS = ["case_id", "account_id", "created_at", "primary_trigger", "alert_ids",
-                    "evidence_signals", "typologies", "status"]
+                    "evidence_signals", "typologies", "status", "bundle_reason", "correlation_window_hours"]
 
 
 def persist_alerts_csv(alerts, path):
@@ -635,6 +790,7 @@ def persist_alerts_csv(alerts, path):
             row = dict(a)
             row["triggering_rules"] = "|".join(a.get("triggering_rules", []))
             row["evidence_signals"] = "|".join(s["signal"] for s in a.get("evidence_signals", []))
+            row["relevant_transaction_ids"] = "|".join(a.get("relevant_transaction_ids", []))
             row["linked_case_id"] = a.get("linked_case_id", "")
             writer.writerow({k: row.get(k, "") for k in ALERT_CSV_FIELDS})
     return path
@@ -654,6 +810,7 @@ def persist_cases_csv(cases, path):
             row["alert_ids"] = "|".join(c.get("alert_ids", []))
             row["evidence_signals"] = "|".join(c.get("evidence_signals", []))
             row["typologies"] = "|".join(c.get("typologies", []))
+            row["bundle_reason"] = "|".join(c.get("bundle_reason", []))
             writer.writerow({k: row.get(k, "") for k in CASE_CSV_FIELDS})
     return path
 
