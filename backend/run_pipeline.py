@@ -48,6 +48,7 @@ from detection_layer import (
     persist_cases_csv,
 )
 from network_layer import generate_network_evidence, wrap_as_evidence
+from evidence_model import build_evidence_items, compute_completeness
 
 
 def run_pipeline(data_dir="mock_data", out_dir="pipeline_output"):
@@ -81,6 +82,14 @@ def run_pipeline(data_dir="mock_data", out_dir="pipeline_output"):
     for case in cases:
         network_evidence = generate_network_evidence(store, case)
         evidence = wrap_as_evidence(network_evidence)
+        # CHECKPOINT 2: typed evidence items + deterministic completeness,
+        # built from this case's actual network_evidence/store data (never
+        # random) - additive fields on top of the unchanged `data` blob, so
+        # nothing that already reads `data`/`source_transactions`/etc. is
+        # affected. See evidence_model.py for the full evidence object model.
+        evidence_items = build_evidence_items(store, case, network_evidence)
+        evidence["evidence_items"] = evidence_items
+        evidence["completeness"] = compute_completeness(evidence_items)
         evidence_path = os.path.join(evidence_dir, f"{case['case_id']}.json")
         with open(evidence_path, "w") as f:
             json.dump(evidence, f, indent=2, default=str)
@@ -120,6 +129,14 @@ def main():
     print("\nVisualization type by typology (must be graph/graph/timeline/behavioral_transaction_timeline):")
     for typ, viz in sorted(viz_by_typology.items()):
         print(f"  {typ:<18} -> {sorted(viz)}")
+
+    completeness_scores = [e["completeness"]["weighted_score"] for e in evidence_records
+                            if e["completeness"]["weighted_score"] is not None]
+    if completeness_scores:
+        avg = round(sum(completeness_scores) / len(completeness_scores), 1)
+        print(f"\nEvidence completeness (weighted, deterministic): avg={avg} "
+              f"min={min(completeness_scores)} max={max(completeness_scores)} "
+              f"(n={len(completeness_scores)}/{len(evidence_records)} cases with a typed requirement table)")
 
     print(f"\nOutput files under {args.out_dir}/:")
     print(f"  suspected_alerts.csv, cases.csv (+ .json copies)")

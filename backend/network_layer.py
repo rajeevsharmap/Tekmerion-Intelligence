@@ -583,6 +583,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
     os.makedirs(args.out_dir, exist_ok=True)
 
+    from evidence_model import build_evidence_items, compute_completeness
+
     store = DataStore(args.data_dir)
     with open(args.cases_file) as f:
         cases = json.load(f)
@@ -595,6 +597,9 @@ if __name__ == "__main__":
         # shared object.
         net = generate_network_evidence(store, case)
         evidence = wrap_as_evidence(net)
+        evidence_items = build_evidence_items(store, case, net)
+        evidence["evidence_items"] = evidence_items
+        evidence["completeness"] = compute_completeness(evidence_items)
         with open(f"{args.out_dir}/{case['case_id']}.json", "w") as f:
             json.dump(evidence, f, indent=2, default=str)
         print(f"{case['case_id']} [{case['primary_trigger']}] -> "
@@ -602,4 +607,3 @@ if __name__ == "__main__":
               f"{len(net['source_transactions'])} source txn(s) -> {args.out_dir}/{case['case_id']}.json")
 
     print(f"\nWrote {len(cases)} case-scoped evidence file(s) to {args.out_dir}/")
-    

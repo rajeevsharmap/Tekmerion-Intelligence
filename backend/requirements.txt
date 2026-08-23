@@ -6,3 +6,4 @@ google-genai
 Faker
 networkx
 matplotlib
+pytest
