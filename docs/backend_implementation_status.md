@@ -45,7 +45,7 @@ the 9-stage pipeline and current status:
 | Evidence (structured object model) | ✅ [IMPLEMENTED] [VERIFIED] — typed `EvidenceItem`s (`backend/evidence_model.py`), additive to the existing `data` blob. Unchanged this checkpoint (out of scope). **Known limitation (unchanged):** `evidence_id`/`generated_at` are non-deterministic (`uuid.uuid4()`/`datetime.now()`) — see section 4. |
 | Evidence completeness | ✅ [IMPLEMENTED] [VERIFIED] — deterministic, weighted, computed from real evidence every run; zero randomness in live code. Unchanged this checkpoint. |
 | Investigator authority | ✅ [IMPLEMENTED] [VERIFIED] (**Checkpoint 4**) — deterministic policy engine (`backend/authority_policy.py`), wired into both live entry points (`run_pipeline.py`, `network_layer.py`'s standalone `__main__`); computes `junior`/`senior` from real evidence completeness, typology risk, high-value transaction, network complexity, and (if supplied) contradiction/confidence signals — never randomly assigned, never hardcoded, never decided by Detection/Case Intake. |
-| Action / escalation | 🟡 [PARTIALLY IMPLEMENTED] — the authority *decision* (`can_resolve`/`decision`/`reasons`) is computed and persisted per case (Checkpoint 4); a downstream enforcement/UI layer that gates an actual investigator's attempted action against this decision, plus the Audit Trail/Human Review/Investigator Action pipeline stages themselves, do not exist yet in live code (out of scope, later checkpoints). |
+| Action / escalation | 🟡 [PARTIALLY IMPLEMENTED] — **updated, Checkpoint 6:** Next-Best-Action recommendation, authorization enforcement (junior vs. senior), audit trail, human review, investigator action (incl. mandatory-reason override), and case memory are now all implemented and wired into `run_pipeline.py` (`next_best_action.py` / `audit_trail.py` / `investigator_action.py` / `case_state.py` / `case_memory.py` / `action_pipeline.py`, 38 tests passing). **Still not implemented:** real execution of an authorized action against an actual external banking system (simulated only) and SAR report generation (explicitly deferred to a later checkpoint). |
 
 ## 2. Completed changes (CHECKPOINT 3, this session)
 
@@ -704,14 +704,255 @@ hypothesis agents are not yet wired into `run_pipeline.py`'s live
 per-case loop — documented in `authority_policy.py`'s own docstring, not
 hidden.
 
+**CHECKPOINT 5 (this session, across multiple sessions): Regulatory
+Compliance Rule Engine + Regulatory RAG + Investigation Auditor + Case
+Completeness Score + bounded targeted re-gather, made jurisdiction-aware.
+[COMPLETE] [VERIFIED].**
+
+**Note on numbering:** an earlier version of this document reserved
+"CHECKPOINT 5" for the ground-truth network model + `eval_pipeline.py`
+rebuild (see the now-superseded line previously here). That work was
+never started; this project's actual Checkpoint 5, decided and built
+across several sessions, is the regulatory/audit/completeness stage
+described below instead. The ground-truth network model + `eval_pipeline.py`
+rebuild remains unstarted and is renumbered into "Remaining work" below.
+
+**What this checkpoint adds** (see `docs/ARCHITECTURE.md`'s new
+"Checkpoint 5" section for the full design contract): six new modules —
+`jurisdiction.py`, `regulatory_corpus.py`, `regulatory_rag.py`,
+`regulatory_rules.py`, `investigation_auditor.py`, `case_completeness.py`,
+`regather_loop.py` — wired additively into `run_pipeline.py` between
+Evidence (Checkpoint 2) and Investigator Authority (Checkpoint 4), which
+remains unchanged and fully intact.
+
+- **India-primary jurisdiction.** The mock dataset's every account has
+  `registered_country = "India"`. `jurisdiction.py` determines, from real
+  fields only (registered_country, `is_international`, `currency`, geo
+  country-mismatch — never a guess), a per-case `jurisdiction` label
+  (`IN` / `US` / `cross_border` / `unknown`), `applicable_jurisdictions`,
+  and a `confidence`. Real dataset run: 21/21 cases resolve
+  `base_jurisdiction = IN` (`confidence`: 19 high, 2 medium); 14/21 are
+  additionally tagged `cross_border` (real `is_international`/foreign-
+  currency/geo signals present) — **0/21 ever retrieve a US-tagged
+  regulatory citation.**
+- **Regulatory corpus** (`regulatory_corpus.py`) is an explicitly-labeled
+  **static bundled reference corpus** — documented as NOT a live
+  regulatory feed and NOT legal advice. India entries (PMLA Rule 3 CTR
+  threshold — INR 10,00,000; PMLA STR duty; RBI KYC/CDD Master Direction;
+  FEMA/LRS cross-border) were checked this session against FIU-IND's own
+  FAQ page, SEBI's cash-transaction-report guidance, and the RBI KYC
+  Master Direction's own reference number. US entries (BSA/31 CFR
+  1010.311 $10,000 CTR threshold, etc.) are retained, gated to `US`/
+  `cross_border`-tagged cases only.
+- **Regulatory RAG** (`regulatory_rag.py`) hard-gates retrieval by
+  `applicable_jurisdictions` *before* any keyword scoring — an entry
+  outside the case's jurisdiction is structurally unreachable regardless
+  of keyword overlap. Deterministic, no network calls at runtime.
+- **Rule engine** (`regulatory_rules.py`): `confirmed_concern` /
+  `potentially_applicable` / `no_identified_breach` / `insufficient_evidence`
+  — a rule never claims a breach from one bare anomaly (requires ≥2
+  corroborating signals for `confirmed_concern`). The CTR rule is
+  jurisdiction-*and*-currency-aware: compares INR amounts against India's
+  threshold, USD amounts against the US threshold, and returns
+  `insufficient_evidence` (never a silent conversion) when the only
+  gathered amount is in a currency the case's jurisdiction's threshold
+  isn't defined in, or when jurisdiction itself is unresolved.
+- **Investigation auditor** (`investigation_auditor.py`) independently
+  checks unsupported regulatory claims, contradictory evidence,
+  unsupported authority conclusions, provenance gaps, **jurisdiction
+  mismatch**, and **unresolved jurisdiction** — never repeats the rule
+  engine's own conclusion. Real dataset run: only `missing_critical_evidence`
+  fires (4 cases); zero jurisdiction-mismatch/unresolved-jurisdiction
+  issues, consistent with all 21 accounts resolving cleanly to India.
+- **Case completeness score** (`case_completeness.py`): one explainable
+  0–100 score (evidence 60% / regulatory 25% / auditor 15%), with a
+  dedicated `case_jurisdiction_not_resolved_with_high_confidence` reason
+  surfaced when jurisdiction confidence is low/unknown (additive —
+  doesn't change the fixed weights). The `source_of_funds`-style
+  dataset-wide structural gap (Checkpoint 4's `structural_gap_reasons`)
+  is excluded from the score exactly as it already was from
+  `critical_evidence_missing`, so it cannot by itself cap every case
+  below "complete".
+- **Bounded re-gather loop** (`regather_loop.py`): max 2 iterations,
+  targeted per missing evidence type, never invents evidence, stops early
+  once nothing case-specific remains to request. Intentionally
+  jurisdiction-blind (see ARCHITECTURE.md) — `run_pipeline.py` re-
+  evaluates regulatory findings/auditor/completeness after regather using
+  the *same*, already-determined `jurisdiction_context`.
+- **Pipeline wiring fix found and fixed this session:** `run_pipeline.py`
+  had NOT been computing or passing `jurisdiction_context` at all to
+  `evaluate_compliance_rules()`/`audit_investigation()`/
+  `compute_case_completeness()` — meaning the auditor's jurisdiction
+  checks were silently inert (`if not jurisdiction_context: return []`)
+  despite being fully implemented. Fixed: the pipeline now computes
+  `jurisdiction_context` once per case (before the CTR/rule evaluation)
+  and threads the same object through every downstream call, including
+  the post-regather re-evaluation; it is also persisted on the case
+  output as `evidence["jurisdiction"]`.
+- **Test-fixture defect found and fixed this session:**
+  `tests/test_checkpoint5.py`'s CTR tests were calibrated against the
+  pre-jurisdiction, implicitly-US-shaped $10,000-equivalent threshold
+  (a bare INR 25,000 test amount) and had no `registered_country` at
+  all. Fixed by giving the `_account_swap_case_and_net` fixture explicit,
+  overridable `registered_country`/`amount_high`/`amount_low` parameters;
+  the pre-existing India-shaped test now uses an amount above the real
+  INR 10,00,000 threshold, and four new tests were added: US-jurisdiction
+  CTR (USD threshold, confirms `confirmed_concern` is reachable outside
+  India), unknown-jurisdiction (`insufficient_evidence`, never a guess),
+  and currency-mismatch (India case with only a USD amount gathered —
+  `insufficient_evidence`, never a silent conversion).
+
+**Tests: 114/114 passing** (31 in `test_checkpoint5.py`, up from the
+prior session's unverified "111/111" claim — the true baseline including
+this checkpoint's fixture fix and 4 new tests). Run via:
+```
+cd backend
+PYTHONPATH="$(pwd)/venv/Lib/site-packages" PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+  python3 -m pytest tests/ -q
+```
+(`PYTHONPATH`/`PYTEST_DISABLE_PLUGIN_AUTOLOAD` are needed in this
+environment only because the checked-in `venv/` is Windows-targeted
+— `fastapi`/`uvicorn`/`langgraph`'s `pydantic_core`/DLL-loading
+dependencies do not import on Linux — but `pytest` itself and every
+package the Checkpoint 5 modules and their tests actually need
+(`networkx`, `pandas`, `pytest`) import fine; disabling pytest's
+auto-loaded `langsmith` plugin avoids that one unrelated import path.)
+
+**Real pipeline run** (`python3 run_pipeline.py`): 220 accounts scanned →
+31 alerts → 21 cases → 21 evidence records (unchanged from Checkpoint 4's
+baseline — this checkpoint adds fields to each case's evidence record, it
+does not change detection/bundling). Case completeness: 17 complete / 4
+incomplete, all 4 incomplete cases triggered the bounded re-gather loop
+(unchanged from the prior session's reported baseline, now independently
+re-verified rather than merely repeated). Jurisdiction distribution:
+21/21 `IN` base jurisdiction, 14/21 additionally `cross_border`, 0/21 `US`
+or `unknown`. No PII beyond pseudonymous account/case/transaction IDs is
+present in persisted evidence JSON.
+
+**Known limitations, honestly carried forward:**
+- The bundled regulatory corpus is small and hand-curated, not a licensed
+  compliance content provider or a live feed — documented as such in
+  `regulatory_corpus.py`'s own docstring.
+- Because every real account in this dataset resolves to `IN`, the
+  jurisdiction-mismatch and unresolved-jurisdiction auditor checks are
+  exercised end-to-end only by the unit tests (hand-built `US`/`unknown`
+  fixtures), not by any real case in the current mock dataset — this is
+  a property of the dataset being India-only, not a gap in the checks
+  themselves.
+- `contradiction_state` is still not wired into this live per-case loop
+  (same pre-existing, documented Checkpoint 4 limitation) — the auditor's
+  contradictory-evidence check degrades to "not evaluated" rather than
+  guessing.
+- Action/escalation (pipeline stage 9) — see CHECKPOINT 6 below; the
+  recommendation/authorization/audit/review/memory portion is now
+  implemented, real execution against an external banking system remains
+  simulated only.
+
+**CHECKPOINT 6 (this session): Next-Best-Action + Audit Trail + Human
+Review + Investigator Action + Case Memory. [COMPLETE] [VERIFIED].**
+
+**Note on numbering:** this document previously reserved "CHECKPOINT 6"
+for the ground-truth network model + `eval_pipeline.py` rebuild (see the
+now-superseded line previously here, itself already a renumbering from an
+earlier "CHECKPOINT 5" reservation — see the Checkpoint 5 note above).
+That work was never started and remains not started; this project's
+actual Checkpoint 6, built and verified this session, is the downstream
+action/authorization/audit/human-review/case-memory stage described
+below instead — matching the pipeline stage list in
+`docs/ARCHITECTURE.md`'s "Checkpoint 6" section and the task brief this
+session was given. The ground-truth network model + `eval_pipeline.py`
+rebuild remains unstarted and is renumbered again into "Remaining work"
+below, alongside the SAR-report-generation work (which this session was
+explicitly instructed not to start).
+
+**What this checkpoint adds** (see `docs/ARCHITECTURE.md`'s new
+"Checkpoint 6" section for the full design contract): six new modules —
+`next_best_action.py`, `case_state.py`, `audit_trail.py`,
+`investigator_action.py`, `case_memory.py`, `action_pipeline.py` — plus
+`demo_checkpoint6.py` and `tests/test_checkpoint6.py`, wired additively
+into `run_pipeline.py` immediately after Checkpoint 4's authority
+decision. Every real case now gets, deterministically: a Next-Best-Action
+recommendation, a seeded audit trail (the upstream Checkpoint 3–5
+computations logged as `system` events), an initial lifecycle state
+(`HUMAN_REVIEW` if `case_completeness.status == "complete"`, otherwise
+held at `INVESTIGATING`), and a Case Memory record. Human review/
+investigator-action/override/escalation are demonstrated via
+`tests/test_checkpoint6.py` (38 tests) and `demo_checkpoint6.py`'s five
+labeled scenarios, not fabricated for every real case (that would be
+inventing investigator behavior the pipeline has no basis to assert).
+
+**Verification performed this session (not merely repeated from the
+prior session's handoff):**
+- `tests/test_checkpoint6.py`: **38/38 passing.**
+- Full regression suite: **153/153 passing, 0 failed** (up from the
+  Checkpoint 5 baseline of 114; the +39 delta is the 38 new Checkpoint 6
+  tests plus 1 pytest-collection accounting difference), run via the same
+  `PYTHONPATH`/`PYTEST_DISABLE_PLUGIN_AUTOLOAD` invocation documented
+  above for the Windows-targeted checked-in `venv/`.
+- Fresh `python3 run_pipeline.py --demo_case`: 220 accounts → 31 alerts →
+  21 cases → 21 evidence records (unchanged from Checkpoint 5's baseline —
+  Checkpoint 6 adds fields to each case's evidence record, it does not
+  change detection/bundling/regulatory output). Every one of the 21 real
+  cases received a Checkpoint 6 result. Next-Best-Action distribution on
+  this real data: `RESTRICT_ACCOUNT` (11), `BLOCK_TRANSACTION` (6),
+  `REQUEST_MORE_INFORMATION` (4). Lifecycle state after Checkpoint 6
+  seeding: `HUMAN_REVIEW` (17, the complete cases), `INVESTIGATING` (4,
+  the incomplete cases correctly held back from review). No case reached
+  `CLEAR`/`CLOSE_CASE`/`MONITOR` naturally on this dataset — see the
+  known limitation in `docs/ARCHITECTURE.md`'s Checkpoint 6 section; this
+  is a property of the mock dataset only containing alert-triggered
+  cases, not a policy defect.
+- `demo_checkpoint6.py` (five labeled, explicitly-not-claimed-as-natural
+  scenarios): senior-executed `BLOCK_TRANSACTION` (case_state → `CLOSED`);
+  the same case attempted by a junior → `authorized=False`,
+  `actual_action=REJECTED_UNAUTHORIZED`, case_state stays at
+  `HUMAN_REVIEW` (never silently executed); an escalation to senior
+  (case_state → `ESCALATED`); a senior override of the system
+  recommendation (`recommendation_followed=False`, non-empty
+  `override_reason` required and present, case_state → `ESCALATED`); and
+  a hand-built clean/low-risk case junior-authorized straight to `CLEAR`
+  (case_state → `CLOSED`).
+- Security/integrity spot-checks: no `ground_truth` import anywhere in
+  the six new modules (`grep`-verified); no `random`/`uuid` use in any
+  Checkpoint 6 module (all IDs are deterministic content hashes, same
+  style as `detection_layer.py`'s Checkpoint 3 fix); `case_memory.py`'s
+  output schema contains no evaluation-only/ground-truth field;
+  `audit_trail.py` exposes no delete/overwrite method; a junior
+  investigator's attempt at a senior-only action is rejected and audited,
+  never silently executed.
+- Checkpoint 4/5 regression: `test_authority_policy.py`,
+  `test_checkpoint5.py`, `test_case_bundling.py`,
+  `test_ground_truth_isolation.py`, `test_evidence_model.py` all still
+  pass unmodified in content (only CRLF line-ending normalization
+  differs in the working tree from the last commit — see the git-status
+  note at the top of this session's changes; no logic in any Checkpoint
+  4/5 file was altered).
+
+**Known limitations, honestly carried forward:**
+- Real execution against an external banking system is simulated only —
+  `action_executed` audit events are recorded, but no real system call is
+  made. This was explicitly out of scope for this checkpoint.
+- SAR report generation is deferred to a later checkpoint, per this
+  checkpoint's own instruction; `case_memory.py` persists every field a
+  future SAR generator will need but does not produce SAR narrative text.
+- `INVESTIGATOR_DIRECTORY` in `investigator_action.py` is a deterministic
+  test identity/role table, not real authentication/SSO — documented in
+  that module's own docstring as the one place that will need to change
+  when real auth is built.
+- `contradiction_state` is still not wired into the live per-case loop
+  (same pre-existing Checkpoint 4/5 limitation); Next-Best-Action reads
+  it as an optional parameter and defaults to policy-neutral behavior
+  when absent, rather than guessing.
+
 Remaining checkpoints, reserved for future sessions:
-- CHECKPOINT 5: ground-truth network model + `eval_pipeline.py` rebuild
-- CHECKPOINT 6: tests and final verification across all stages
+- CHECKPOINT 7: SAR report generation (including password-protected SAR
+  PDFs), final frontend integration, API productionization, deployment —
+  explicitly out of scope for this session per the task brief.
+- (unscheduled) ground-truth network model + `eval_pipeline.py` rebuild
+  (renumbered twice now — see the numbering note above)
 - (unscheduled) evidence-stage determinism fix (`evidence_id`/
   `generated_at` in `network_layer.py`/`evidence_model.py`) — see section
   4, item 8
-- (unscheduled) downstream authority *enforcement* (gating an actual
-  investigator's attempted action against `assess_authority()`'s
-  decision) and the Audit Trail/Human Review/Investigator Action pipeline
-  stages themselves — Checkpoint 4 computes and persists the decision;
-  consuming it to block/allow a real action is not yet built.
+- (unscheduled) real execution of an authorized action against an actual
+  banking system — Checkpoint 6 computes, authorizes, and audits the
+  decision; performing the real-world action itself is not yet built.

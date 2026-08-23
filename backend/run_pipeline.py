@@ -49,7 +49,13 @@ from detection_layer import (
 )
 from network_layer import generate_network_evidence, wrap_as_evidence
 from evidence_model import build_evidence_items, compute_completeness
-from authority_policy import assess_authority
+from authority_policy import assess_authority, AUTHORITY_POLICY
+from regulatory_rules import evaluate_compliance_rules
+from investigation_auditor import audit_investigation
+from case_completeness import compute_case_completeness
+from regather_loop import run_regather_loop
+from jurisdiction import determine_case_jurisdiction
+from action_pipeline import CaseActionLayer
 
 
 def run_pipeline(data_dir="mock_data", out_dir="pipeline_output"):
@@ -102,6 +108,119 @@ def run_pipeline(data_dir="mock_data", out_dir="pipeline_output"):
             case, evidence_items, evidence["completeness"],
             net=network_evidence, account=account, case_alerts=case_alerts,
         )
+
+        # CHECKPOINT 5: Regulatory Compliance Rule Engine -> Regulatory RAG
+        # -> Investigation Auditor -> Case Completeness Score -> [LOW ->
+        # targeted re-gather | HIGH -> downstream auditor routing]. Every
+        # stage reads only already-computed real evidence (evidence_items,
+        # network_evidence, the authority decision above) - no ground
+        # truth, no LLM call, no randomness. `contradiction_state` is
+        # intentionally omitted here (same documented reason authority_
+        # policy.py gives - see that module's docstring: the LLM
+        # contradiction agent is not wired into this live per-case loop
+        # yet), so the auditor's contradictory-evidence check degrades to
+        # "not evaluated -> no issue" rather than guessing.
+        structural_gap_reasons = AUTHORITY_POLICY.get("structural_gap_reasons", ())
+        # JURISDICTION: determined once per case, from real account/
+        # transaction/geo data only (jurisdiction.py) - never re-derived
+        # per rule. It does not change across the re-gather loop below
+        # (widening a transaction/network time window cannot change which
+        # country an account is registered in), so the same
+        # jurisdiction_context is reused for the post-regather
+        # re-evaluation instead of being recomputed.
+        jurisdiction_context = determine_case_jurisdiction(
+            case, net=network_evidence, account=account, store=store,
+        )
+        regulatory_findings = evaluate_compliance_rules(
+            case, evidence_items, evidence["completeness"],
+            net=network_evidence, account=account, store=store,
+            jurisdiction_context=jurisdiction_context,
+        )
+        auditor_result = audit_investigation(
+            case, evidence_items, evidence["completeness"], net=network_evidence, account=account,
+            regulatory_findings=regulatory_findings, authority_decision=evidence["authority"],
+            structural_gap_reasons=structural_gap_reasons,
+            jurisdiction_context=jurisdiction_context,
+        )
+        case_completeness = compute_case_completeness(
+            case, evidence_items, evidence["completeness"],
+            regulatory_findings=regulatory_findings, auditor_result=auditor_result,
+            structural_gap_reasons=structural_gap_reasons,
+            jurisdiction_context=jurisdiction_context,
+        )
+
+        regather_result = None
+        if case_completeness["status"] == "incomplete":
+            regather_result = run_regather_loop(
+                store, case, evidence_items, evidence["completeness"],
+                structural_gap_reasons=structural_gap_reasons,
+            )
+            if regather_result["final_disposition"] != "no_regather_needed":
+                # Re-evaluate everything downstream of evidence/completeness
+                # against the re-gathered evidence - never re-run Detection/
+                # Case Bundling, only the targeted evidence + everything
+                # that reads it.
+                evidence_items = regather_result["final_evidence_items"]
+                evidence["evidence_items"] = evidence_items
+                evidence["completeness"] = regather_result["final_completeness"]
+                if regather_result["final_net"] is not None:
+                    network_evidence = regather_result["final_net"]
+                regulatory_findings = evaluate_compliance_rules(
+                    case, evidence_items, evidence["completeness"],
+                    net=network_evidence, account=account, store=store,
+                    jurisdiction_context=jurisdiction_context,
+                )
+                auditor_result = audit_investigation(
+                    case, evidence_items, evidence["completeness"], net=network_evidence, account=account,
+                    regulatory_findings=regulatory_findings, authority_decision=evidence["authority"],
+                    structural_gap_reasons=structural_gap_reasons,
+                    jurisdiction_context=jurisdiction_context,
+                )
+                case_completeness = compute_case_completeness(
+                    case, evidence_items, evidence["completeness"],
+                    regulatory_findings=regulatory_findings, auditor_result=auditor_result,
+                    structural_gap_reasons=structural_gap_reasons,
+                    jurisdiction_context=jurisdiction_context,
+                )
+
+        evidence["jurisdiction"] = jurisdiction_context
+        evidence["regulatory_findings"] = regulatory_findings
+        evidence["auditor"] = auditor_result
+        evidence["case_completeness"] = case_completeness
+        evidence["regather"] = regather_result
+        # Clean output contract for the next checkpoint to consume -
+        # additive, does not replace the fields above.
+        evidence["next_stage"] = {
+            "case_id": case["case_id"],
+            "jurisdiction": jurisdiction_context,
+            "completeness_result": case_completeness,
+            "regulatory_findings": regulatory_findings,
+            "evidence_references": [i["evidence_id"] for i in evidence_items],
+            "auditor_decision": auditor_result,
+            "recommended_next_stage": (
+                "auditor_routing" if case_completeness["status"] == "complete"
+                else "re_gather_evidence"
+            ),
+        }
+
+        # CHECKPOINT 6: Next-Best-Action -> Audit Trail -> Human Review
+        # (queued, not auto-decided) -> Investigator Action (not yet
+        # attempted) -> Case Memory. Built from THIS case's already-
+        # computed evidence/regulatory/auditor/completeness/authority
+        # output above - no new evidence gathering, no ground truth, no
+        # randomness, no LLM call. Every real case gets a deterministic
+        # recommendation + seeded audit trail + initial lifecycle state +
+        # case memory record; an actual human review/investigator action
+        # is NOT fabricated here for every case (that would be inventing
+        # investigator behavior) - see action_pipeline.py and
+        # tests/test_checkpoint6.py / the Checkpoint 6 demo script for
+        # representative junior/senior/override/rejected examples.
+        action_layer = CaseActionLayer(case, evidence, case_alerts=case_alerts)
+        evidence["next_best_action"] = action_layer.recommendation
+        evidence["audit_trail"] = action_layer.trail.to_list()
+        evidence["case_state"] = action_layer.state
+        evidence["case_memory"] = action_layer.memory
+
         evidence_path = os.path.join(evidence_dir, f"{case['case_id']}.json")
         with open(evidence_path, "w") as f:
             json.dump(evidence, f, indent=2, default=str)
@@ -149,6 +268,22 @@ def main():
         print(f"\nEvidence completeness (weighted, deterministic): avg={avg} "
               f"min={min(completeness_scores)} max={max(completeness_scores)} "
               f"(n={len(completeness_scores)}/{len(evidence_records)} cases with a typed requirement table)")
+
+    cc_statuses = _typology_counts(
+        [{"status": e["case_completeness"]["status"]} for e in evidence_records], "status"
+    )
+    regathered = sum(1 for e in evidence_records if e.get("regather") and e["regather"]["iterations"])
+    print(f"\nCase completeness (Checkpoint 5, deterministic): {cc_statuses}  "
+          f"({regathered}/{len(evidence_records)} cases triggered the re-gather loop)")
+
+    nba_counts = _typology_counts(
+        [{"action": e["next_best_action"]["recommended_action"]} for e in evidence_records], "action"
+    )
+    state_counts = _typology_counts(
+        [{"state": e["case_state"]} for e in evidence_records], "state"
+    )
+    print(f"\nNext-Best-Action (Checkpoint 6, deterministic): {nba_counts}")
+    print(f"Case lifecycle state after Checkpoint 6 seeding: {state_counts}")
 
     print(f"\nOutput files under {args.out_dir}/:")
     print(f"  suspected_alerts.csv, cases.csv (+ .json copies)")

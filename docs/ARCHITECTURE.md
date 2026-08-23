@@ -122,15 +122,233 @@ stage may read ground truth to shortcut its own computation.
    target schema.
 7. **Evidence completeness** — required vs. available vs. missing,
    computed from the actual evidence gathered, never a random number (see
-   "Evidence completeness model" below). **Not implemented at all today**
-   — this is the single largest gap between this document and the code.
+   "Evidence completeness model" below). [IMPLEMENTED] as of Checkpoint 2;
+   see "Checkpoint 5" below for the case-level completeness score that
+   builds on top of this per-evidence-item score.
 8. **Investigator authority** — a policy decision (junior/senior),
    computed from evidence completeness + typology risk + confidence +
    contradiction state — never hardcoded, never randomly assigned, never
    decided by Detection/Case-Intake (see "Investigator authority model"
-   below). **Not implemented at all today.**
+   below). [IMPLEMENTED] as of Checkpoint 4 (`authority_policy.py`).
 9. **Action / escalation** — clear / monitor / block / escalate, driven by
-   authority + policy. **Not implemented at all today.**
+   authority + policy. [IMPLEMENTED] as of Checkpoint 6
+   (`next_best_action.py` / `audit_trail.py` / `investigator_action.py` /
+   `case_state.py` / `case_memory.py` / `action_pipeline.py`) for the
+   deterministic recommendation, authorization enforcement, audit
+   trail, human review, and case memory portions — see the "Checkpoint
+   6" section below. **Still not implemented:** actually executing an
+   action against a real banking system (this remains simulated —
+   `action_executed` events are recorded but never call an external
+   system) and SAR report generation, which is explicitly deferred to a
+   later checkpoint (see `case_memory.py`'s docstring). See the
+   Checkpoint 5 section below for the regulatory compliance, audit,
+   completeness, and re-gather stages that run just ahead of this one.
+
+## Checkpoint 5: Regulatory compliance, audit, completeness, re-gather
+
+**This section supersedes the abbreviated stage list above for what
+happens between stage 6 (Evidence) and stage 8 (Investigator authority).**
+The 9-stage list above still describes the pipeline correctly at a high
+level, but understates what now runs between "Evidence" and
+"Investigator authority": five additional, real (non-LLM, deterministic)
+stages, all implemented and wired into `run_pipeline.py` as of Checkpoint
+5.
+
+```
+... → EVIDENCE (stage 6)
+    → JURISDICTION DETERMINATION            (jurisdiction.py)
+    → REGULATORY COMPLIANCE RULE ENGINE     (regulatory_rules.py)
+        ↳ REGULATORY RAG                    (regulatory_rag.py + regulatory_corpus.py)
+    → INVESTIGATION AUDITOR                 (investigation_auditor.py)
+    → CASE COMPLETENESS SCORE               (case_completeness.py)
+    → [incomplete] → BOUNDED TARGETED RE-GATHER (regather_loop.py, max 2 iterations)
+                       ↳ re-evaluates regulatory findings/auditor/completeness
+                         against the same case's jurisdiction (unchanged)
+    → INVESTIGATOR AUTHORITY (stage 8, Checkpoint 4 — unchanged)
+    → ACTION / ESCALATION (stage 9 — not yet implemented)
+```
+
+**Jurisdiction determination** (`jurisdiction.py`) — the mock dataset is
+India-primary (every account's `registered_country` is "India"), with a
+minority of genuinely international/cross-border transactions and geo
+events. This module determines, per case, from real already-available
+fields only (`registered_country`, `is_international`, `currency`,
+`geo_events.registered_country_match` — never a guess, never an LLM call):
+a `jurisdiction` label (`IN` | `US` | `cross_border` | `unknown`), a
+`base_jurisdiction`, the `applicable_jurisdictions` list that gates
+downstream retrieval, a `confidence`, and a structured `basis` an auditor
+can read. A foreign counterpart or foreign-currency transaction on an
+India-registered account does **not** make US law apply to that account —
+it makes the case `cross_border`, which has its own tagged reference
+material (India-side FEMA/LRS), never a US citation.
+
+**Regulatory compliance rule engine** (`regulatory_rules.py`) — a small,
+config-driven set of deterministic BSA/AML-adjacent rules
+(`RULE_DEFINITIONS`), each evaluated only against already-gathered real
+evidence. Every rule result is one of `confirmed_concern` (multiple
+independently-discovered corroborating signals — never a single anomaly),
+`potentially_applicable` (one real signal, flagged for human review),
+`no_identified_breach`, or `insufficient_evidence` (evidence not gathered,
+OR jurisdiction could not be determined, OR the only amounts gathered are
+in a currency this rule cannot compare against its jurisdiction-
+appropriate threshold). The CTR rule is jurisdiction-and-currency-aware:
+India uses PMLA Rule 3 (INR 10,00,000); the US uses 31 CFR 1010.311
+($10,000) — never one hardcoded figure applied regardless of currency.
+
+**Regulatory RAG** (`regulatory_rag.py` + `regulatory_corpus.py`) — pure,
+deterministic keyword-overlap retrieval over a small **bundled, static
+reference corpus** (explicitly documented as such — not a live regulatory
+feed, not legal advice). Jurisdiction is a hard gate checked *before* any
+keyword scoring: an entry whose own `jurisdiction` tag is outside the
+case's `applicable_jurisdictions` is structurally unreachable, regardless
+of keyword overlap. Every returned entry carries its own provenance
+(`source_id`, `citation`, `authority`, `jurisdiction`) copied verbatim
+from the corpus — nothing is paraphrased or invented here. India entries
+were checked this session against FIU-IND's own FAQ page, SEBI's cash-
+transaction-report guidance, and the RBI KYC Master Direction's own
+reference number; where a specific numeric threshold could not be
+corroborated (e.g. cross-border wire-transfer reporting specifically),
+the corpus states the qualitative obligation only rather than guessing.
+
+**Investigation auditor** (`investigation_auditor.py`) — an independent
+structural re-check over already-computed upstream output; it never
+re-gathers evidence, never calls an LLM, and never simply repeats the
+rule engine's own conclusion. Checks include unsupported regulatory
+claims, contradictory evidence (degrades to "not evaluated" when the LLM
+contradiction agent hasn't run for this case, rather than guessing),
+provenance gaps, unsupported authority conclusions, **jurisdiction
+mismatch** (a regulatory citation whose own jurisdiction isn't in the
+case's `applicable_jurisdictions`), and **unresolved jurisdiction** (a
+`confirmed_concern` regulatory conclusion resting on a case whose own
+jurisdiction is `unknown`).
+
+**Case completeness score** (`case_completeness.py`) — one explainable
+0–100 score combining three real, weighted components: evidence
+completeness (recomputed over only *reachable* evidence types, so a
+dataset-wide structural gap like `source_of_funds` — permanently absent
+from every case in this mock dataset — cannot by itself cap every case's
+score below "complete"), regulatory rule resolution, and auditor
+cleanliness (penalized per critical issue). Jurisdiction uncertainty is
+surfaced as an explicit `reasons` entry
+(`case_jurisdiction_not_resolved_with_high_confidence`) rather than a
+separate weighted component, since it already reaches the score through
+the regulatory/auditor components above.
+
+**Bounded targeted re-gather loop** (`regather_loop.py`) — when
+completeness is below threshold, converts the *specific* missing evidence
+into targeted requests against the existing typology-specific network/
+timeline builders, re-run with a wider time window (never a new,
+fabricated evidence source). Hard-capped at 2 iterations; stops earlier
+the moment nothing case-specific remains to request. Intentionally
+jurisdiction-*blind* by design: jurisdiction is account-level metadata
+(`registered_country`) that a wider transaction/network traversal window
+cannot change, so there is no jurisdiction-specific evidence for this loop
+to request. `run_pipeline.py` re-evaluates regulatory findings, the
+auditor, and completeness against the re-gathered evidence using the
+*same*, already-determined `jurisdiction_context` (not recomputed).
+
+## Checkpoint 6: Next-Best-Action, Audit Trail, Human Review, Investigator Action, Case Memory
+
+**This section supersedes the abbreviated stage list above for what
+happens between stage 8 (Investigator authority, Checkpoint 4) and stage
+9 (Action / escalation).** Five additional, real (non-LLM, deterministic)
+components, all implemented and wired into `run_pipeline.py` as of
+Checkpoint 6:
+
+```
+... → INVESTIGATOR AUTHORITY (stage 8, Checkpoint 4 — unchanged)
+    → NEXT-BEST-ACTION                      (next_best_action.py)
+    → AUDIT TRAIL                           (audit_trail.py)
+    → HUMAN REVIEW                          (investigator_action.py — create_human_review)
+    → INVESTIGATOR ACTION                   (investigator_action.py — authorize_action / record_investigator_action)
+        ↳ RECOMMENDATION OVERRIDE           (requires an explicit, non-empty override_reason)
+    → CASE MEMORY                           (case_memory.py)
+```
+
+All five are sequenced by `action_pipeline.py`'s `CaseActionLayer`, one
+instance per case, which also threads the case's lifecycle state
+(`case_state.py`) through the flow above. `CaseActionLayer` does not
+duplicate any of the five modules' own logic — it only calls them in
+order and records every step to the case's `AuditTrail`.
+
+**Next-Best-Action** (`next_best_action.py`) — a deterministic,
+config-driven decision cascade (never an LLM call, never `random`/
+`uuid4`) over already-computed upstream signals only: Checkpoint 5's
+`case_completeness`/`regulatory_findings`/`auditor_result` and
+Checkpoint 4's `authority_decision`. Produces exactly one action from a
+fixed vocabulary (`CLEAR`, `MONITOR`, `REQUEST_MORE_INFORMATION`,
+`ESCALATE_TO_SENIOR`, `RESTRICT_ACCOUNT`, `BLOCK_TRANSACTION`,
+`FILE_SAR`, `CLOSE_CASE`) with machine-readable `reason_codes`,
+`regulatory_basis`, `supporting_evidence_ids`, a `required_authority`
+(the greater of the case's own Checkpoint-4 tier and the action's own
+minimum — irreversible actions like `BLOCK_TRANSACTION`/`RESTRICT_
+ACCOUNT`/`FILE_SAR` always require `senior`, regardless of how the case
+itself routed), and `requires_human_review: True` — this engine only
+recommends; it never executes.
+
+**Case lifecycle state machine** (`case_state.py`) — an explicit state
+enum (`SUSPECTED → INVESTIGATING → AUDIT_READY → HUMAN_REVIEW →
+ACTION_PENDING → ACTION_EXECUTED → CLOSED`, plus `ESCALATED`) with a
+fixed adjacency list of allowed transitions. `CLOSED` is terminal (no
+outgoing edges). Any transition not explicitly listed — including from
+an unrecognized state — raises `InvalidTransitionError` rather than
+silently occurring; an unauthorized/rejected investigator attempt
+returns the case to `HUMAN_REVIEW`, it never advances to
+`ACTION_EXECUTED`.
+
+**Audit trail** (`audit_trail.py`) — one `AuditTrail` instance per case.
+Append-only from the application's perspective: the class exposes only
+`append()` and read-only accessors that return defensive copies; there is
+no delete/overwrite code path anywhere in the module. Every lifecycle
+event (`case_created` through `case_closed`, 18 event types) records
+actor, actor type (`system` vs `investigator` — so a system recommendation
+is never conflated with a human decision or a human action), before/after
+state, reason, related evidence, and a deterministic content-hash
+`event_id`.
+
+**Investigator action / authorization** (`investigator_action.py`) —
+enforces Checkpoint 4/Checkpoint-6 authority requirements against a
+backend-resolved investigator role (`resolve_investigator()` — a
+deterministic test identity/role table, `INVESTIGATOR_DIRECTORY`, since
+no real authentication exists yet; a caller can supply an
+`investigator_id` but can never supply a role directly, and an unknown ID
+resolves to unauthenticated, never a permissive default). `authorize_
+action()` computes `authorized` server-side and returns a full record
+even when unauthorized, so the attempt is still audited rather than
+silently dropped. `create_human_review()` builds the structured Human
+Review record (system recommendation vs. investigator decision, kept
+distinct). `record_investigator_action()` builds the Investigator Action
+record; if the requested action differs from the system recommendation,
+a non-empty `override_reason` is mandatory or `OverrideReasonRequiredError`
+is raised — the recommendation itself is never silently changed to match
+what was actually done.
+
+**Case memory** (`case_memory.py`) — the durable, historical investigation
+record. References evidence/regulatory/audit-trail entries by ID (never
+duplicates full evidence blobs). `build_case_memory()` creates the record
+once per case; `update_case_memory()` only ever appends to `*_history`
+lists (`lifecycle_history`, `human_review_history`, `investigator_action_
+history`, `case_completeness_history`) and returns a new dict — it never
+mutates or drops a prior entry. Carries every field a later SAR-generation
+checkpoint will need (typology, jurisdiction, regulatory findings with
+citations, evidence references, auditor findings, the system
+recommendation, and the investigator's actual action/identity/role/
+authorization result/timestamp) without generating SAR narrative text
+itself. Ground-truth labels are never read or stored here — verified by
+`tests/test_checkpoint6.py` and by inspection (no `ground_truth` import
+anywhere in the Checkpoint 6 modules).
+
+**Known limitation, honestly carried forward:** on the checked-in mock
+dataset, every real case's typology/evidence profile routes to
+`RESTRICT_ACCOUNT`, `BLOCK_TRANSACTION`, or `REQUEST_MORE_INFORMATION` —
+no real case naturally reaches `CLEAR`/`CLOSE_CASE`/`MONITOR`, because
+Checkpoint 3's detection/bundling only creates a case from a fired alert
+in the first place (there is no "nothing happened" case in this
+dataset). The `CLEAR` and junior-authorized paths, along with a senior
+override and an escalation, are proven correct via `tests/
+test_checkpoint6.py`'s hand-built fixtures and `demo_checkpoint6.py`'s
+five labeled scenarios instead — not fabricated as if they occurred
+naturally in the mock pipeline run.
 
 ## Ground-truth network model
 
@@ -644,3 +862,13 @@ architecture spec:
 16. Reverse-smurfing graph reconstruction is correct.
 17. Ground truth is never imported by any live pipeline module (should be
     an automated `grep`/`ast`-based test, not just a manual check).
+
+**[VERIFIED] (Checkpoint 6, this session):** `tests/test_checkpoint6.py`
+adds 38 tests covering the Checkpoint 6 acceptance criteria — NBA
+determinism, case-state transition validity (including that invalid
+transitions raise `InvalidTransitionError` and that `CLOSED` is
+terminal), audit-trail append-only behavior, junior/senior action
+authorization (including that a junior cannot execute a senior-only
+action), mandatory `override_reason` on a changed recommendation, and
+case-memory history preservation across updates. Full regression: **153
+tests pass, 0 failed** (`python -m pytest tests/ -q`, run this session).
