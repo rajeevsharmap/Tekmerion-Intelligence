@@ -1,6 +1,7 @@
 {
-  "evidence_id": "EVID-9961DA53",
-  "case_id": "CASE-16635D67",
+  "evidence_id": "EVID-CAC3EBCC",
+  "case_id": "CASE-AB4E6708",
+  "account_id": "ACC000141",
   "evidence_type": "network_analysis",
   "typology": "reverse_smurfing",
   "source": "network_evidence_layer",
@@ -367,5 +368,28 @@
       }
     ]
   },
-  "generated_at": "2026-08-22T08:36:55.132873"
+  "source_transactions": [
+    "TXN001152",
+    "TXN001153",
+    "TXN001508",
+    "TXN001509",
+    "TXN001510",
+    "TXN001511",
+    "TXN001512",
+    "TXN001513",
+    "TXN001514",
+    "TXN001515",
+    "TXN001516",
+    "TXN001517",
+    "TXN001518",
+    "TXN001519",
+    "TXN001520",
+    "TXN001521",
+    "TXN001522"
+  ],
+  "network_scope": {
+    "max_depth": 3,
+    "time_window_hours": 24
+  },
+  "generated_at": "2026-08-23T09:29:48.780325"
 }

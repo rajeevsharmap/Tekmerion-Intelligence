@@ -1,6 +1,7 @@
 {
-  "evidence_id": "EVID-DEAE5FB8",
-  "case_id": "CASE-2C59C42E",
+  "evidence_id": "EVID-286E88F2",
+  "case_id": "CASE-428BB932",
+  "account_id": "ACC000183",
   "evidence_type": "network_analysis",
   "typology": "money_mule",
   "source": "network_evidence_layer",
@@ -117,5 +118,19 @@
       "multiple_counterparties"
     ]
   },
-  "generated_at": "2026-08-22T08:36:55.142336"
+  "source_transactions": [
+    "TXN001585",
+    "TXN001584",
+    "TXN001589",
+    "TXN001586",
+    "TXN001587",
+    "TXN001588",
+    "TXN001583",
+    "TXN001590"
+  ],
+  "network_scope": {
+    "max_depth": 3,
+    "time_window_hours": 24
+  },
+  "generated_at": "2026-08-23T09:29:48.788554"
 }

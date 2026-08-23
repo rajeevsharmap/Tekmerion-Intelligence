@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "../styles/Dashboard.css";
 
-const navItems = [
+const baseNavItems = [
   {
     label: "Suspected",
     path: "/suspected",
@@ -17,12 +17,20 @@ const navItems = [
     path: "/reference",
     icon: "library_books",
   },
-  {
+];
+
+const roleNavItem = {
+  junior: {
     label: "Escalated",
     path: "/escalated",
     icon: "priority_high",
   },
-];
+  senior: {
+    label: "System Insights",
+    path: "/system-insights",
+    icon: "insights",
+  },
+};
 
 function getAuthData() {
   const raw =
@@ -62,7 +70,13 @@ function Dashboard() {
     "Investigator";
 
   const agentId = authData?.agentId || "";
-  const roleLabel = getRoleLabel(authData?.role);
+
+  // Default to junior if role is missing or unrecognized, so nav
+  // never renders empty for a malformed/legacy auth payload.
+  const role = authData?.role === "senior" ? "senior" : "junior";
+  const roleLabel = getRoleLabel(role);
+
+  const navItems = [...baseNavItems, roleNavItem[role]];
 
   const handleLogout = () => {
     // Clear both storage locations so old login data cannot interfere.

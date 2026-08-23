@@ -1,0 +1,143 @@
+/* =========================================================
+   Audit-Ready Cases — page-specific additions only.
+   Relies on shared classes already defined in Suspected.css:
+   dashboard-content, dashboard-header, summary-grid, summary-card,
+   cases-panel, case-list, case-row, case-topline, case-id.
+   ========================================================= */
+
+/* ---------- Warning summary card (Evidence Gaps Flagged) ---------- */
+
+.summary-card.warning {
+  color: var(--warning);
+  border-color: transparent;
+  background: var(--warning-container);
+}
+
+.summary-card.warning .summary-heading .material-symbols-outlined {
+  color: var(--warning);
+}
+
+.summary-card.warning .summary-meta {
+  color: var(--warning);
+  opacity: 0.85;
+}
+
+/* ---------- Audit-Ready badge ---------- */
+
+.audit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(64, 194, 253, 0.28);
+  color: var(--on-secondary-container);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 7px;
+  font-weight: 600;
+}
+
+.audit-badge .material-symbols-outlined {
+  font-size: 11px;
+}
+
+/* ---------- Completeness chip ---------- */
+
+.completeness-chip {
+  margin-left: auto;
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: var(--surface-container-low);
+  color: var(--on-surface-variant);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+}
+
+/* ---------- Audit row layout ---------- */
+
+.case-row.audit-row {
+  align-items: stretch;
+}
+
+.audit-case-information {
+  width: 100%;
+}
+
+.audit-case-information h3 {
+  margin-bottom: 10px;
+}
+
+/* ---------- Evidence chain-of-custody strip ---------- */
+
+.evidence-chain-strip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--surface-container-low);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.chain-node-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chain-node {
+  color: var(--on-surface-variant);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+}
+
+.chain-arrow {
+  color: var(--secondary);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+}
+
+/* ---------- Completeness bar + action footer ---------- */
+
+.audit-row-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.completeness-bar-track {
+  flex: 1;
+  max-width: 220px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--surface-container-high);
+  overflow: hidden;
+}
+
+.completeness-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--secondary);
+}
+
+.view-trail-button {
+  padding: 6px 14px;
+  border: 1px solid rgba(198, 198, 205, 0.35);
+  border-radius: 999px;
+  background: var(--surface-container-low);
+  color: var(--on-surface);
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 600;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.view-trail-button:hover {
+  background: var(--surface-container);
+  border-color: var(--secondary);
+}

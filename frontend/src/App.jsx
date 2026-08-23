@@ -6,12 +6,34 @@ import Suspected from "./Page/Dashboard/Suspected.jsx";
 import AuditReady from "./Page/Dashboard/AuditReady.jsx";
 import Reference from "./Page/Dashboard/Reference.jsx";
 import Escalated from "./Page/Dashboard/Escalated.jsx";
+import SystemInsights from "./Page/Dashboard/SystemInsights.jsx";
+
+function getAuthData() {
+  const raw =
+    sessionStorage.getItem("tekmerion_auth") ||
+    localStorage.getItem("tekmerion_auth");
+
+  if (!raw) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(raw);
+  } catch {
+    // Corrupted auth payload — treat as unauthenticated.
+    sessionStorage.removeItem("tekmerion_auth");
+    localStorage.removeItem("tekmerion_auth");
+    return null;
+  }
+}
 
 function isAuthenticated() {
-  return Boolean(
-    sessionStorage.getItem("tekmerion_auth") ||
-    localStorage.getItem("tekmerion_auth")
-  );
+  return Boolean(getAuthData());
+}
+
+function getRole() {
+  const authData = getAuthData();
+  return authData?.role === "senior" ? "senior" : "junior";
 }
 
 function ProtectedDashboard() {
@@ -22,39 +44,68 @@ function ProtectedDashboard() {
   return <Dashboard />;
 }
 
+/*
+ * RoleRoute guards a single tab that only makes sense for one
+ * authorization level (e.g. Escalated for juniors, System Insights
+ * for seniors). If the signed-in investigator's role does not match,
+ * they are redirected to that role's equivalent tab instead of
+ * seeing a blocked/empty page.
+ */
+function RoleRoute({ allowedRole, redirectTo, children }) {
+  if (!isAuthenticated()) {
+    return <Navigate to="/" replace />;
+  }
+
+  const role = getRole();
+
+  if (role !== allowedRole) {
+    return <Navigate to={redirectTo} replace />;
+  }
+
+  return children;
+}
+
 function App() {
   return (
     <Routes>
       {/* Public route */}
       <Route path="/" element={<Login />} />
 
-      {/* Protected dashboard routes */}
-      <Route
-        path="/suspected"
-        element={<ProtectedDashboard />}
-      >
+      {/* Protected dashboard routes, shared across roles */}
+      <Route path="/suspected" element={<ProtectedDashboard />}>
         <Route index element={<Suspected />} />
       </Route>
 
-      <Route
-        path="/audit-ready"
-        element={<ProtectedDashboard />}
-      >
+      <Route path="/audit-ready" element={<ProtectedDashboard />}>
         <Route index element={<AuditReady />} />
       </Route>
 
-      <Route
-        path="/reference"
-        element={<ProtectedDashboard />}
-      >
+      <Route path="/reference" element={<ProtectedDashboard />}>
         <Route index element={<Reference />} />
       </Route>
 
-      <Route
-        path="/escalated"
-        element={<ProtectedDashboard />}
-      >
-        <Route index element={<Escalated />} />
+      {/* Junior-only tab. A senior landing here is sent to System Insights. */}
+      <Route path="/escalated" element={<ProtectedDashboard />}>
+        <Route
+          index
+          element={
+            <RoleRoute allowedRole="junior" redirectTo="/system-insights">
+              <Escalated />
+            </RoleRoute>
+          }
+        />
+      </Route>
+
+      {/* Senior-only tab. A junior landing here is sent to Escalated. */}
+      <Route path="/system-insights" element={<ProtectedDashboard />}>
+        <Route
+          index
+          element={
+            <RoleRoute allowedRole="senior" redirectTo="/escalated">
+              <SystemInsights />
+            </RoleRoute>
+          }
+        />
       </Route>
 
       {/* Fallback */}

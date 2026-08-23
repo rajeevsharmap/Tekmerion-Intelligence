@@ -1,11 +1,11 @@
 [
   {
-    "case_id": "CASE-3E9A1C25",
+    "case_id": "CASE-53719563",
     "account_id": "ACC000001",
     "created_at": "2025-02-24T09:26:10",
     "primary_trigger": "money_mule",
     "alert_ids": [
-      "ALERT-MONE-C593D47A"
+      "ALERT-MONE-5D8DE1E0"
     ],
     "evidence_signals": [
       "inbound_transaction_count",
@@ -17,13 +17,13 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-421022C2",
+    "case_id": "CASE-6A354A7F",
     "account_id": "ACC000002",
     "created_at": "2025-08-17T00:39:36",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-D29AD271",
-      "ALERT-MONE-938E803E"
+      "ALERT-SMUR-F2F7633E",
+      "ALERT-MONE-B72AB995"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -40,12 +40,12 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-62F7DEE9",
+    "case_id": "CASE-1E2FA77A",
     "account_id": "ACC000006",
     "created_at": "2025-08-11T06:12:45",
     "primary_trigger": "account_swap",
     "alert_ids": [
-      "ALERT-ACCO-68FB74FB"
+      "ALERT-ACCO-F07113C4"
     ],
     "evidence_signals": [
       "compound_account_takeover_signal",
@@ -63,13 +63,13 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-28B1C984",
+    "case_id": "CASE-806563A3",
     "account_id": "ACC000008",
     "created_at": "2025-07-22T18:55:22",
     "primary_trigger": "money_mule",
     "alert_ids": [
-      "ALERT-MONE-E5718464",
-      "ALERT-SMUR-64781CB3"
+      "ALERT-MONE-74B66F11",
+      "ALERT-SMUR-BBC5B206"
     ],
     "evidence_signals": [
       "inbound_transaction_count",
@@ -89,12 +89,12 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-41C64C33",
+    "case_id": "CASE-B0AE82CF",
     "account_id": "ACC000010",
     "created_at": "2025-10-14T07:24:07",
     "primary_trigger": "reverse_smurfing",
     "alert_ids": [
-      "ALERT-REVE-6FCF0796"
+      "ALERT-REVE-A574AB6D"
     ],
     "evidence_signals": [
       "distribution_window_hours",
@@ -109,13 +109,13 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-D832AF47",
+    "case_id": "CASE-78D67FEE",
     "account_id": "ACC000020",
     "created_at": "2025-05-15T00:18:25",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-AD6E7380",
-      "ALERT-MONE-B5691324"
+      "ALERT-SMUR-E1FB0CDC",
+      "ALERT-MONE-A5347D14"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -130,13 +130,13 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-597BBE77",
+    "case_id": "CASE-3A3CAD49",
     "account_id": "ACC000053",
     "created_at": "2025-05-18T13:11:49",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-A3678874",
-      "ALERT-MONE-162267B8"
+      "ALERT-SMUR-1F00E73A",
+      "ALERT-MONE-99DA55E8"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -153,12 +153,12 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-4FF60D4D",
+    "case_id": "CASE-E984BDF6",
     "account_id": "ACC000061",
     "created_at": "2025-10-26T08:15:42",
     "primary_trigger": "reverse_smurfing",
     "alert_ids": [
-      "ALERT-REVE-1957C5AF"
+      "ALERT-REVE-5D59CBB1"
     ],
     "evidence_signals": [
       "distribution_window_hours",
@@ -172,13 +172,13 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-9F19DD87",
+    "case_id": "CASE-F6BD193C",
     "account_id": "ACC000080",
     "created_at": "2025-03-13T08:35:44",
     "primary_trigger": "money_mule",
     "alert_ids": [
-      "ALERT-MONE-1232741A",
-      "ALERT-SMUR-F717DD8B"
+      "ALERT-MONE-1955BAA2",
+      "ALERT-SMUR-B0EFB4BA"
     ],
     "evidence_signals": [
       "inbound_transaction_count",
@@ -200,12 +200,12 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-D88F917C",
+    "case_id": "CASE-C3D2D7A5",
     "account_id": "ACC000095",
     "created_at": "2025-08-10T10:24:58",
     "primary_trigger": "account_swap",
     "alert_ids": [
-      "ALERT-ACCO-9FCA004E"
+      "ALERT-ACCO-AF8737A9"
     ],
     "evidence_signals": [
       "compound_account_takeover_signal",
@@ -224,12 +224,12 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-60DB9164",
+    "case_id": "CASE-2DCE901F",
     "account_id": "ACC000101",
     "created_at": "2025-03-03T09:09:48",
     "primary_trigger": "reverse_smurfing",
     "alert_ids": [
-      "ALERT-REVE-12B35E03"
+      "ALERT-REVE-F76FE7EA"
     ],
     "evidence_signals": [
       "distribution_window_hours",
@@ -244,12 +244,12 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-700F9CCD",
+    "case_id": "CASE-9B364FA0",
     "account_id": "ACC000103",
     "created_at": "2025-05-25T10:06:04",
     "primary_trigger": "account_swap",
     "alert_ids": [
-      "ALERT-ACCO-F2DA7DA3"
+      "ALERT-ACCO-48DF421A"
     ],
     "evidence_signals": [
       "compound_account_takeover_signal",
@@ -267,13 +267,13 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-D799149E",
+    "case_id": "CASE-58713AF6",
     "account_id": "ACC000109",
     "created_at": "2025-06-13T20:13:28",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-2AB1A89F",
-      "ALERT-MONE-725A6F95"
+      "ALERT-SMUR-3DE075AC",
+      "ALERT-MONE-BC5915B3"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -290,13 +290,13 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-552778FC",
+    "case_id": "CASE-349E28E5",
     "account_id": "ACC000115",
     "created_at": "2025-04-30T20:13:39",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-CA20EA87",
-      "ALERT-MONE-28C6E433"
+      "ALERT-SMUR-1A5B7A5F",
+      "ALERT-MONE-8AFC38BC"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -311,12 +311,12 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-94E6CFE7",
+    "case_id": "CASE-54C28F2D",
     "account_id": "ACC000115",
     "created_at": "2025-05-02T10:06:10",
     "primary_trigger": "account_swap",
     "alert_ids": [
-      "ALERT-ACCO-59D47378"
+      "ALERT-ACCO-ECB791C1"
     ],
     "evidence_signals": [
       "compound_account_takeover_signal",
@@ -334,13 +334,13 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-7E3BDB16",
+    "case_id": "CASE-FE0ABCB3",
     "account_id": "ACC000120",
     "created_at": "2025-03-26T22:29:18",
     "primary_trigger": "smurfing",
     "alert_ids": [
-      "ALERT-SMUR-EACA47CF",
-      "ALERT-MONE-E952A194"
+      "ALERT-SMUR-2F2C1C99",
+      "ALERT-MONE-5EE43C2D"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -355,12 +355,12 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-16635D67",
+    "case_id": "CASE-AB4E6708",
     "account_id": "ACC000141",
     "created_at": "2025-08-13T17:07:08",
     "primary_trigger": "reverse_smurfing",
     "alert_ids": [
-      "ALERT-REVE-5C7A28C4"
+      "ALERT-REVE-C3852BDC"
     ],
     "evidence_signals": [
       "distribution_window_hours",
@@ -375,13 +375,13 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-F01A9B97",
+    "case_id": "CASE-12F44C14",
     "account_id": "ACC000152",
     "created_at": "2025-03-17T05:33:20",
     "primary_trigger": "money_mule",
     "alert_ids": [
-      "ALERT-MONE-A19A9FFA",
-      "ALERT-SMUR-49E647BF"
+      "ALERT-MONE-5067B527",
+      "ALERT-SMUR-77CE886A"
     ],
     "evidence_signals": [
       "aggregate_inbound_amount",
@@ -404,12 +404,12 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-02B2367B",
+    "case_id": "CASE-3870CFC9",
     "account_id": "ACC000176",
     "created_at": "2025-05-11T12:44:06",
     "primary_trigger": "account_swap",
     "alert_ids": [
-      "ALERT-ACCO-97D8FBE4"
+      "ALERT-ACCO-AC6A96AF"
     ],
     "evidence_signals": [
       "compound_account_takeover_signal",
@@ -427,13 +427,13 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-2C59C42E",
+    "case_id": "CASE-428BB932",
     "account_id": "ACC000183",
     "created_at": "2025-09-20T21:30:26",
     "primary_trigger": "money_mule",
     "alert_ids": [
-      "ALERT-MONE-1004D9D7",
-      "ALERT-SMUR-918EA546"
+      "ALERT-MONE-DA46D4D1",
+      "ALERT-SMUR-A755228E"
     ],
     "evidence_signals": [
       "inbound_transaction_count",
@@ -454,12 +454,12 @@
     "status": "open"
   },
   {
-    "case_id": "CASE-4506B821",
+    "case_id": "CASE-DEF225C1",
     "account_id": "ACC000205",
     "created_at": "2025-09-16T17:12:13",
     "primary_trigger": "reverse_smurfing",
     "alert_ids": [
-      "ALERT-REVE-31199B13"
+      "ALERT-REVE-A5812592"
     ],
     "evidence_signals": [
       "distribution_window_hours",

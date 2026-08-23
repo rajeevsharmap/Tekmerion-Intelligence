@@ -1,0 +1,77 @@
+/* =========================================================
+   Reference Archive — page-specific additions only.
+   Relies on shared classes already defined in Suspected.css:
+   dashboard-content, dashboard-header, summary-grid, summary-card,
+   cases-panel, cases-toolbar, search-box, case-controls, case-list,
+   case-row, case-information, case-topline, case-id, case-age,
+   case-tags, case-tag, case-actions, empty-state.
+   ========================================================= */
+
+/* ---------- Outcome badge (replaces risk-badge on this page) ---------- */
+
+.outcome-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.outcome-badge.fraud {
+  color: var(--on-secondary-container);
+  background: rgba(64, 194, 253, 0.28);
+  border-color: var(--secondary-fixed);
+}
+
+.outcome-badge.false_positive {
+  color: var(--on-surface-variant);
+  background: var(--surface-container-high);
+  border-color: rgba(198, 198, 205, 0.4);
+}
+
+.outcome-badge.legitimate {
+  color: var(--on-primary-fixed);
+  background: rgba(190, 198, 224, 0.35);
+  border-color: rgba(190, 198, 224, 0.6);
+}
+
+/* ---------- Case description ---------- */
+
+.case-description {
+  margin: 0 0 10px;
+  color: var(--on-surface-variant);
+  font-size: 10px;
+  line-height: 16px;
+}
+
+/* ---------- View Case button ---------- */
+
+.view-case-button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 999px;
+  background: var(--secondary);
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 9px;
+  font-weight: 600;
+  transition: background 0.18s ease;
+}
+
+.view-case-button:hover {
+  background: #005174;
+}
+
+/* ---------- Row layout tweak (description needs vertical stacking) ---------- */
+
+.case-row.reference-row {
+  align-items: flex-start;
+}
+
+.case-row.reference-row .case-actions {
+  align-self: flex-end;
+}

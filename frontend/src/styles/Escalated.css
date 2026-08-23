@@ -1,0 +1,111 @@
+/* =========================================================
+   Escalated Cases — page-specific additions only.
+   Relies on shared classes already defined in Suspected.css:
+   dashboard-content, dashboard-header, summary-grid, summary-card,
+   summary-card.high-risk, cases-panel, case-list, case-row,
+   case-information, case-topline, case-id, case-age, case-tags,
+   case-tag, case-actions, review-button, more-button.
+   ========================================================= */
+
+/* ---------- Warning summary card (Overridden) ---------- */
+
+.summary-card.warning {
+  color: var(--warning);
+  border-color: transparent;
+  background: var(--warning-container);
+}
+
+.summary-card.warning .summary-heading .material-symbols-outlined {
+  color: var(--warning);
+}
+
+.summary-card.warning .summary-meta {
+  color: var(--warning);
+  opacity: 0.85;
+}
+
+/* ---------- Escalation badge (replaces risk-badge on this page) ---------- */
+
+.escalation-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.escalation-badge.pending {
+  color: var(--on-error-container);
+  background: var(--error-container);
+}
+
+.escalation-badge.actioned {
+  color: var(--on-surface-variant);
+  background: var(--surface-container-high);
+}
+
+/* ---------- Provenance line ---------- */
+
+.case-provenance {
+  margin: 0 0 8px;
+  color: var(--on-surface-variant);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+  line-height: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+/* ---------- Agent verdict chip ---------- */
+
+.verdict-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 8px;
+  border: 1px solid rgba(198, 198, 205, 0.35);
+  border-radius: 5px;
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 7px;
+}
+
+.verdict-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.verdict-dot.contested {
+  background: #b86b00;
+}
+
+.verdict-dot.agreed {
+  background: #2e7d32;
+}
+
+/* ---------- Actioned (closed) row treatment ---------- */
+
+.case-row.escalated-row.actioned {
+  opacity: 0.7;
+  background: var(--surface-container-low);
+}
+
+.case-row.escalated-row.actioned h3 {
+  color: var(--on-surface-variant);
+}
+
+.case-row.escalated-row.actioned .review-button {
+  cursor: not-allowed;
+  color: var(--on-surface-variant);
+  border-color: rgba(198, 198, 205, 0.5);
+}
+
+.case-row.escalated-row.actioned .review-button:hover {
+  background: transparent;
+}

@@ -1,6 +1,7 @@
 {
-  "evidence_id": "EVID-81918F88",
-  "case_id": "CASE-02B2367B",
+  "evidence_id": "EVID-BD75050B",
+  "case_id": "CASE-3870CFC9",
+  "account_id": "ACC000176",
   "evidence_type": "network_analysis",
   "typology": "account_swap",
   "source": "network_evidence_layer",
@@ -58,5 +59,12 @@
       "sim_change_before_transaction"
     ]
   },
-  "generated_at": "2026-08-22T08:36:55.139161"
+  "source_transactions": [
+    "TXN001597"
+  ],
+  "network_scope": {
+    "max_depth": 3,
+    "time_window_hours": 24
+  },
+  "generated_at": "2026-08-23T09:29:48.786645"
 }

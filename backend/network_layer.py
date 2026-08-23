@@ -537,10 +537,18 @@ def _default_window(anchor_time, days):
 
 def wrap_as_evidence(network_response, confidence="high"):
     """Wrap a generate_network_evidence() response as an Evidence Store
-    object (spec section 18) ready for the Evidence Store to persist."""
+    object (spec section 18) ready for the Evidence Store to persist.
+
+    source_transactions and network_scope are kept as their own top-level
+    fields (not folded into `data`) specifically so this record can prove,
+    on inspection, which transactions were CONTEXTUAL global-traversal
+    discoveries for this case versus the originating alert's own
+    transaction_id(s) recorded on the case/alert objects - the two must
+    stay visibly distinct, never merged."""
     return {
         "evidence_id": f"EVID-{uuid.uuid4().hex[:8].upper()}",
         "case_id": network_response["case_id"],
+        "account_id": network_response["account_id"],
         "evidence_type": "network_analysis",
         "typology": network_response["typology"],
         "source": "network_evidence_layer",
@@ -550,6 +558,11 @@ def wrap_as_evidence(network_response, confidence="high"):
             **network_response["evidence"],
             "patterns": network_response["patterns"],
         },
+        # contextual only - discovered via traversal of the GLOBAL transaction
+        # database, not limited to the case's own originating alert(s). Never
+        # merged into the case/alert's own transaction_id/alert_ids.
+        "source_transactions": network_response["source_transactions"],
+        "network_scope": network_response["network_scope"],
         "generated_at": network_response["generated_at"],
     }
 
@@ -589,3 +602,4 @@ if __name__ == "__main__":
               f"{len(net['source_transactions'])} source txn(s) -> {args.out_dir}/{case['case_id']}.json")
 
     print(f"\nWrote {len(cases)} case-scoped evidence file(s) to {args.out_dir}/")
+    

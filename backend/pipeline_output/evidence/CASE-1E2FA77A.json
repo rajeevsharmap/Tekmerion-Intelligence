@@ -1,6 +1,7 @@
 {
-  "evidence_id": "EVID-243CDAEF",
-  "case_id": "CASE-62F7DEE9",
+  "evidence_id": "EVID-1D13A234",
+  "case_id": "CASE-1E2FA77A",
+  "account_id": "ACC000006",
   "evidence_type": "network_analysis",
   "typology": "account_swap",
   "source": "network_evidence_layer",
@@ -79,5 +80,13 @@
       "sudden_value_increase"
     ]
   },
-  "generated_at": "2026-08-22T08:36:55.077019"
+  "source_transactions": [
+    "TXN000040",
+    "TXN001591"
+  ],
+  "network_scope": {
+    "max_depth": 3,
+    "time_window_hours": 24
+  },
+  "generated_at": "2026-08-23T09:29:48.735845"
 }

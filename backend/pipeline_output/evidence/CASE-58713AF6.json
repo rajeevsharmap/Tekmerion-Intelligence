@@ -1,6 +1,7 @@
 {
-  "evidence_id": "EVID-C50A5778",
-  "case_id": "CASE-D799149E",
+  "evidence_id": "EVID-B0BB4283",
+  "case_id": "CASE-58713AF6",
+  "account_id": "ACC000109",
   "evidence_type": "network_analysis",
   "typology": "smurfing",
   "source": "network_evidence_layer",
@@ -300,5 +301,24 @@
       }
     ]
   },
-  "generated_at": "2026-08-22T08:36:55.118911"
+  "source_transactions": [
+    "TXN000356",
+    "TXN000771",
+    "TXN000961",
+    "TXN001465",
+    "TXN001466",
+    "TXN001467",
+    "TXN001468",
+    "TXN001469",
+    "TXN001470",
+    "TXN001471",
+    "TXN001472",
+    "TXN001473",
+    "TXN001474"
+  ],
+  "network_scope": {
+    "max_depth": 3,
+    "time_window_hours": 24
+  },
+  "generated_at": "2026-08-23T09:29:48.767092"
 }

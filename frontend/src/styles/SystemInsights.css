@@ -1,0 +1,388 @@
+/* =========================================================
+   System Insights — reuses tokens/card recipe from Dashboard.css
+   (--secondary, --surface, --outline-variant, Hanken Grotesk,
+   JetBrains Mono, Manrope). No new colors introduced.
+   ========================================================= */
+
+.insights-panel {
+  width: 100%;
+  border: 1px solid rgba(198, 198, 205, 0.35);
+  border-radius: 13px;
+  background: var(--surface);
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.025);
+}
+
+/* ---------- Sub-tabs ---------- */
+
+.insight-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 20px 0;
+  border-bottom: 1px solid rgba(198, 198, 205, 0.35);
+}
+
+.insight-tab {
+  padding: 0 4px 12px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 22px;
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.insight-tab:hover {
+  color: var(--on-surface);
+}
+
+.insight-tab.active {
+  color: var(--secondary);
+  border-bottom-color: var(--secondary);
+}
+
+.insight-panel-body {
+  padding: 20px;
+}
+
+.insight-panel-intro {
+  margin: 0 0 18px;
+  color: var(--on-surface-variant);
+  font-size: 10px;
+  line-height: 16px;
+}
+
+/* ---------- Pipeline Trace ---------- */
+
+.pipeline-trace {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-bottom: 18px;
+}
+
+.pipeline-stage-wrapper {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.pipeline-stage {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 14px 12px;
+  border: 1px solid rgba(198, 198, 205, 0.35);
+  border-radius: 10px;
+  background: var(--surface-container-lowest);
+  cursor: pointer;
+  text-align: left;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.pipeline-stage:hover {
+  border-color: var(--secondary);
+}
+
+.pipeline-stage.active {
+  border-color: var(--secondary);
+  background: rgba(196, 231, 255, 0.3);
+}
+
+.pipeline-stage-name {
+  color: var(--on-surface);
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 15px;
+}
+
+.pipeline-stage-metric {
+  color: var(--on-surface-variant);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+  line-height: 12px;
+}
+
+.pipeline-connector {
+  flex: 0 0 18px;
+  height: 1px;
+  margin: 0 4px;
+  background: var(--outline-variant);
+}
+
+/* ---------- Stage Detail Panel ---------- */
+
+.stage-detail-panel {
+  padding: 16px 18px;
+  border: 1px solid rgba(198, 198, 205, 0.35);
+  border-radius: 10px;
+  background: var(--surface-container-low);
+}
+
+.stage-detail-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.stage-detail-heading .material-symbols-outlined {
+  color: var(--secondary);
+  font-size: 18px;
+}
+
+.stage-detail-heading h3 {
+  margin: 0;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.stage-detail-panel p {
+  margin: 0 0 12px;
+  color: var(--on-surface-variant);
+  font-size: 11px;
+  line-height: 18px;
+}
+
+.stage-trail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 11px;
+  border-radius: 7px;
+  background: var(--surface-container-lowest);
+  color: var(--on-surface-variant);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  line-height: 13px;
+}
+
+.stage-trail .material-symbols-outlined {
+  flex: 0 0 auto;
+  color: var(--secondary);
+  font-size: 14px;
+}
+
+/* ---------- Insight Submission Form ---------- */
+
+.insight-form {
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(198, 198, 205, 0.35);
+  border-radius: 10px;
+  background: var(--surface-container-lowest);
+}
+
+.insight-form-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.insight-case-chip {
+  padding: 4px 8px;
+  border: 1px solid rgba(198, 198, 205, 0.35);
+  border-radius: 5px;
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+}
+
+.typology-chip-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.typology-chip {
+  padding: 4px 9px;
+  border: 1px solid rgba(198, 198, 205, 0.35);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+  transition:
+    border-color 0.18s ease,
+    color 0.18s ease,
+    background 0.18s ease;
+}
+
+.typology-chip:hover {
+  border-color: var(--secondary);
+}
+
+.typology-chip.active {
+  border-color: var(--secondary);
+  background: var(--secondary-fixed);
+  color: #00435b;
+  font-weight: 600;
+}
+
+.insight-textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(198, 198, 205, 0.45);
+  border-radius: 8px;
+  outline: none;
+  resize: vertical;
+  color: var(--on-surface);
+  background: #ffffff;
+  font-family: "Manrope", sans-serif;
+  font-size: 11px;
+  line-height: 17px;
+}
+
+.insight-textarea:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 2px rgba(64, 194, 253, 0.12);
+}
+
+.insight-textarea::placeholder {
+  color: var(--on-surface-variant);
+  opacity: 0.75;
+}
+
+.insight-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.advisory-badge {
+  color: var(--on-surface-variant);
+  font-size: 8px;
+  line-height: 12px;
+  opacity: 0.85;
+}
+
+.submit-insight-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 999px;
+  background: #050505;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 700;
+  transition: background 0.18s ease;
+}
+
+.submit-insight-button:hover {
+  background: #191919;
+}
+
+/* ---------- Insight Feed ---------- */
+
+.insight-feed-heading {
+  margin: 0 0 12px;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.insight-card {
+  display: flex;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(198, 198, 205, 0.25);
+}
+
+.insight-card:last-child {
+  border-bottom: none;
+}
+
+.insight-avatar {
+  flex: 0 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--secondary-fixed);
+  color: var(--secondary);
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.insight-card-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.insight-card-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.insight-typology-tag {
+  padding: 3px 8px;
+  border: 1px solid rgba(198, 198, 205, 0.35);
+  border-radius: 5px;
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 7px;
+}
+
+.insight-time {
+  color: var(--on-surface-variant);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+}
+
+.insight-card-body p {
+  margin: 0;
+  color: var(--on-surface);
+  font-size: 11px;
+  line-height: 17px;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .pipeline-trace {
+    flex-direction: column;
+  }
+
+  .pipeline-stage-wrapper {
+    flex-direction: column;
+  }
+
+  .pipeline-connector {
+    width: 1px;
+    height: 14px;
+    margin: 4px 0;
+  }
+
+  .insight-form-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
