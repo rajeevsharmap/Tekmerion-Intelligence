@@ -220,6 +220,13 @@ def run_pipeline(data_dir="mock_data", out_dir="pipeline_output"):
         evidence["audit_trail"] = action_layer.trail.to_list()
         evidence["case_state"] = action_layer.state
         evidence["case_memory"] = action_layer.memory
+        # CHECKPOINT 7: structured SAR record - None for every case that
+        # never reached an authorized FILE_SAR investigator action (see
+        # sar_report.py). No real case in this mock dataset naturally
+        # reaches FILE_SAR (see docs/ARCHITECTURE.md's Checkpoint 6
+        # section's known limitation) - a real human-in-the-loop
+        # FILE_SAR execution is not fabricated here for every case.
+        evidence["sar_report"] = action_layer.sar_report
 
         evidence_path = os.path.join(evidence_dir, f"{case['case_id']}.json")
         with open(evidence_path, "w") as f:
@@ -284,6 +291,12 @@ def main():
     )
     print(f"\nNext-Best-Action (Checkpoint 6, deterministic): {nba_counts}")
     print(f"Case lifecycle state after Checkpoint 6 seeding: {state_counts}")
+
+    sar_count = sum(1 for e in evidence_records if e.get("sar_report") is not None)
+    print(f"SAR reports generated (Checkpoint 7): {sar_count}/{len(evidence_records)} "
+          f"(0 is expected on this dataset - see docs/ARCHITECTURE.md's Checkpoint 6 "
+          f"known limitation; FILE_SAR/SAR generation is exercised via "
+          f"tests/test_checkpoint7.py's hand-built fixtures instead)")
 
     print(f"\nOutput files under {args.out_dir}/:")
     print(f"  suspected_alerts.csv, cases.csv (+ .json copies)")

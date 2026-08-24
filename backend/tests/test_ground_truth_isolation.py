@@ -61,10 +61,31 @@ LIVE_MODULES = [
     "authority_policy.py",
     "run_pipeline.py",
     "main.py",
+    # CHECKPOINT 5
+    "jurisdiction.py",
+    "regulatory_corpus.py",
+    "regulatory_rag.py",
+    "regulatory_rules.py",
+    "investigation_auditor.py",
+    "case_completeness.py",
+    "regather_loop.py",
     os.path.join("agents", "contradiction_agent.py"),
     os.path.join("agents", "evidence_builder.py"),
     os.path.join("agents", "legitimate_hypothesis_agent.py"),
     os.path.join("agents", "scammer_hypothesis_agent.py"),
+    # CHECKPOINT 6 - added this session (Checkpoint 7 audit found these
+    # were never added to this list when they were built; genuinely
+    # missing static protection, not new code).
+    "next_best_action.py",
+    "case_state.py",
+    "audit_trail.py",
+    "investigator_action.py",
+    "case_memory.py",
+    "action_pipeline.py",
+    # CHECKPOINT 7
+    "sar_report.py",
+    "case_data_access.py",
+    "langgraph_orchestration.py",
 ]
 
 # Substrings that indicate a ground-truth concept per the checkpoint spec:

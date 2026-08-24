@@ -1,5 +1,5 @@
 import "../../styles/AuditReady.css";
-
+import { useNavigate } from "react-router-dom"
 const auditReadyCases = [
   {
     id: "CASE-2023-8902A",
@@ -37,6 +37,7 @@ const auditReadyCases = [
 ];
 
 function AuditReady() {
+  const navigate = useNavigate();
   return (
     <div className="dashboard-content">
       <header className="dashboard-header">
@@ -142,7 +143,7 @@ function AuditReady() {
                     />
                   </div>
 
-                  <button type="button" className="view-trail-button">
+                  <button type="button" className="view-trail-button" onClick={() => navigate(`/audit-ready/${item.id}`)}>
                     View Audit Trail
                   </button>
                 </div>

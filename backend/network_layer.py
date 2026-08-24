@@ -35,6 +35,8 @@ Detection Agent's job to raise as its own alert/case - this layer never
 creates alerts or cases, and never mutates the `case` object it's given.
 """
 
+import hashlib
+import json
 import statistics
 import uuid
 from datetime import datetime, timedelta
@@ -529,6 +531,14 @@ def generate_network_evidence(store, case, time_window=None):
     }
 
 
+def _content_hash_id(prefix, *parts):
+    """Deterministic content-hash ID (same pattern as audit_trail.py /
+    next_best_action.py / evidence_model.py): identical inputs always
+    yield the same ID, unlike uuid.uuid4() which is random per call."""
+    raw = json.dumps(parts, sort_keys=True, default=str)
+    return f"{prefix}-{hashlib.sha256(raw.encode()).hexdigest()[:8].upper()}"
+
+
 def _default_window(anchor_time, days):
     if anchor_time is None:
         return None
@@ -546,7 +556,10 @@ def wrap_as_evidence(network_response, confidence="high"):
     transaction_id(s) recorded on the case/alert objects - the two must
     stay visibly distinct, never merged."""
     return {
-        "evidence_id": f"EVID-{uuid.uuid4().hex[:8].upper()}",
+        "evidence_id": _content_hash_id(
+            "EVID", network_response["case_id"], network_response["account_id"],
+            network_response["typology"],
+        ),
         "case_id": network_response["case_id"],
         "account_id": network_response["account_id"],
         "evidence_type": "network_analysis",
@@ -584,7 +597,10 @@ if __name__ == "__main__":
     os.makedirs(args.out_dir, exist_ok=True)
 
     from evidence_model import build_evidence_items, compute_completeness
-    from authority_policy import assess_authority
+    from authority_policy import assess_authority, AUTHORITY_POLICY
+    from regulatory_rules import evaluate_compliance_rules
+    from investigation_auditor import audit_investigation
+    from case_completeness import compute_case_completeness
 
     store = DataStore(args.data_dir)
     with open(args.cases_file) as f:
@@ -612,6 +628,28 @@ if __name__ == "__main__":
         account = store.accounts_by_id.get(case["account_id"])
         evidence["authority"] = assess_authority(case, evidence_items, evidence["completeness"],
                                                    net=net, account=account)
+        # CHECKPOINT 5: same regulatory/auditor/completeness stages
+        # run_pipeline.py computes - kept wired into both live entry
+        # points so they don't silently diverge (same pattern Checkpoint
+        # 2/4 used). This entry point has no re-gather step (it has no
+        # `store`-shaped standalone call site for it beyond what
+        # run_pipeline.py already exercises end-to-end); it reports the
+        # completeness assessment computed from whatever evidence
+        # generate_network_evidence() already gathered, honestly.
+        structural_gap_reasons = AUTHORITY_POLICY.get("structural_gap_reasons", ())
+        regulatory_findings = evaluate_compliance_rules(
+            case, evidence_items, evidence["completeness"], net=net, account=account, store=store,
+        )
+        evidence["regulatory_findings"] = regulatory_findings
+        evidence["auditor"] = audit_investigation(
+            case, evidence_items, evidence["completeness"], net=net, account=account,
+            regulatory_findings=regulatory_findings, authority_decision=evidence["authority"],
+            structural_gap_reasons=structural_gap_reasons,
+        )
+        evidence["case_completeness"] = compute_case_completeness(
+            case, evidence_items, evidence["completeness"], regulatory_findings=regulatory_findings,
+            auditor_result=evidence["auditor"], structural_gap_reasons=structural_gap_reasons,
+        )
         with open(f"{args.out_dir}/{case['case_id']}.json", "w") as f:
             json.dump(evidence, f, indent=2, default=str)
         print(f"{case['case_id']} [{case['primary_trigger']}] -> "

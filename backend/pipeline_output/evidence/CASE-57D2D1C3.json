@@ -1,0 +1,2258 @@
+{
+  "evidence_id": "EVID-C98A49ED",
+  "case_id": "CASE-57D2D1C3",
+  "account_id": "ACC000109",
+  "evidence_type": "network_analysis",
+  "typology": "smurfing",
+  "source": "network_evidence_layer",
+  "confidence": "high",
+  "data": {
+    "visualization_type": "network",
+    "root_account": "ACC000109",
+    "max_depth": 3,
+    "nodes": [
+      {
+        "data": {
+          "id": "ACC000036",
+          "label": "ACC000036",
+          "role": "source",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000109",
+          "label": "ACC000109",
+          "role": "root",
+          "risk": "high"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000068",
+          "label": "ACC000068",
+          "role": "source",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000173",
+          "label": "ACC000173",
+          "role": "source",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000088",
+          "label": "ACC000088",
+          "role": "source",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000117",
+          "label": "ACC000117",
+          "role": "source",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000052",
+          "label": "ACC000052",
+          "role": "source",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000150",
+          "label": "ACC000150",
+          "role": "source",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000112",
+          "label": "ACC000112",
+          "role": "downstream",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000148",
+          "label": "ACC000148",
+          "role": "related",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000161",
+          "label": "ACC000161",
+          "role": "related",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000146",
+          "label": "ACC000146",
+          "role": "related",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000158",
+          "label": "ACC000158",
+          "role": "related",
+          "risk": "unknown"
+        }
+      },
+      {
+        "data": {
+          "id": "ACC000095",
+          "label": "ACC000095",
+          "role": "related",
+          "risk": "unknown"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "data": {
+          "id": "TXN001471",
+          "source": "ACC000036",
+          "target": "ACC000109",
+          "amount": 47847.63,
+          "currency": "INR",
+          "timestamp": "2025-06-13T10:28:28",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001472",
+          "source": "ACC000109",
+          "target": "ACC000112",
+          "amount": 255956.15,
+          "currency": "INR",
+          "timestamp": "2025-06-13T15:31:04",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001468",
+          "source": "ACC000068",
+          "target": "ACC000109",
+          "amount": 44618.65,
+          "currency": "INR",
+          "timestamp": "2025-06-13T14:46:28",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001467",
+          "source": "ACC000173",
+          "target": "ACC000109",
+          "amount": 38775.01,
+          "currency": "INR",
+          "timestamp": "2025-06-13T15:22:28",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001465",
+          "source": "ACC000088",
+          "target": "ACC000109",
+          "amount": 46224.02,
+          "currency": "INR",
+          "timestamp": "2025-06-13T17:12:28",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001470",
+          "source": "ACC000117",
+          "target": "ACC000109",
+          "amount": 45897.03,
+          "currency": "INR",
+          "timestamp": "2025-06-13T17:43:28",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN000771",
+          "source": "ACC000117",
+          "target": "ACC000148",
+          "amount": 50630.16,
+          "currency": "INR",
+          "timestamp": "2025-06-11T09:31:38",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001466",
+          "source": "ACC000052",
+          "target": "ACC000109",
+          "amount": 45394.04,
+          "currency": "INR",
+          "timestamp": "2025-06-13T19:23:28",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN000356",
+          "source": "ACC000052",
+          "target": "ACC000161",
+          "amount": 19777.92,
+          "currency": "INR",
+          "timestamp": "2025-06-15T13:34:58",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001469",
+          "source": "ACC000150",
+          "target": "ACC000109",
+          "amount": 44893.77,
+          "currency": "INR",
+          "timestamp": "2025-06-13T20:13:28",
+          "depth": 2
+        }
+      },
+      {
+        "data": {
+          "id": "TXN000961",
+          "source": "ACC000150",
+          "target": "ACC000146",
+          "amount": 20758.64,
+          "currency": "INR",
+          "timestamp": "2025-06-11T21:09:29",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001473",
+          "source": "ACC000112",
+          "target": "ACC000158",
+          "amount": 233618.5,
+          "currency": "INR",
+          "timestamp": "2025-06-13T19:50:43",
+          "depth": 3
+        }
+      },
+      {
+        "data": {
+          "id": "TXN001474",
+          "source": "ACC000158",
+          "target": "ACC000095",
+          "amount": 226363.19,
+          "currency": "INR",
+          "timestamp": "2025-06-13T22:36:20",
+          "depth": 3
+        }
+      }
+    ],
+    "patterns": [
+      {
+        "type": "many_to_one",
+        "account": "ACC000109",
+        "supporting_transactions": [
+          "TXN001471",
+          "TXN001468",
+          "TXN001467",
+          "TXN001465",
+          "TXN001470",
+          "TXN001466",
+          "TXN001469"
+        ]
+      },
+      {
+        "type": "rapid_onward_transfer",
+        "from": "ACC000109",
+        "to": "ACC000112",
+        "time_difference_minutes": 8.6
+      },
+      {
+        "type": "multi_hop_flow",
+        "path": [
+          "ACC000109",
+          "ACC000112",
+          "ACC000158",
+          "ACC000095"
+        ],
+        "depth": 3
+      }
+    ]
+  },
+  "source_transactions": [
+    "TXN000356",
+    "TXN000771",
+    "TXN000961",
+    "TXN001465",
+    "TXN001466",
+    "TXN001467",
+    "TXN001468",
+    "TXN001469",
+    "TXN001470",
+    "TXN001471",
+    "TXN001472",
+    "TXN001473",
+    "TXN001474"
+  ],
+  "network_scope": {
+    "max_depth": 3,
+    "time_window_hours": 24
+  },
+  "generated_at": "2026-08-24T01:31:29.883681",
+  "evidence_items": [
+    {
+      "evidence_id": "EVD-BD6B154F",
+      "case_id": "CASE-57D2D1C3",
+      "evidence_type": "transaction_chain",
+      "source": "network_evidence_layer",
+      "source_record_ids": [
+        "TXN000356",
+        "TXN000771",
+        "TXN000961",
+        "TXN001465",
+        "TXN001466",
+        "TXN001467",
+        "TXN001468",
+        "TXN001469",
+        "TXN001470",
+        "TXN001471",
+        "TXN001472",
+        "TXN001473",
+        "TXN001474"
+      ],
+      "required": true,
+      "weight": 0.2,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "smurfing"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-C607A146",
+      "case_id": "CASE-57D2D1C3",
+      "evidence_type": "temporal_pattern",
+      "source": "network_evidence_layer",
+      "source_record_ids": [
+        "rapid_onward_transfer",
+        "multi_hop_flow"
+      ],
+      "required": true,
+      "weight": 0.15,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "smurfing"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-546ABF52",
+      "case_id": "CASE-57D2D1C3",
+      "evidence_type": "counterparty_relationship",
+      "source": "network_evidence_layer",
+      "source_record_ids": [
+        "ACC000036",
+        "ACC000109",
+        "ACC000068",
+        "ACC000173",
+        "ACC000088",
+        "ACC000117",
+        "ACC000052",
+        "ACC000150",
+        "ACC000112",
+        "ACC000148",
+        "ACC000161",
+        "ACC000146",
+        "ACC000158",
+        "ACC000095"
+      ],
+      "required": true,
+      "weight": 0.15,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "smurfing"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-A75191B7",
+      "case_id": "CASE-57D2D1C3",
+      "evidence_type": "beneficiary_information",
+      "source": "beneficiaries.csv",
+      "source_record_ids": [
+        "BENE000265",
+        "BENE000266",
+        "BENE000267",
+        "BENE000268"
+      ],
+      "required": true,
+      "weight": 0.1,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "smurfing"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-248AA5CF",
+      "case_id": "CASE-57D2D1C3",
+      "evidence_type": "device_information",
+      "source": "devices.csv",
+      "source_record_ids": [
+        "DEV000168",
+        "DEV000169"
+      ],
+      "required": true,
+      "weight": 0.15,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "smurfing"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-F74371A4",
+      "case_id": "CASE-57D2D1C3",
+      "evidence_type": "geo_information",
+      "source": "geo_events.csv",
+      "source_record_ids": [
+        "GEO000376",
+        "GEO000377",
+        "GEO000378",
+        "GEO000379",
+        "GEO000380"
+      ],
+      "required": true,
+      "weight": 0.1,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "smurfing"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-DB04E201",
+      "case_id": "CASE-57D2D1C3",
+      "evidence_type": "source_of_funds",
+      "source": "not_modeled_in_dataset",
+      "source_record_ids": [],
+      "required": true,
+      "weight": 0.15,
+      "available": false,
+      "quality": null,
+      "supports": [],
+      "contradicts": [],
+      "missing_reason": {
+        "reason": "documentation_not_available",
+        "severity": "critical"
+      }
+    }
+  ],
+  "completeness": {
+    "weighted_score": 85.0,
+    "simple_score": 85.7,
+    "required_count": 7,
+    "available_count": 6,
+    "missing": [
+      {
+        "evidence_type": "source_of_funds",
+        "reason": "documentation_not_available",
+        "severity": "critical"
+      }
+    ],
+    "method": "deterministic_weighted_availability"
+  },
+  "authority": {
+    "case_id": "CASE-57D2D1C3",
+    "authority_tier": "senior",
+    "can_resolve": false,
+    "decision": "senior_review_required",
+    "reasons": [
+      "high_value_transaction",
+      "complex_network"
+    ],
+    "risk_factors": [
+      "complex_network",
+      "high_value_transaction"
+    ],
+    "missing_evidence": [
+      {
+        "evidence_type": "source_of_funds",
+        "reason": "documentation_not_available",
+        "severity": "critical"
+      }
+    ],
+    "policy_version": "v1",
+    "confidence": 0.929,
+    "confidence_source": "derived_from_evidence_quality",
+    "policy_inputs": {
+      "typology": "smurfing",
+      "typology_risk": "moderate",
+      "weighted_completeness": 85.0,
+      "high_value_transaction": true,
+      "complex_network": true,
+      "contradiction_state": "not_evaluated",
+      "junior_action_limit_exceeded": false
+    }
+  },
+  "jurisdiction": {
+    "case_id": "CASE-57D2D1C3",
+    "jurisdiction": "IN",
+    "base_jurisdiction": "IN",
+    "applicable_jurisdictions": [
+      "IN"
+    ],
+    "confidence": "high",
+    "registered_country": "India",
+    "cross_border_indicators": [],
+    "basis": [
+      {
+        "signal": "account_registered_country",
+        "value": "India",
+        "mapped_to": "IN"
+      }
+    ]
+  },
+  "regulatory_findings": [
+    {
+      "rule_id": "RULE-CTR-001",
+      "rule_name": "Currency/Cash Transaction Report threshold",
+      "typology": "smurfing",
+      "status": "no_identified_breach",
+      "confidence": 1.0,
+      "supporting_evidence": [
+        {
+          "evidence_type": "transaction_amount",
+          "source_record_ids": [],
+          "observed_value": 255956.15,
+          "currency": "INR"
+        }
+      ],
+      "rationale": "largest gathered INR transaction (INR 255,956.15) is below the IN reporting threshold (INR 1,000,000)",
+      "regulatory_context": [
+        {
+          "source_id": "REG-IN-PMLA-CTR",
+          "title": "Cash Transaction Report (CTR) filing threshold",
+          "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+          "jurisdiction": "IN",
+          "authority": "FIU-IND",
+          "topic": "CTR",
+          "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+          "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+          "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "high_value_transaction",
+            "high-value",
+            "amount_fragmentation",
+            "large_transaction",
+            "ctr",
+            "structuring"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+          "retrieval_score": 5,
+          "matched_keywords": [
+            "ctr",
+            "high-value",
+            "high_value_transaction"
+          ]
+        },
+        {
+          "source_id": "REG-IN-PMLA-STR",
+          "title": "Suspicious Transaction Report (STR) filing duty",
+          "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+          "jurisdiction": "IN",
+          "authority": "FIU-IND",
+          "topic": "STR",
+          "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+          "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+          "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "rapid_onward_transfer",
+            "multi_hop_flow",
+            "pass_through_timing",
+            "amount_retention_ratio",
+            "suspicious",
+            "no_apparent_lawful_purpose",
+            "structuring",
+            "amount_fragmentation",
+            "many_to_one",
+            "one_to_many",
+            "transaction_chain",
+            "fan_in",
+            "fan_out"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+          "retrieval_score": 5,
+          "matched_keywords": [
+            "many_to_one",
+            "multi_hop_flow",
+            "rapid_onward_transfer"
+          ]
+        }
+      ],
+      "jurisdiction_context": {
+        "case_id": "CASE-57D2D1C3",
+        "jurisdiction": "IN",
+        "base_jurisdiction": "IN",
+        "applicable_jurisdictions": [
+          "IN"
+        ],
+        "confidence": "high",
+        "registered_country": "India",
+        "cross_border_indicators": [],
+        "basis": [
+          {
+            "signal": "account_registered_country",
+            "value": "India",
+            "mapped_to": "IN"
+          }
+        ]
+      },
+      "case_id": "CASE-57D2D1C3"
+    },
+    {
+      "rule_id": "RULE-STRUCT-001",
+      "rule_name": "Structuring to evade reporting",
+      "typology": "smurfing",
+      "status": "confirmed_concern",
+      "confidence": 0.8,
+      "supporting_evidence": [
+        {
+          "evidence_type": "transaction_chain",
+          "source_record_ids": [
+            "TXN000356",
+            "TXN000771",
+            "TXN000961",
+            "TXN001465",
+            "TXN001466",
+            "TXN001467",
+            "TXN001468",
+            "TXN001469",
+            "TXN001470",
+            "TXN001471",
+            "TXN001472",
+            "TXN001473",
+            "TXN001474"
+          ]
+        },
+        {
+          "evidence_type": "pattern",
+          "pattern_type": "many_to_one"
+        },
+        {
+          "evidence_type": "pattern",
+          "pattern_type": "rapid_onward_transfer"
+        }
+      ],
+      "rationale": "2 independently-discovered structuring-relevant patterns corroborate each other over a real, available transaction chain: ['many_to_one', 'rapid_onward_transfer']",
+      "regulatory_context": [
+        {
+          "source_id": "REG-IN-PMLA-STR",
+          "title": "Suspicious Transaction Report (STR) filing duty",
+          "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+          "jurisdiction": "IN",
+          "authority": "FIU-IND",
+          "topic": "STR",
+          "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+          "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+          "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "rapid_onward_transfer",
+            "multi_hop_flow",
+            "pass_through_timing",
+            "amount_retention_ratio",
+            "suspicious",
+            "no_apparent_lawful_purpose",
+            "structuring",
+            "amount_fragmentation",
+            "many_to_one",
+            "one_to_many",
+            "transaction_chain",
+            "fan_in",
+            "fan_out"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+          "retrieval_score": 8,
+          "matched_keywords": [
+            "amount_fragmentation",
+            "many_to_one",
+            "multi_hop_flow",
+            "rapid_onward_transfer",
+            "structuring",
+            "transaction_chain"
+          ]
+        },
+        {
+          "source_id": "REG-IN-PMLA-CTR",
+          "title": "Cash Transaction Report (CTR) filing threshold",
+          "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+          "jurisdiction": "IN",
+          "authority": "FIU-IND",
+          "topic": "CTR",
+          "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+          "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+          "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "high_value_transaction",
+            "high-value",
+            "amount_fragmentation",
+            "large_transaction",
+            "ctr",
+            "structuring"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+          "retrieval_score": 4,
+          "matched_keywords": [
+            "amount_fragmentation",
+            "structuring"
+          ]
+        }
+      ],
+      "jurisdiction_context": {
+        "case_id": "CASE-57D2D1C3",
+        "jurisdiction": "IN",
+        "base_jurisdiction": "IN",
+        "applicable_jurisdictions": [
+          "IN"
+        ],
+        "confidence": "high",
+        "registered_country": "India",
+        "cross_border_indicators": [],
+        "basis": [
+          {
+            "signal": "account_registered_country",
+            "value": "India",
+            "mapped_to": "IN"
+          }
+        ]
+      },
+      "case_id": "CASE-57D2D1C3"
+    },
+    {
+      "rule_id": "RULE-SAR-001",
+      "rule_name": "Suspicious Activity / Suspicious Transaction Report filing consideration",
+      "typology": "smurfing",
+      "status": "confirmed_concern",
+      "confidence": 0.8,
+      "supporting_evidence": [
+        {
+          "evidence_type": "pattern",
+          "pattern_type": "multi_hop_flow"
+        },
+        {
+          "evidence_type": "pattern",
+          "pattern_type": "rapid_onward_transfer"
+        }
+      ],
+      "rationale": "2 SAR-relevant patterns corroborate each other: ['multi_hop_flow', 'rapid_onward_transfer']",
+      "regulatory_context": [
+        {
+          "source_id": "REG-IN-PMLA-STR",
+          "title": "Suspicious Transaction Report (STR) filing duty",
+          "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+          "jurisdiction": "IN",
+          "authority": "FIU-IND",
+          "topic": "STR",
+          "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+          "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+          "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "rapid_onward_transfer",
+            "multi_hop_flow",
+            "pass_through_timing",
+            "amount_retention_ratio",
+            "suspicious",
+            "no_apparent_lawful_purpose",
+            "structuring",
+            "amount_fragmentation",
+            "many_to_one",
+            "one_to_many",
+            "transaction_chain",
+            "fan_in",
+            "fan_out"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+          "retrieval_score": 7,
+          "matched_keywords": [
+            "amount_retention_ratio",
+            "many_to_one",
+            "multi_hop_flow",
+            "pass_through_timing",
+            "rapid_onward_transfer"
+          ]
+        },
+        {
+          "source_id": "REG-IN-PMLA-CTR",
+          "title": "Cash Transaction Report (CTR) filing threshold",
+          "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+          "jurisdiction": "IN",
+          "authority": "FIU-IND",
+          "topic": "CTR",
+          "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+          "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+          "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "high_value_transaction",
+            "high-value",
+            "amount_fragmentation",
+            "large_transaction",
+            "ctr",
+            "structuring"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+          "retrieval_score": 2,
+          "matched_keywords": []
+        }
+      ],
+      "jurisdiction_context": {
+        "case_id": "CASE-57D2D1C3",
+        "jurisdiction": "IN",
+        "base_jurisdiction": "IN",
+        "applicable_jurisdictions": [
+          "IN"
+        ],
+        "confidence": "high",
+        "registered_country": "India",
+        "cross_border_indicators": [],
+        "basis": [
+          {
+            "signal": "account_registered_country",
+            "value": "India",
+            "mapped_to": "IN"
+          }
+        ]
+      },
+      "case_id": "CASE-57D2D1C3"
+    }
+  ],
+  "auditor": {
+    "case_id": "CASE-57D2D1C3",
+    "issues": [],
+    "issue_count": 0,
+    "critical_issue_count": 0
+  },
+  "case_completeness": {
+    "case_id": "CASE-57D2D1C3",
+    "score": 100.0,
+    "threshold": 75.0,
+    "status": "complete",
+    "missing_evidence": [
+      {
+        "evidence_type": "source_of_funds",
+        "reason": "documentation_not_available",
+        "severity": "critical"
+      }
+    ],
+    "critical_missing_evidence": [],
+    "satisfied_requirements": [
+      "transaction_chain",
+      "temporal_pattern",
+      "counterparty_relationship",
+      "beneficiary_information",
+      "device_information",
+      "geo_information"
+    ],
+    "failed_requirements": [
+      "source_of_funds"
+    ],
+    "reasons": [
+      "structural_dataset_wide_gap_excluded_from_score"
+    ],
+    "next_step": "continue",
+    "components": {
+      "evidence": 100.0,
+      "regulatory": 100.0,
+      "auditor": 100.0
+    },
+    "jurisdiction_context": {
+      "case_id": "CASE-57D2D1C3",
+      "jurisdiction": "IN",
+      "base_jurisdiction": "IN",
+      "applicable_jurisdictions": [
+        "IN"
+      ],
+      "confidence": "high",
+      "registered_country": "India",
+      "cross_border_indicators": [],
+      "basis": [
+        {
+          "signal": "account_registered_country",
+          "value": "India",
+          "mapped_to": "IN"
+        }
+      ]
+    }
+  },
+  "regather": null,
+  "next_stage": {
+    "case_id": "CASE-57D2D1C3",
+    "jurisdiction": {
+      "case_id": "CASE-57D2D1C3",
+      "jurisdiction": "IN",
+      "base_jurisdiction": "IN",
+      "applicable_jurisdictions": [
+        "IN"
+      ],
+      "confidence": "high",
+      "registered_country": "India",
+      "cross_border_indicators": [],
+      "basis": [
+        {
+          "signal": "account_registered_country",
+          "value": "India",
+          "mapped_to": "IN"
+        }
+      ]
+    },
+    "completeness_result": {
+      "case_id": "CASE-57D2D1C3",
+      "score": 100.0,
+      "threshold": 75.0,
+      "status": "complete",
+      "missing_evidence": [
+        {
+          "evidence_type": "source_of_funds",
+          "reason": "documentation_not_available",
+          "severity": "critical"
+        }
+      ],
+      "critical_missing_evidence": [],
+      "satisfied_requirements": [
+        "transaction_chain",
+        "temporal_pattern",
+        "counterparty_relationship",
+        "beneficiary_information",
+        "device_information",
+        "geo_information"
+      ],
+      "failed_requirements": [
+        "source_of_funds"
+      ],
+      "reasons": [
+        "structural_dataset_wide_gap_excluded_from_score"
+      ],
+      "next_step": "continue",
+      "components": {
+        "evidence": 100.0,
+        "regulatory": 100.0,
+        "auditor": 100.0
+      },
+      "jurisdiction_context": {
+        "case_id": "CASE-57D2D1C3",
+        "jurisdiction": "IN",
+        "base_jurisdiction": "IN",
+        "applicable_jurisdictions": [
+          "IN"
+        ],
+        "confidence": "high",
+        "registered_country": "India",
+        "cross_border_indicators": [],
+        "basis": [
+          {
+            "signal": "account_registered_country",
+            "value": "India",
+            "mapped_to": "IN"
+          }
+        ]
+      }
+    },
+    "regulatory_findings": [
+      {
+        "rule_id": "RULE-CTR-001",
+        "rule_name": "Currency/Cash Transaction Report threshold",
+        "typology": "smurfing",
+        "status": "no_identified_breach",
+        "confidence": 1.0,
+        "supporting_evidence": [
+          {
+            "evidence_type": "transaction_amount",
+            "source_record_ids": [],
+            "observed_value": 255956.15,
+            "currency": "INR"
+          }
+        ],
+        "rationale": "largest gathered INR transaction (INR 255,956.15) is below the IN reporting threshold (INR 1,000,000)",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-PMLA-CTR",
+            "title": "Cash Transaction Report (CTR) filing threshold",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "CTR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "high_value_transaction",
+              "high-value",
+              "amount_fragmentation",
+              "large_transaction",
+              "ctr",
+              "structuring"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "retrieval_score": 5,
+            "matched_keywords": [
+              "ctr",
+              "high-value",
+              "high_value_transaction"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-STR",
+            "title": "Suspicious Transaction Report (STR) filing duty",
+            "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "STR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "rapid_onward_transfer",
+              "multi_hop_flow",
+              "pass_through_timing",
+              "amount_retention_ratio",
+              "suspicious",
+              "no_apparent_lawful_purpose",
+              "structuring",
+              "amount_fragmentation",
+              "many_to_one",
+              "one_to_many",
+              "transaction_chain",
+              "fan_in",
+              "fan_out"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "retrieval_score": 5,
+            "matched_keywords": [
+              "many_to_one",
+              "multi_hop_flow",
+              "rapid_onward_transfer"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-57D2D1C3",
+          "jurisdiction": "IN",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN"
+          ],
+          "confidence": "high",
+          "registered_country": "India",
+          "cross_border_indicators": [],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-57D2D1C3"
+      },
+      {
+        "rule_id": "RULE-STRUCT-001",
+        "rule_name": "Structuring to evade reporting",
+        "typology": "smurfing",
+        "status": "confirmed_concern",
+        "confidence": 0.8,
+        "supporting_evidence": [
+          {
+            "evidence_type": "transaction_chain",
+            "source_record_ids": [
+              "TXN000356",
+              "TXN000771",
+              "TXN000961",
+              "TXN001465",
+              "TXN001466",
+              "TXN001467",
+              "TXN001468",
+              "TXN001469",
+              "TXN001470",
+              "TXN001471",
+              "TXN001472",
+              "TXN001473",
+              "TXN001474"
+            ]
+          },
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "many_to_one"
+          },
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "rapid_onward_transfer"
+          }
+        ],
+        "rationale": "2 independently-discovered structuring-relevant patterns corroborate each other over a real, available transaction chain: ['many_to_one', 'rapid_onward_transfer']",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-PMLA-STR",
+            "title": "Suspicious Transaction Report (STR) filing duty",
+            "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "STR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "rapid_onward_transfer",
+              "multi_hop_flow",
+              "pass_through_timing",
+              "amount_retention_ratio",
+              "suspicious",
+              "no_apparent_lawful_purpose",
+              "structuring",
+              "amount_fragmentation",
+              "many_to_one",
+              "one_to_many",
+              "transaction_chain",
+              "fan_in",
+              "fan_out"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "retrieval_score": 8,
+            "matched_keywords": [
+              "amount_fragmentation",
+              "many_to_one",
+              "multi_hop_flow",
+              "rapid_onward_transfer",
+              "structuring",
+              "transaction_chain"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CTR",
+            "title": "Cash Transaction Report (CTR) filing threshold",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "CTR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "high_value_transaction",
+              "high-value",
+              "amount_fragmentation",
+              "large_transaction",
+              "ctr",
+              "structuring"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "retrieval_score": 4,
+            "matched_keywords": [
+              "amount_fragmentation",
+              "structuring"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-57D2D1C3",
+          "jurisdiction": "IN",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN"
+          ],
+          "confidence": "high",
+          "registered_country": "India",
+          "cross_border_indicators": [],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-57D2D1C3"
+      },
+      {
+        "rule_id": "RULE-SAR-001",
+        "rule_name": "Suspicious Activity / Suspicious Transaction Report filing consideration",
+        "typology": "smurfing",
+        "status": "confirmed_concern",
+        "confidence": 0.8,
+        "supporting_evidence": [
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "multi_hop_flow"
+          },
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "rapid_onward_transfer"
+          }
+        ],
+        "rationale": "2 SAR-relevant patterns corroborate each other: ['multi_hop_flow', 'rapid_onward_transfer']",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-PMLA-STR",
+            "title": "Suspicious Transaction Report (STR) filing duty",
+            "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "STR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "rapid_onward_transfer",
+              "multi_hop_flow",
+              "pass_through_timing",
+              "amount_retention_ratio",
+              "suspicious",
+              "no_apparent_lawful_purpose",
+              "structuring",
+              "amount_fragmentation",
+              "many_to_one",
+              "one_to_many",
+              "transaction_chain",
+              "fan_in",
+              "fan_out"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "retrieval_score": 7,
+            "matched_keywords": [
+              "amount_retention_ratio",
+              "many_to_one",
+              "multi_hop_flow",
+              "pass_through_timing",
+              "rapid_onward_transfer"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CTR",
+            "title": "Cash Transaction Report (CTR) filing threshold",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "CTR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "high_value_transaction",
+              "high-value",
+              "amount_fragmentation",
+              "large_transaction",
+              "ctr",
+              "structuring"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "retrieval_score": 2,
+            "matched_keywords": []
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-57D2D1C3",
+          "jurisdiction": "IN",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN"
+          ],
+          "confidence": "high",
+          "registered_country": "India",
+          "cross_border_indicators": [],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-57D2D1C3"
+      }
+    ],
+    "evidence_references": [
+      "EVD-BD6B154F",
+      "EVD-C607A146",
+      "EVD-546ABF52",
+      "EVD-A75191B7",
+      "EVD-248AA5CF",
+      "EVD-F74371A4",
+      "EVD-DB04E201"
+    ],
+    "auditor_decision": {
+      "case_id": "CASE-57D2D1C3",
+      "issues": [],
+      "issue_count": 0,
+      "critical_issue_count": 0
+    },
+    "recommended_next_stage": "auditor_routing"
+  },
+  "next_best_action": {
+    "recommendation_id": "NBA-93048CEC",
+    "case_id": "CASE-57D2D1C3",
+    "typology": "smurfing",
+    "recommended_action": "RESTRICT_ACCOUNT",
+    "reason_codes": [
+      "confirmed_regulatory_concern",
+      "RULE-SAR-001",
+      "RULE-STRUCT-001",
+      "network_topology_typology"
+    ],
+    "supporting_evidence_ids": [
+      "EVD-BD6B154F",
+      "EVD-C607A146",
+      "EVD-546ABF52",
+      "EVD-A75191B7",
+      "EVD-248AA5CF",
+      "EVD-F74371A4"
+    ],
+    "regulatory_basis": [
+      "RULE-SAR-001",
+      "RULE-STRUCT-001"
+    ],
+    "confidence": 0.965,
+    "required_authority": "senior",
+    "requires_human_review": true,
+    "policy_version": "v1"
+  },
+  "audit_trail": [
+    {
+      "event_id": "EVT-B04259A4",
+      "case_id": "CASE-57D2D1C3",
+      "event_type": "case_created",
+      "actor_type": "system",
+      "actor_id": "detection_layer",
+      "timestamp": "2026-08-23T20:01:29.884035+00:00",
+      "before_state": null,
+      "after_state": {
+        "status": "open"
+      },
+      "reason": "case bundled from correlated alerts",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-E46A45FD",
+      "case_id": "CASE-57D2D1C3",
+      "event_type": "alert_created",
+      "actor_type": "system",
+      "actor_id": "detection_layer",
+      "timestamp": "2026-08-23T20:01:29.884089+00:00",
+      "before_state": null,
+      "after_state": {
+        "alert_id": "ALERT-SMUR-1F33B252"
+      },
+      "reason": "alert triggered by detection rules",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-DF1924F8",
+      "case_id": "CASE-57D2D1C3",
+      "event_type": "alert_created",
+      "actor_type": "system",
+      "actor_id": "detection_layer",
+      "timestamp": "2026-08-23T20:01:29.884107+00:00",
+      "before_state": null,
+      "after_state": {
+        "alert_id": "ALERT-MONE-2F3897CC"
+      },
+      "reason": "alert triggered by detection rules",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-43BAF922",
+      "case_id": "CASE-57D2D1C3",
+      "event_type": "evidence_gathered",
+      "actor_type": "system",
+      "actor_id": "network_layer",
+      "timestamp": "2026-08-23T20:01:29.884120+00:00",
+      "before_state": null,
+      "after_state": {
+        "completeness": {
+          "weighted_score": 85.0,
+          "simple_score": 85.7,
+          "required_count": 7,
+          "available_count": 6,
+          "missing": [
+            {
+              "evidence_type": "source_of_funds",
+              "reason": "documentation_not_available",
+              "severity": "critical"
+            }
+          ],
+          "method": "deterministic_weighted_availability"
+        }
+      },
+      "reason": "network/timeline evidence generated for case",
+      "related_evidence_ids": [
+        "EVD-BD6B154F",
+        "EVD-C607A146",
+        "EVD-546ABF52",
+        "EVD-A75191B7",
+        "EVD-248AA5CF",
+        "EVD-F74371A4",
+        "EVD-DB04E201"
+      ],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-2484F804",
+      "case_id": "CASE-57D2D1C3",
+      "event_type": "regulatory_evaluation",
+      "actor_type": "system",
+      "actor_id": "regulatory_rules",
+      "timestamp": "2026-08-23T20:01:29.884134+00:00",
+      "before_state": null,
+      "after_state": {
+        "rule_count": 3
+      },
+      "reason": "compliance rules evaluated against gathered evidence",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-71314F84",
+      "case_id": "CASE-57D2D1C3",
+      "event_type": "auditor_evaluation",
+      "actor_type": "system",
+      "actor_id": "investigation_auditor",
+      "timestamp": "2026-08-23T20:01:29.884148+00:00",
+      "before_state": null,
+      "after_state": {
+        "case_id": "CASE-57D2D1C3",
+        "issues": [],
+        "issue_count": 0,
+        "critical_issue_count": 0
+      },
+      "reason": "independent structural audit of the investigation",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-A1FC7579",
+      "case_id": "CASE-57D2D1C3",
+      "event_type": "completeness_evaluation",
+      "actor_type": "system",
+      "actor_id": "case_completeness",
+      "timestamp": "2026-08-23T20:01:29.884158+00:00",
+      "before_state": null,
+      "after_state": {
+        "case_id": "CASE-57D2D1C3",
+        "score": 100.0,
+        "threshold": 75.0,
+        "status": "complete",
+        "missing_evidence": [
+          {
+            "evidence_type": "source_of_funds",
+            "reason": "documentation_not_available",
+            "severity": "critical"
+          }
+        ],
+        "critical_missing_evidence": [],
+        "satisfied_requirements": [
+          "transaction_chain",
+          "temporal_pattern",
+          "counterparty_relationship",
+          "beneficiary_information",
+          "device_information",
+          "geo_information"
+        ],
+        "failed_requirements": [
+          "source_of_funds"
+        ],
+        "reasons": [
+          "structural_dataset_wide_gap_excluded_from_score"
+        ],
+        "next_step": "continue",
+        "components": {
+          "evidence": 100.0,
+          "regulatory": 100.0,
+          "auditor": 100.0
+        },
+        "jurisdiction_context": {
+          "case_id": "CASE-57D2D1C3",
+          "jurisdiction": "IN",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN"
+          ],
+          "confidence": "high",
+          "registered_country": "India",
+          "cross_border_indicators": [],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        }
+      },
+      "reason": "case completeness scored",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-9F90A5E5",
+      "case_id": "CASE-57D2D1C3",
+      "event_type": "authority_evaluation",
+      "actor_type": "system",
+      "actor_id": "authority_policy",
+      "timestamp": "2026-08-23T20:01:29.884169+00:00",
+      "before_state": null,
+      "after_state": {
+        "case_id": "CASE-57D2D1C3",
+        "authority_tier": "senior",
+        "can_resolve": false,
+        "decision": "senior_review_required",
+        "reasons": [
+          "high_value_transaction",
+          "complex_network"
+        ],
+        "risk_factors": [
+          "complex_network",
+          "high_value_transaction"
+        ],
+        "missing_evidence": [
+          {
+            "evidence_type": "source_of_funds",
+            "reason": "documentation_not_available",
+            "severity": "critical"
+          }
+        ],
+        "policy_version": "v1",
+        "confidence": 0.929,
+        "confidence_source": "derived_from_evidence_quality",
+        "policy_inputs": {
+          "typology": "smurfing",
+          "typology_risk": "moderate",
+          "weighted_completeness": 85.0,
+          "high_value_transaction": true,
+          "complex_network": true,
+          "contradiction_state": "not_evaluated",
+          "junior_action_limit_exceeded": false
+        }
+      },
+      "reason": "junior/senior routing decision (Checkpoint 4, consumed here)",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-BFC509B8",
+      "case_id": "CASE-57D2D1C3",
+      "event_type": "next_best_action_generated",
+      "actor_type": "system",
+      "actor_id": "next_best_action",
+      "timestamp": "2026-08-23T20:01:29.884219+00:00",
+      "before_state": null,
+      "after_state": {
+        "recommendation_id": "NBA-93048CEC",
+        "case_id": "CASE-57D2D1C3",
+        "typology": "smurfing",
+        "recommended_action": "RESTRICT_ACCOUNT",
+        "reason_codes": [
+          "confirmed_regulatory_concern",
+          "RULE-SAR-001",
+          "RULE-STRUCT-001",
+          "network_topology_typology"
+        ],
+        "supporting_evidence_ids": [
+          "EVD-BD6B154F",
+          "EVD-C607A146",
+          "EVD-546ABF52",
+          "EVD-A75191B7",
+          "EVD-248AA5CF",
+          "EVD-F74371A4"
+        ],
+        "regulatory_basis": [
+          "RULE-SAR-001",
+          "RULE-STRUCT-001"
+        ],
+        "confidence": 0.965,
+        "required_authority": "senior",
+        "requires_human_review": true,
+        "policy_version": "v1"
+      },
+      "reason": "deterministic recommendation generated",
+      "related_evidence_ids": [
+        "EVD-BD6B154F",
+        "EVD-C607A146",
+        "EVD-546ABF52",
+        "EVD-A75191B7",
+        "EVD-248AA5CF",
+        "EVD-F74371A4"
+      ],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-293F48AA",
+      "case_id": "CASE-57D2D1C3",
+      "event_type": "human_review_started",
+      "actor_type": "system",
+      "actor_id": "action_pipeline",
+      "timestamp": "2026-08-23T20:01:29.884236+00:00",
+      "before_state": null,
+      "after_state": {
+        "case_state": "HUMAN_REVIEW"
+      },
+      "reason": "case is audit-ready; queued for human review",
+      "related_evidence_ids": [],
+      "metadata": {}
+    }
+  ],
+  "case_state": "HUMAN_REVIEW",
+  "case_memory": {
+    "case_id": "CASE-57D2D1C3",
+    "account_id": "ACC000109",
+    "typology": "smurfing",
+    "lifecycle_state": "HUMAN_REVIEW",
+    "lifecycle_history": [
+      "HUMAN_REVIEW"
+    ],
+    "jurisdiction": {
+      "case_id": "CASE-57D2D1C3",
+      "jurisdiction": "IN",
+      "base_jurisdiction": "IN",
+      "applicable_jurisdictions": [
+        "IN"
+      ],
+      "confidence": "high",
+      "registered_country": "India",
+      "cross_border_indicators": [],
+      "basis": [
+        {
+          "signal": "account_registered_country",
+          "value": "India",
+          "mapped_to": "IN"
+        }
+      ]
+    },
+    "evidence_references": [
+      "EVD-BD6B154F",
+      "EVD-C607A146",
+      "EVD-546ABF52",
+      "EVD-A75191B7",
+      "EVD-248AA5CF",
+      "EVD-F74371A4",
+      "EVD-DB04E201"
+    ],
+    "evidence_completeness": {
+      "weighted_score": 85.0,
+      "simple_score": 85.7,
+      "required_count": 7,
+      "available_count": 6,
+      "missing": [
+        {
+          "evidence_type": "source_of_funds",
+          "reason": "documentation_not_available",
+          "severity": "critical"
+        }
+      ],
+      "method": "deterministic_weighted_availability"
+    },
+    "case_completeness_history": [
+      {
+        "case_id": "CASE-57D2D1C3",
+        "score": 100.0,
+        "threshold": 75.0,
+        "status": "complete",
+        "missing_evidence": [
+          {
+            "evidence_type": "source_of_funds",
+            "reason": "documentation_not_available",
+            "severity": "critical"
+          }
+        ],
+        "critical_missing_evidence": [],
+        "satisfied_requirements": [
+          "transaction_chain",
+          "temporal_pattern",
+          "counterparty_relationship",
+          "beneficiary_information",
+          "device_information",
+          "geo_information"
+        ],
+        "failed_requirements": [
+          "source_of_funds"
+        ],
+        "reasons": [
+          "structural_dataset_wide_gap_excluded_from_score"
+        ],
+        "next_step": "continue",
+        "components": {
+          "evidence": 100.0,
+          "regulatory": 100.0,
+          "auditor": 100.0
+        },
+        "jurisdiction_context": {
+          "case_id": "CASE-57D2D1C3",
+          "jurisdiction": "IN",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN"
+          ],
+          "confidence": "high",
+          "registered_country": "India",
+          "cross_border_indicators": [],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        }
+      }
+    ],
+    "authority_decision": {
+      "case_id": "CASE-57D2D1C3",
+      "authority_tier": "senior",
+      "can_resolve": false,
+      "decision": "senior_review_required",
+      "reasons": [
+        "high_value_transaction",
+        "complex_network"
+      ],
+      "risk_factors": [
+        "complex_network",
+        "high_value_transaction"
+      ],
+      "missing_evidence": [
+        {
+          "evidence_type": "source_of_funds",
+          "reason": "documentation_not_available",
+          "severity": "critical"
+        }
+      ],
+      "policy_version": "v1",
+      "confidence": 0.929,
+      "confidence_source": "derived_from_evidence_quality",
+      "policy_inputs": {
+        "typology": "smurfing",
+        "typology_risk": "moderate",
+        "weighted_completeness": 85.0,
+        "high_value_transaction": true,
+        "complex_network": true,
+        "contradiction_state": "not_evaluated",
+        "junior_action_limit_exceeded": false
+      }
+    },
+    "regulatory_findings": [
+      {
+        "rule_id": "RULE-CTR-001",
+        "rule_name": "Currency/Cash Transaction Report threshold",
+        "typology": "smurfing",
+        "status": "no_identified_breach",
+        "confidence": 1.0,
+        "supporting_evidence": [
+          {
+            "evidence_type": "transaction_amount",
+            "source_record_ids": [],
+            "observed_value": 255956.15,
+            "currency": "INR"
+          }
+        ],
+        "rationale": "largest gathered INR transaction (INR 255,956.15) is below the IN reporting threshold (INR 1,000,000)",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-PMLA-CTR",
+            "title": "Cash Transaction Report (CTR) filing threshold",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "CTR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "high_value_transaction",
+              "high-value",
+              "amount_fragmentation",
+              "large_transaction",
+              "ctr",
+              "structuring"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "retrieval_score": 5,
+            "matched_keywords": [
+              "ctr",
+              "high-value",
+              "high_value_transaction"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-STR",
+            "title": "Suspicious Transaction Report (STR) filing duty",
+            "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "STR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "rapid_onward_transfer",
+              "multi_hop_flow",
+              "pass_through_timing",
+              "amount_retention_ratio",
+              "suspicious",
+              "no_apparent_lawful_purpose",
+              "structuring",
+              "amount_fragmentation",
+              "many_to_one",
+              "one_to_many",
+              "transaction_chain",
+              "fan_in",
+              "fan_out"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "retrieval_score": 5,
+            "matched_keywords": [
+              "many_to_one",
+              "multi_hop_flow",
+              "rapid_onward_transfer"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-57D2D1C3",
+          "jurisdiction": "IN",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN"
+          ],
+          "confidence": "high",
+          "registered_country": "India",
+          "cross_border_indicators": [],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-57D2D1C3"
+      },
+      {
+        "rule_id": "RULE-STRUCT-001",
+        "rule_name": "Structuring to evade reporting",
+        "typology": "smurfing",
+        "status": "confirmed_concern",
+        "confidence": 0.8,
+        "supporting_evidence": [
+          {
+            "evidence_type": "transaction_chain",
+            "source_record_ids": [
+              "TXN000356",
+              "TXN000771",
+              "TXN000961",
+              "TXN001465",
+              "TXN001466",
+              "TXN001467",
+              "TXN001468",
+              "TXN001469",
+              "TXN001470",
+              "TXN001471",
+              "TXN001472",
+              "TXN001473",
+              "TXN001474"
+            ]
+          },
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "many_to_one"
+          },
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "rapid_onward_transfer"
+          }
+        ],
+        "rationale": "2 independently-discovered structuring-relevant patterns corroborate each other over a real, available transaction chain: ['many_to_one', 'rapid_onward_transfer']",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-PMLA-STR",
+            "title": "Suspicious Transaction Report (STR) filing duty",
+            "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "STR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "rapid_onward_transfer",
+              "multi_hop_flow",
+              "pass_through_timing",
+              "amount_retention_ratio",
+              "suspicious",
+              "no_apparent_lawful_purpose",
+              "structuring",
+              "amount_fragmentation",
+              "many_to_one",
+              "one_to_many",
+              "transaction_chain",
+              "fan_in",
+              "fan_out"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "retrieval_score": 8,
+            "matched_keywords": [
+              "amount_fragmentation",
+              "many_to_one",
+              "multi_hop_flow",
+              "rapid_onward_transfer",
+              "structuring",
+              "transaction_chain"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CTR",
+            "title": "Cash Transaction Report (CTR) filing threshold",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "CTR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "high_value_transaction",
+              "high-value",
+              "amount_fragmentation",
+              "large_transaction",
+              "ctr",
+              "structuring"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "retrieval_score": 4,
+            "matched_keywords": [
+              "amount_fragmentation",
+              "structuring"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-57D2D1C3",
+          "jurisdiction": "IN",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN"
+          ],
+          "confidence": "high",
+          "registered_country": "India",
+          "cross_border_indicators": [],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-57D2D1C3"
+      },
+      {
+        "rule_id": "RULE-SAR-001",
+        "rule_name": "Suspicious Activity / Suspicious Transaction Report filing consideration",
+        "typology": "smurfing",
+        "status": "confirmed_concern",
+        "confidence": 0.8,
+        "supporting_evidence": [
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "multi_hop_flow"
+          },
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "rapid_onward_transfer"
+          }
+        ],
+        "rationale": "2 SAR-relevant patterns corroborate each other: ['multi_hop_flow', 'rapid_onward_transfer']",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-PMLA-STR",
+            "title": "Suspicious Transaction Report (STR) filing duty",
+            "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "STR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "rapid_onward_transfer",
+              "multi_hop_flow",
+              "pass_through_timing",
+              "amount_retention_ratio",
+              "suspicious",
+              "no_apparent_lawful_purpose",
+              "structuring",
+              "amount_fragmentation",
+              "many_to_one",
+              "one_to_many",
+              "transaction_chain",
+              "fan_in",
+              "fan_out"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "retrieval_score": 7,
+            "matched_keywords": [
+              "amount_retention_ratio",
+              "many_to_one",
+              "multi_hop_flow",
+              "pass_through_timing",
+              "rapid_onward_transfer"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CTR",
+            "title": "Cash Transaction Report (CTR) filing threshold",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "CTR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "high_value_transaction",
+              "high-value",
+              "amount_fragmentation",
+              "large_transaction",
+              "ctr",
+              "structuring"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "retrieval_score": 2,
+            "matched_keywords": []
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-57D2D1C3",
+          "jurisdiction": "IN",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN"
+          ],
+          "confidence": "high",
+          "registered_country": "India",
+          "cross_border_indicators": [],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-57D2D1C3"
+      }
+    ],
+    "auditor_findings": {
+      "case_id": "CASE-57D2D1C3",
+      "issues": [],
+      "issue_count": 0,
+      "critical_issue_count": 0
+    },
+    "recommended_action": {
+      "recommendation_id": "NBA-93048CEC",
+      "case_id": "CASE-57D2D1C3",
+      "typology": "smurfing",
+      "recommended_action": "RESTRICT_ACCOUNT",
+      "reason_codes": [
+        "confirmed_regulatory_concern",
+        "RULE-SAR-001",
+        "RULE-STRUCT-001",
+        "network_topology_typology"
+      ],
+      "supporting_evidence_ids": [
+        "EVD-BD6B154F",
+        "EVD-C607A146",
+        "EVD-546ABF52",
+        "EVD-A75191B7",
+        "EVD-248AA5CF",
+        "EVD-F74371A4"
+      ],
+      "regulatory_basis": [
+        "RULE-SAR-001",
+        "RULE-STRUCT-001"
+      ],
+      "confidence": 0.965,
+      "required_authority": "senior",
+      "requires_human_review": true,
+      "policy_version": "v1"
+    },
+    "human_review": null,
+    "human_review_history": [],
+    "investigator_action": null,
+    "investigator_action_history": [],
+    "audit_trail_ref": [
+      "EVT-B04259A4",
+      "EVT-E46A45FD",
+      "EVT-DF1924F8",
+      "EVT-43BAF922",
+      "EVT-2484F804",
+      "EVT-71314F84",
+      "EVT-A1FC7579",
+      "EVT-9F90A5E5",
+      "EVT-BFC509B8",
+      "EVT-293F48AA"
+    ],
+    "final_disposition": null
+  }
+}

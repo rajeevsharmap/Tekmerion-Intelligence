@@ -35,10 +35,15 @@ def build_case_memory(case, jurisdiction_context, evidence_items, completeness,
                        authority_decision, regulatory_findings, auditor_result,
                        case_completeness, recommendation, lifecycle_state,
                        human_review=None, investigator_action=None,
-                       audit_trail_events=None, final_disposition=None):
+                       audit_trail_events=None, final_disposition=None,
+                       sar_report=None):
     """Create a new Case Memory record. One record per case; later stages
     call `update_case_memory()` on the returned dict, never re-create it
-    from scratch (that would silently discard `*_history`)."""
+    from scratch (that would silently discard `*_history`).
+
+    `sar_report` (CHECKPOINT 7, optional, additive - see sar_report.py) is
+    `None` for every case that never reached an authorized FILE_SAR
+    investigator action; it is never fabricated or backfilled here."""
     audit_trail_events = audit_trail_events or []
     memory = {
         "case_id": case["case_id"],
@@ -62,13 +67,16 @@ def build_case_memory(case, jurisdiction_context, evidence_items, completeness,
         "final_disposition": final_disposition or (
             (investigator_action or {}).get("actual_action")
         ),
+        "sar_report": sar_report,
+        "sar_report_history": [sar_report] if sar_report else [],
     }
     return memory
 
 
 def update_case_memory(memory, lifecycle_state=None, human_review=None,
                         investigator_action=None, case_completeness=None,
-                        audit_trail_events=None, final_disposition=None):
+                        audit_trail_events=None, final_disposition=None,
+                        sar_report=None):
     """Additive update: every argument is optional; when supplied it is
     APPENDED to the relevant `*_history` list (and mirrored into the
     matching "most recent" pointer field) - prior entries are never
@@ -105,5 +113,9 @@ def update_case_memory(memory, lifecycle_state=None, human_review=None,
 
     if final_disposition is not None:
         updated["final_disposition"] = final_disposition
+
+    if sar_report is not None:
+        updated["sar_report"] = sar_report
+        updated["sar_report_history"] = list(memory.get("sar_report_history", [])) + [sar_report]
 
     return updated

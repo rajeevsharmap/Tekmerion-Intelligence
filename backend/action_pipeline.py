@@ -31,6 +31,7 @@ from investigator_action import (
     OverrideReasonRequiredError,
 )
 from case_memory import build_case_memory, update_case_memory
+from sar_report import build_sar_report
 
 
 class InvalidActionLayerStateError(Exception):
@@ -54,6 +55,7 @@ class CaseActionLayer:
         self.recommendation = None
         self.human_review = None
         self.investigator_action = None
+        self.sar_report = None  # CHECKPOINT 7 - see sar_report.py
         self.memory = None
 
         self._seed_upstream_events()
@@ -208,6 +210,27 @@ class CaseActionLayer:
                                after_state={"actual_action": action_record["actual_action"]},
                                reason="authorized action executed (simulated in the mock environment)")
             self.state = cs.transition(self.state, cs.ACTION_EXECUTED)
+
+            # CHECKPOINT 7: an authorized, executed FILE_SAR action
+            # generates a structured SAR record from already-computed
+            # Checkpoint 4-6 output - no new evidence, no LLM, no
+            # randomness. See sar_report.py for the full precondition
+            # re-validation (this call never assumes the action above was
+            # correctly gated; sar_report.py checks independently).
+            if action_record["actual_action"] == "FILE_SAR":
+                self.sar_report = build_sar_report(
+                    self.case,
+                    self.evidence.get("jurisdiction"),
+                    self.evidence.get("regulatory_findings", []),
+                    self.evidence.get("evidence_items", []),
+                    self.evidence.get("auditor", {}),
+                    action_record,
+                )
+                self.trail.append("sar_report_generated", "system", "sar_report",
+                                   after_state={"sar_id": self.sar_report["sar_id"],
+                                                "status": self.sar_report["status"]},
+                                   related_evidence_ids=self.sar_report["supporting_evidence_ids"],
+                                   reason=f"SAR record generated with status {self.sar_report['status']}")
             if requested_action == "ESCALATE_TO_SENIOR":
                 self.trail.append("case_escalated", "investigator", investigator_id,
                                    after_state={"case_state": cs.ESCALATED}, reason=reason)
@@ -226,5 +249,6 @@ class CaseActionLayer:
             self.memory, lifecycle_state=self.state, investigator_action=action_record,
             audit_trail_events=self.trail.events,
             final_disposition=action_record["actual_action"] if action_record["authorized"] else None,
+            sar_report=self.sar_report,
         )
         return action_record

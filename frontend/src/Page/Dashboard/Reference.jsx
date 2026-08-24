@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import "../../styles/Reference.css";
-
+import { useNavigate } from "react-router-dom";
 const referenceCases = [
   {
     id: "CASE-2023-112B",
@@ -52,6 +52,7 @@ function Reference() {
   const [search, setSearch] = useState("");
   const [typologyFilter, setTypologyFilter] = useState("all");
   const [outcomeFilter, setOutcomeFilter] = useState("all");
+  const navigate = useNavigate();
 
   const filteredCases = useMemo(() => {
     return referenceCases.filter((item) => {
@@ -201,7 +202,7 @@ function Reference() {
               </div>
 
               <div className="case-actions">
-                <button type="button" className="view-case-button">
+                <button type="button" className="view-case-button" onClick={() => navigate(`/reference/${item.id}`)}>
                   View Case
                 </button>
               </div>

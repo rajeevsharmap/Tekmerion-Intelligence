@@ -1,0 +1,3099 @@
+{
+  "evidence_id": "EVID-9E2AB47F",
+  "case_id": "CASE-4F6238C4",
+  "account_id": "ACC000176",
+  "evidence_type": "network_analysis",
+  "typology": "account_swap",
+  "source": "network_evidence_layer",
+  "confidence": "high",
+  "data": {
+    "visualization_type": "behavioral_transaction_timeline",
+    "events": [
+      {
+        "event_id": "DEV000272",
+        "timestamp": "2025-05-11T11:38:02",
+        "event_type": "device_change",
+        "device_id": "DEV000272",
+        "is_trusted_device": false
+      },
+      {
+        "event_id": "DEV000272-SIM",
+        "timestamp": "2025-05-11T11:38:02",
+        "event_type": "sim_change",
+        "sim_change_detected": true
+      },
+      {
+        "event_id": "GEO000604",
+        "timestamp": "2025-05-11T12:11:06",
+        "event_type": "geo",
+        "city": "Dubai",
+        "country": "UAE",
+        "distance_from_last_location_km": 3023.0,
+        "registered_country_match": false,
+        "is_vpn_or_proxy": true
+      },
+      {
+        "event_id": "TXN001597",
+        "timestamp": "2025-05-11T12:44:06",
+        "event_type": "transaction",
+        "direction": "out",
+        "amount": 825715.6,
+        "currency": "INR",
+        "beneficiary_id": "BENE000447",
+        "is_first_time_beneficiary": false
+      }
+    ],
+    "behavioral_summary": {
+      "baseline_avg_amount": null,
+      "baseline_avg_daily_count": null,
+      "recent_avg_amount": 825715.6,
+      "recent_daily_count": 0.25,
+      "amount_deviation_ratio": null,
+      "frequency_deviation_ratio": null,
+      "anchor_time": "2025-05-11T12:44:06"
+    },
+    "patterns": [
+      "high_value_transaction",
+      "new_device_before_transaction",
+      "rapid_geographic_change",
+      "sim_change_before_transaction"
+    ]
+  },
+  "source_transactions": [
+    "TXN001597"
+  ],
+  "network_scope": {
+    "max_depth": 3,
+    "time_window_hours": 24
+  },
+  "generated_at": "2026-08-24T01:31:29.947217",
+  "evidence_items": [
+    {
+      "evidence_id": "EVD-306EF7F2",
+      "case_id": "CASE-4F6238C4",
+      "evidence_type": "device_information",
+      "source": "devices.csv",
+      "source_record_ids": [
+        "DEV000271",
+        "DEV000272"
+      ],
+      "required": true,
+      "weight": 0.15,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "account_swap"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-54E2489E",
+      "case_id": "CASE-4F6238C4",
+      "evidence_type": "sim_change_evidence",
+      "source": "network_evidence_layer",
+      "source_record_ids": [
+        "DEV000272-SIM"
+      ],
+      "required": true,
+      "weight": 0.15,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "account_swap"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-889501C2",
+      "case_id": "CASE-4F6238C4",
+      "evidence_type": "geo_information",
+      "source": "geo_events.csv",
+      "source_record_ids": [
+        "GEO000600",
+        "GEO000601",
+        "GEO000602",
+        "GEO000603",
+        "GEO000604"
+      ],
+      "required": true,
+      "weight": 0.15,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "account_swap"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-990AA09C",
+      "case_id": "CASE-4F6238C4",
+      "evidence_type": "impossible_travel",
+      "source": "network_evidence_layer",
+      "source_record_ids": [
+        "GEO000604"
+      ],
+      "required": true,
+      "weight": 0.1,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "account_swap"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-60EE6CBE",
+      "case_id": "CASE-4F6238C4",
+      "evidence_type": "high_value_transaction",
+      "source": "network_evidence_layer",
+      "source_record_ids": [
+        "TXN001597"
+      ],
+      "required": true,
+      "weight": 0.15,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "account_swap"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-3C202323",
+      "case_id": "CASE-4F6238C4",
+      "evidence_type": "beneficiary_information",
+      "source": "beneficiaries.csv",
+      "source_record_ids": [
+        "BENE000446",
+        "BENE000447"
+      ],
+      "required": true,
+      "weight": 0.15,
+      "available": true,
+      "quality": "high",
+      "supports": [
+        "account_swap"
+      ],
+      "contradicts": []
+    },
+    {
+      "evidence_id": "EVD-926063BE",
+      "case_id": "CASE-4F6238C4",
+      "evidence_type": "behavioral_baseline",
+      "source": "network_evidence_layer",
+      "source_record_ids": [],
+      "required": true,
+      "weight": 0.15,
+      "available": false,
+      "quality": null,
+      "supports": [],
+      "contradicts": [],
+      "missing_reason": {
+        "reason": "insufficient_transaction_history_for_baseline",
+        "severity": "critical"
+      }
+    }
+  ],
+  "completeness": {
+    "weighted_score": 85.0,
+    "simple_score": 85.7,
+    "required_count": 7,
+    "available_count": 6,
+    "missing": [
+      {
+        "evidence_type": "behavioral_baseline",
+        "reason": "insufficient_transaction_history_for_baseline",
+        "severity": "critical"
+      }
+    ],
+    "method": "deterministic_weighted_availability"
+  },
+  "authority": {
+    "case_id": "CASE-4F6238C4",
+    "authority_tier": "senior",
+    "can_resolve": false,
+    "decision": "senior_review_required",
+    "reasons": [
+      "critical_evidence_missing",
+      "high_risk_typology",
+      "high_value_transaction",
+      "junior_action_limit_exceeded"
+    ],
+    "risk_factors": [
+      "critical_evidence_gap",
+      "high_severity_alert",
+      "high_value_transaction",
+      "typology_high_risk"
+    ],
+    "missing_evidence": [
+      {
+        "evidence_type": "behavioral_baseline",
+        "reason": "insufficient_transaction_history_for_baseline",
+        "severity": "critical"
+      }
+    ],
+    "policy_version": "v1",
+    "confidence": 0.929,
+    "confidence_source": "derived_from_evidence_quality",
+    "policy_inputs": {
+      "typology": "account_swap",
+      "typology_risk": "high",
+      "weighted_completeness": 85.0,
+      "high_value_transaction": true,
+      "complex_network": false,
+      "contradiction_state": "not_evaluated",
+      "junior_action_limit_exceeded": true
+    }
+  },
+  "jurisdiction": {
+    "case_id": "CASE-4F6238C4",
+    "jurisdiction": "cross_border",
+    "base_jurisdiction": "IN",
+    "applicable_jurisdictions": [
+      "IN",
+      "cross_border"
+    ],
+    "confidence": "medium",
+    "registered_country": "India",
+    "cross_border_indicators": [
+      {
+        "signal": "geo_country_mismatch",
+        "geo_event_ids": [
+          "GEO000604"
+        ],
+        "count": 1
+      }
+    ],
+    "basis": [
+      {
+        "signal": "account_registered_country",
+        "value": "India",
+        "mapped_to": "IN"
+      }
+    ]
+  },
+  "regulatory_findings": [
+    {
+      "rule_id": "RULE-CTR-001",
+      "rule_name": "Currency/Cash Transaction Report threshold",
+      "typology": "account_swap",
+      "status": "no_identified_breach",
+      "confidence": 1.0,
+      "supporting_evidence": [
+        {
+          "evidence_type": "transaction_amount",
+          "source_record_ids": [],
+          "observed_value": 825715.6,
+          "currency": "INR"
+        }
+      ],
+      "rationale": "largest gathered INR transaction (INR 825,715.60) is below the IN reporting threshold (INR 1,000,000)",
+      "regulatory_context": [
+        {
+          "source_id": "REG-IN-FEMA-LRS",
+          "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+          "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+          "jurisdiction": "cross_border",
+          "authority": "RBI",
+          "topic": "outward_remittance",
+          "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+          "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+          "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "cross_border",
+            "international",
+            "is_international",
+            "foreign_currency",
+            "non_local_currency_transaction",
+            "remittance"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+          "retrieval_score": 8,
+          "matched_keywords": [
+            "cross_border",
+            "foreign_currency",
+            "international",
+            "is_international",
+            "non_local_currency_transaction",
+            "remittance"
+          ]
+        },
+        {
+          "source_id": "REG-IN-PMLA-CROSSBORDER",
+          "title": "Cross-border transaction record-keeping (general obligation)",
+          "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+          "jurisdiction": "cross_border",
+          "authority": "FIU-IND",
+          "topic": "cross_border_reporting",
+          "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+          "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+          "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "cross_border",
+            "international",
+            "is_international",
+            "foreign_currency",
+            "non_local_currency_transaction",
+            "geo_country_mismatch"
+          ],
+          "source_type": "bundled_reference_corpus_unverified_figure",
+          "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+          "retrieval_score": 7,
+          "matched_keywords": [
+            "cross_border",
+            "foreign_currency",
+            "international",
+            "is_international",
+            "non_local_currency_transaction"
+          ]
+        },
+        {
+          "source_id": "REG-IN-PMLA-CTR",
+          "title": "Cash Transaction Report (CTR) filing threshold",
+          "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+          "jurisdiction": "IN",
+          "authority": "FIU-IND",
+          "topic": "CTR",
+          "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+          "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+          "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "high_value_transaction",
+            "high-value",
+            "amount_fragmentation",
+            "large_transaction",
+            "ctr",
+            "structuring"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+          "retrieval_score": 5,
+          "matched_keywords": [
+            "ctr",
+            "high-value",
+            "high_value_transaction"
+          ]
+        }
+      ],
+      "jurisdiction_context": {
+        "case_id": "CASE-4F6238C4",
+        "jurisdiction": "cross_border",
+        "base_jurisdiction": "IN",
+        "applicable_jurisdictions": [
+          "IN",
+          "cross_border"
+        ],
+        "confidence": "medium",
+        "registered_country": "India",
+        "cross_border_indicators": [
+          {
+            "signal": "geo_country_mismatch",
+            "geo_event_ids": [
+              "GEO000604"
+            ],
+            "count": 1
+          }
+        ],
+        "basis": [
+          {
+            "signal": "account_registered_country",
+            "value": "India",
+            "mapped_to": "IN"
+          }
+        ]
+      },
+      "case_id": "CASE-4F6238C4"
+    },
+    {
+      "rule_id": "RULE-SAR-001",
+      "rule_name": "Suspicious Activity / Suspicious Transaction Report filing consideration",
+      "typology": "account_swap",
+      "status": "potentially_applicable",
+      "confidence": 0.4,
+      "supporting_evidence": [
+        {
+          "evidence_type": "pattern",
+          "pattern_type": "sim_change_before_transaction"
+        }
+      ],
+      "rationale": "one SAR-relevant pattern found (sim_change_before_transaction); flagged for review",
+      "regulatory_context": [
+        {
+          "source_id": "REG-IN-FEMA-LRS",
+          "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+          "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+          "jurisdiction": "cross_border",
+          "authority": "RBI",
+          "topic": "outward_remittance",
+          "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+          "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+          "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "cross_border",
+            "international",
+            "is_international",
+            "foreign_currency",
+            "non_local_currency_transaction",
+            "remittance"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+          "retrieval_score": 8,
+          "matched_keywords": [
+            "cross_border",
+            "foreign_currency",
+            "international",
+            "is_international",
+            "non_local_currency_transaction",
+            "remittance"
+          ]
+        },
+        {
+          "source_id": "REG-IN-PMLA-CROSSBORDER",
+          "title": "Cross-border transaction record-keeping (general obligation)",
+          "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+          "jurisdiction": "cross_border",
+          "authority": "FIU-IND",
+          "topic": "cross_border_reporting",
+          "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+          "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+          "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "cross_border",
+            "international",
+            "is_international",
+            "foreign_currency",
+            "non_local_currency_transaction",
+            "geo_country_mismatch"
+          ],
+          "source_type": "bundled_reference_corpus_unverified_figure",
+          "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+          "retrieval_score": 7,
+          "matched_keywords": [
+            "cross_border",
+            "foreign_currency",
+            "international",
+            "is_international",
+            "non_local_currency_transaction"
+          ]
+        },
+        {
+          "source_id": "REG-IN-PMLA-STR",
+          "title": "Suspicious Transaction Report (STR) filing duty",
+          "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+          "jurisdiction": "IN",
+          "authority": "FIU-IND",
+          "topic": "STR",
+          "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+          "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+          "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "rapid_onward_transfer",
+            "multi_hop_flow",
+            "pass_through_timing",
+            "amount_retention_ratio",
+            "suspicious",
+            "no_apparent_lawful_purpose",
+            "structuring",
+            "amount_fragmentation",
+            "many_to_one",
+            "one_to_many",
+            "transaction_chain",
+            "fan_in",
+            "fan_out"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+          "retrieval_score": 5,
+          "matched_keywords": [
+            "amount_retention_ratio",
+            "pass_through_timing",
+            "rapid_onward_transfer"
+          ]
+        }
+      ],
+      "jurisdiction_context": {
+        "case_id": "CASE-4F6238C4",
+        "jurisdiction": "cross_border",
+        "base_jurisdiction": "IN",
+        "applicable_jurisdictions": [
+          "IN",
+          "cross_border"
+        ],
+        "confidence": "medium",
+        "registered_country": "India",
+        "cross_border_indicators": [
+          {
+            "signal": "geo_country_mismatch",
+            "geo_event_ids": [
+              "GEO000604"
+            ],
+            "count": 1
+          }
+        ],
+        "basis": [
+          {
+            "signal": "account_registered_country",
+            "value": "India",
+            "mapped_to": "IN"
+          }
+        ]
+      },
+      "case_id": "CASE-4F6238C4"
+    },
+    {
+      "rule_id": "RULE-ATO-001",
+      "rule_name": "Account-takeover red flags",
+      "typology": "account_swap",
+      "status": "confirmed_concern",
+      "confidence": 0.85,
+      "supporting_evidence": [
+        {
+          "evidence_type": "sim_change_evidence",
+          "source_record_ids": [
+            "DEV000272-SIM"
+          ]
+        },
+        {
+          "evidence_type": "pattern",
+          "pattern_type": "rapid_geographic_change"
+        }
+      ],
+      "rationale": "SIM-change event and rapid/impossible geographic change corroborate each other - a genuine account-takeover-pattern red flag, not a single anomaly",
+      "regulatory_context": [
+        {
+          "source_id": "REG-IN-FEMA-LRS",
+          "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+          "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+          "jurisdiction": "cross_border",
+          "authority": "RBI",
+          "topic": "outward_remittance",
+          "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+          "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+          "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "cross_border",
+            "international",
+            "is_international",
+            "foreign_currency",
+            "non_local_currency_transaction",
+            "remittance"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+          "retrieval_score": 8,
+          "matched_keywords": [
+            "cross_border",
+            "foreign_currency",
+            "international",
+            "is_international",
+            "non_local_currency_transaction",
+            "remittance"
+          ]
+        },
+        {
+          "source_id": "REG-IN-PMLA-CROSSBORDER",
+          "title": "Cross-border transaction record-keeping (general obligation)",
+          "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+          "jurisdiction": "cross_border",
+          "authority": "FIU-IND",
+          "topic": "cross_border_reporting",
+          "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+          "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+          "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "cross_border",
+            "international",
+            "is_international",
+            "foreign_currency",
+            "non_local_currency_transaction",
+            "geo_country_mismatch"
+          ],
+          "source_type": "bundled_reference_corpus_unverified_figure",
+          "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+          "retrieval_score": 7,
+          "matched_keywords": [
+            "cross_border",
+            "foreign_currency",
+            "international",
+            "is_international",
+            "non_local_currency_transaction"
+          ]
+        },
+        {
+          "source_id": "REG-IN-PMLA-CTR",
+          "title": "Cash Transaction Report (CTR) filing threshold",
+          "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+          "jurisdiction": "IN",
+          "authority": "FIU-IND",
+          "topic": "CTR",
+          "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+          "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+          "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "high_value_transaction",
+            "high-value",
+            "amount_fragmentation",
+            "large_transaction",
+            "ctr",
+            "structuring"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+          "retrieval_score": 3,
+          "matched_keywords": [
+            "high_value_transaction"
+          ]
+        }
+      ],
+      "jurisdiction_context": {
+        "case_id": "CASE-4F6238C4",
+        "jurisdiction": "cross_border",
+        "base_jurisdiction": "IN",
+        "applicable_jurisdictions": [
+          "IN",
+          "cross_border"
+        ],
+        "confidence": "medium",
+        "registered_country": "India",
+        "cross_border_indicators": [
+          {
+            "signal": "geo_country_mismatch",
+            "geo_event_ids": [
+              "GEO000604"
+            ],
+            "count": 1
+          }
+        ],
+        "basis": [
+          {
+            "signal": "account_registered_country",
+            "value": "India",
+            "mapped_to": "IN"
+          }
+        ]
+      },
+      "case_id": "CASE-4F6238C4"
+    },
+    {
+      "rule_id": "RULE-CDD-001",
+      "rule_name": "Beneficiary verification / customer due diligence",
+      "typology": "account_swap",
+      "status": "no_identified_breach",
+      "confidence": 0.6,
+      "supporting_evidence": [
+        {
+          "evidence_type": "beneficiary_information",
+          "source_record_ids": [
+            "BENE000446",
+            "BENE000447"
+          ],
+          "unverified_or_first_time_count": 0
+        }
+      ],
+      "rationale": "beneficiary records are present, verified, and not first-time",
+      "regulatory_context": [
+        {
+          "source_id": "REG-IN-FEMA-LRS",
+          "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+          "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+          "jurisdiction": "cross_border",
+          "authority": "RBI",
+          "topic": "outward_remittance",
+          "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+          "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+          "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "cross_border",
+            "international",
+            "is_international",
+            "foreign_currency",
+            "non_local_currency_transaction",
+            "remittance"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+          "retrieval_score": 8,
+          "matched_keywords": [
+            "cross_border",
+            "foreign_currency",
+            "international",
+            "is_international",
+            "non_local_currency_transaction",
+            "remittance"
+          ]
+        },
+        {
+          "source_id": "REG-IN-PMLA-CROSSBORDER",
+          "title": "Cross-border transaction record-keeping (general obligation)",
+          "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+          "jurisdiction": "cross_border",
+          "authority": "FIU-IND",
+          "topic": "cross_border_reporting",
+          "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+          "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+          "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+          "applicable_typologies": [
+            "smurfing",
+            "reverse_smurfing",
+            "money_mule",
+            "account_swap"
+          ],
+          "keywords": [
+            "cross_border",
+            "international",
+            "is_international",
+            "foreign_currency",
+            "non_local_currency_transaction",
+            "geo_country_mismatch"
+          ],
+          "source_type": "bundled_reference_corpus_unverified_figure",
+          "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+          "retrieval_score": 7,
+          "matched_keywords": [
+            "cross_border",
+            "foreign_currency",
+            "international",
+            "is_international",
+            "non_local_currency_transaction"
+          ]
+        },
+        {
+          "source_id": "REG-IN-RBI-KYC-CDD",
+          "title": "Customer Due Diligence / beneficiary verification expectations",
+          "citation": "Master Direction - Know Your Customer (KYC) Direction, 2016 (RBI/DBR/2015-16/18, Master Direction DBR.AML.BC.No.81/14.01.001/2015-16, dated 25 February 2016, as amended)",
+          "jurisdiction": "IN",
+          "authority": "RBI",
+          "topic": "CDD",
+          "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+          "summary": "RBI-regulated entities must undertake Customer Due Diligence, including identification and verification of customers, beneficial owners, and beneficiaries, at onboarding and on an ongoing basis, with enhanced due diligence for higher-risk relationships.",
+          "applicability": "Applies only when the case's determined jurisdiction is IN.",
+          "applicable_typologies": [
+            "account_swap",
+            "money_mule"
+          ],
+          "keywords": [
+            "beneficiary_information",
+            "new_beneficiary",
+            "is_first_time_beneficiary",
+            "is_verified",
+            "unverified"
+          ],
+          "source_type": "bundled_reference_corpus",
+          "text": "RBI-regulated entities must undertake Customer Due Diligence, including identification and verification of customers, beneficial owners, and beneficiaries, at onboarding and on an ongoing basis, with enhanced due diligence for higher-risk relationships.",
+          "retrieval_score": 5,
+          "matched_keywords": [
+            "beneficiary_information",
+            "is_verified",
+            "new_beneficiary"
+          ]
+        }
+      ],
+      "jurisdiction_context": {
+        "case_id": "CASE-4F6238C4",
+        "jurisdiction": "cross_border",
+        "base_jurisdiction": "IN",
+        "applicable_jurisdictions": [
+          "IN",
+          "cross_border"
+        ],
+        "confidence": "medium",
+        "registered_country": "India",
+        "cross_border_indicators": [
+          {
+            "signal": "geo_country_mismatch",
+            "geo_event_ids": [
+              "GEO000604"
+            ],
+            "count": 1
+          }
+        ],
+        "basis": [
+          {
+            "signal": "account_registered_country",
+            "value": "India",
+            "mapped_to": "IN"
+          }
+        ]
+      },
+      "case_id": "CASE-4F6238C4"
+    }
+  ],
+  "auditor": {
+    "case_id": "CASE-4F6238C4",
+    "issues": [
+      {
+        "issue_type": "missing_critical_evidence",
+        "severity": "critical",
+        "detail": {
+          "evidence_type": "behavioral_baseline",
+          "reason": "insufficient_transaction_history_for_baseline"
+        }
+      }
+    ],
+    "issue_count": 1,
+    "critical_issue_count": 1
+  },
+  "case_completeness": {
+    "case_id": "CASE-4F6238C4",
+    "score": 87.2,
+    "threshold": 75.0,
+    "status": "incomplete",
+    "missing_evidence": [
+      {
+        "evidence_type": "behavioral_baseline",
+        "reason": "insufficient_transaction_history_for_baseline",
+        "severity": "critical"
+      }
+    ],
+    "critical_missing_evidence": [
+      {
+        "evidence_type": "behavioral_baseline",
+        "reason": "insufficient_transaction_history_for_baseline",
+        "severity": "critical"
+      }
+    ],
+    "satisfied_requirements": [
+      "device_information",
+      "sim_change_evidence",
+      "geo_information",
+      "impossible_travel",
+      "high_value_transaction",
+      "beneficiary_information"
+    ],
+    "failed_requirements": [
+      "behavioral_baseline"
+    ],
+    "reasons": [
+      "critical_case_specific_evidence_missing",
+      "auditor_flagged_critical_issue"
+    ],
+    "next_step": "re_gather",
+    "components": {
+      "evidence": 85.0,
+      "regulatory": 100.0,
+      "auditor": 75.0
+    },
+    "jurisdiction_context": {
+      "case_id": "CASE-4F6238C4",
+      "jurisdiction": "cross_border",
+      "base_jurisdiction": "IN",
+      "applicable_jurisdictions": [
+        "IN",
+        "cross_border"
+      ],
+      "confidence": "medium",
+      "registered_country": "India",
+      "cross_border_indicators": [
+        {
+          "signal": "geo_country_mismatch",
+          "geo_event_ids": [
+            "GEO000604"
+          ],
+          "count": 1
+        }
+      ],
+      "basis": [
+        {
+          "signal": "account_registered_country",
+          "value": "India",
+          "mapped_to": "IN"
+        }
+      ]
+    }
+  },
+  "regather": {
+    "case_id": "CASE-4F6238C4",
+    "max_iterations": 2,
+    "iterations": [
+      {
+        "iteration": 1,
+        "requested_evidence": [
+          {
+            "evidence_type": "behavioral_baseline",
+            "reason": "insufficient_transaction_history_for_baseline",
+            "severity": "critical"
+          }
+        ],
+        "evidence_returned": [],
+        "completeness_before": 85.0,
+        "completeness_after": 85.0
+      }
+    ],
+    "final_net": {
+      "case_id": "CASE-4F6238C4",
+      "account_id": "ACC000176",
+      "typology": "account_swap",
+      "network_type": "account_swap",
+      "visualization_type": "behavioral_transaction_timeline",
+      "evidence": {
+        "events": [
+          {
+            "event_id": "DEV000272",
+            "timestamp": "2025-05-11T11:38:02",
+            "event_type": "device_change",
+            "device_id": "DEV000272",
+            "is_trusted_device": false
+          },
+          {
+            "event_id": "DEV000272-SIM",
+            "timestamp": "2025-05-11T11:38:02",
+            "event_type": "sim_change",
+            "sim_change_detected": true
+          },
+          {
+            "event_id": "GEO000604",
+            "timestamp": "2025-05-11T12:11:06",
+            "event_type": "geo",
+            "city": "Dubai",
+            "country": "UAE",
+            "distance_from_last_location_km": 3023.0,
+            "registered_country_match": false,
+            "is_vpn_or_proxy": true
+          },
+          {
+            "event_id": "TXN001597",
+            "timestamp": "2025-05-11T12:44:06",
+            "event_type": "transaction",
+            "direction": "out",
+            "amount": 825715.6,
+            "currency": "INR",
+            "beneficiary_id": "BENE000447",
+            "is_first_time_beneficiary": false
+          }
+        ],
+        "behavioral_summary": {
+          "baseline_avg_amount": null,
+          "baseline_avg_daily_count": null,
+          "recent_avg_amount": 825715.6,
+          "recent_daily_count": 0.25,
+          "amount_deviation_ratio": null,
+          "frequency_deviation_ratio": null,
+          "anchor_time": "2025-05-11T12:44:06"
+        }
+      },
+      "patterns": [
+        "high_value_transaction",
+        "new_device_before_transaction",
+        "rapid_geographic_change",
+        "sim_change_before_transaction"
+      ],
+      "source_transactions": [
+        "TXN001597"
+      ],
+      "generated_at": "2026-08-24T01:31:29.947739",
+      "network_scope": {
+        "max_depth": 3,
+        "widened_multiplier": 2
+      }
+    },
+    "final_evidence_items": [
+      {
+        "evidence_id": "EVD-306EF7F2",
+        "case_id": "CASE-4F6238C4",
+        "evidence_type": "device_information",
+        "source": "devices.csv",
+        "source_record_ids": [
+          "DEV000271",
+          "DEV000272"
+        ],
+        "required": true,
+        "weight": 0.15,
+        "available": true,
+        "quality": "high",
+        "supports": [
+          "account_swap"
+        ],
+        "contradicts": []
+      },
+      {
+        "evidence_id": "EVD-54E2489E",
+        "case_id": "CASE-4F6238C4",
+        "evidence_type": "sim_change_evidence",
+        "source": "network_evidence_layer",
+        "source_record_ids": [
+          "DEV000272-SIM"
+        ],
+        "required": true,
+        "weight": 0.15,
+        "available": true,
+        "quality": "high",
+        "supports": [
+          "account_swap"
+        ],
+        "contradicts": []
+      },
+      {
+        "evidence_id": "EVD-889501C2",
+        "case_id": "CASE-4F6238C4",
+        "evidence_type": "geo_information",
+        "source": "geo_events.csv",
+        "source_record_ids": [
+          "GEO000600",
+          "GEO000601",
+          "GEO000602",
+          "GEO000603",
+          "GEO000604"
+        ],
+        "required": true,
+        "weight": 0.15,
+        "available": true,
+        "quality": "high",
+        "supports": [
+          "account_swap"
+        ],
+        "contradicts": []
+      },
+      {
+        "evidence_id": "EVD-990AA09C",
+        "case_id": "CASE-4F6238C4",
+        "evidence_type": "impossible_travel",
+        "source": "network_evidence_layer",
+        "source_record_ids": [
+          "GEO000604"
+        ],
+        "required": true,
+        "weight": 0.1,
+        "available": true,
+        "quality": "high",
+        "supports": [
+          "account_swap"
+        ],
+        "contradicts": []
+      },
+      {
+        "evidence_id": "EVD-60EE6CBE",
+        "case_id": "CASE-4F6238C4",
+        "evidence_type": "high_value_transaction",
+        "source": "network_evidence_layer",
+        "source_record_ids": [
+          "TXN001597"
+        ],
+        "required": true,
+        "weight": 0.15,
+        "available": true,
+        "quality": "high",
+        "supports": [
+          "account_swap"
+        ],
+        "contradicts": []
+      },
+      {
+        "evidence_id": "EVD-3C202323",
+        "case_id": "CASE-4F6238C4",
+        "evidence_type": "beneficiary_information",
+        "source": "beneficiaries.csv",
+        "source_record_ids": [
+          "BENE000446",
+          "BENE000447"
+        ],
+        "required": true,
+        "weight": 0.15,
+        "available": true,
+        "quality": "high",
+        "supports": [
+          "account_swap"
+        ],
+        "contradicts": []
+      },
+      {
+        "evidence_id": "EVD-926063BE",
+        "case_id": "CASE-4F6238C4",
+        "evidence_type": "behavioral_baseline",
+        "source": "network_evidence_layer",
+        "source_record_ids": [],
+        "required": true,
+        "weight": 0.15,
+        "available": false,
+        "quality": null,
+        "supports": [],
+        "contradicts": [],
+        "missing_reason": {
+          "reason": "insufficient_transaction_history_for_baseline",
+          "severity": "critical"
+        }
+      }
+    ],
+    "final_completeness": {
+      "weighted_score": 85.0,
+      "simple_score": 85.7,
+      "required_count": 7,
+      "available_count": 6,
+      "missing": [
+        {
+          "evidence_type": "behavioral_baseline",
+          "reason": "insufficient_transaction_history_for_baseline",
+          "severity": "critical"
+        }
+      ],
+      "method": "deterministic_weighted_availability"
+    },
+    "final_disposition": "unresolved_no_further_evidence_available"
+  },
+  "next_stage": {
+    "case_id": "CASE-4F6238C4",
+    "jurisdiction": {
+      "case_id": "CASE-4F6238C4",
+      "jurisdiction": "cross_border",
+      "base_jurisdiction": "IN",
+      "applicable_jurisdictions": [
+        "IN",
+        "cross_border"
+      ],
+      "confidence": "medium",
+      "registered_country": "India",
+      "cross_border_indicators": [
+        {
+          "signal": "geo_country_mismatch",
+          "geo_event_ids": [
+            "GEO000604"
+          ],
+          "count": 1
+        }
+      ],
+      "basis": [
+        {
+          "signal": "account_registered_country",
+          "value": "India",
+          "mapped_to": "IN"
+        }
+      ]
+    },
+    "completeness_result": {
+      "case_id": "CASE-4F6238C4",
+      "score": 87.2,
+      "threshold": 75.0,
+      "status": "incomplete",
+      "missing_evidence": [
+        {
+          "evidence_type": "behavioral_baseline",
+          "reason": "insufficient_transaction_history_for_baseline",
+          "severity": "critical"
+        }
+      ],
+      "critical_missing_evidence": [
+        {
+          "evidence_type": "behavioral_baseline",
+          "reason": "insufficient_transaction_history_for_baseline",
+          "severity": "critical"
+        }
+      ],
+      "satisfied_requirements": [
+        "device_information",
+        "sim_change_evidence",
+        "geo_information",
+        "impossible_travel",
+        "high_value_transaction",
+        "beneficiary_information"
+      ],
+      "failed_requirements": [
+        "behavioral_baseline"
+      ],
+      "reasons": [
+        "critical_case_specific_evidence_missing",
+        "auditor_flagged_critical_issue"
+      ],
+      "next_step": "re_gather",
+      "components": {
+        "evidence": 85.0,
+        "regulatory": 100.0,
+        "auditor": 75.0
+      },
+      "jurisdiction_context": {
+        "case_id": "CASE-4F6238C4",
+        "jurisdiction": "cross_border",
+        "base_jurisdiction": "IN",
+        "applicable_jurisdictions": [
+          "IN",
+          "cross_border"
+        ],
+        "confidence": "medium",
+        "registered_country": "India",
+        "cross_border_indicators": [
+          {
+            "signal": "geo_country_mismatch",
+            "geo_event_ids": [
+              "GEO000604"
+            ],
+            "count": 1
+          }
+        ],
+        "basis": [
+          {
+            "signal": "account_registered_country",
+            "value": "India",
+            "mapped_to": "IN"
+          }
+        ]
+      }
+    },
+    "regulatory_findings": [
+      {
+        "rule_id": "RULE-CTR-001",
+        "rule_name": "Currency/Cash Transaction Report threshold",
+        "typology": "account_swap",
+        "status": "no_identified_breach",
+        "confidence": 1.0,
+        "supporting_evidence": [
+          {
+            "evidence_type": "transaction_amount",
+            "source_record_ids": [],
+            "observed_value": 825715.6,
+            "currency": "INR"
+          }
+        ],
+        "rationale": "largest gathered INR transaction (INR 825,715.60) is below the IN reporting threshold (INR 1,000,000)",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-FEMA-LRS",
+            "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+            "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+            "jurisdiction": "cross_border",
+            "authority": "RBI",
+            "topic": "outward_remittance",
+            "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+            "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "remittance"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "retrieval_score": 8,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction",
+              "remittance"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CROSSBORDER",
+            "title": "Cross-border transaction record-keeping (general obligation)",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "cross_border",
+            "authority": "FIU-IND",
+            "topic": "cross_border_reporting",
+            "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+            "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "geo_country_mismatch"
+            ],
+            "source_type": "bundled_reference_corpus_unverified_figure",
+            "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "retrieval_score": 7,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CTR",
+            "title": "Cash Transaction Report (CTR) filing threshold",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "CTR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "high_value_transaction",
+              "high-value",
+              "amount_fragmentation",
+              "large_transaction",
+              "ctr",
+              "structuring"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "retrieval_score": 5,
+            "matched_keywords": [
+              "ctr",
+              "high-value",
+              "high_value_transaction"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-4F6238C4",
+          "jurisdiction": "cross_border",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN",
+            "cross_border"
+          ],
+          "confidence": "medium",
+          "registered_country": "India",
+          "cross_border_indicators": [
+            {
+              "signal": "geo_country_mismatch",
+              "geo_event_ids": [
+                "GEO000604"
+              ],
+              "count": 1
+            }
+          ],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-4F6238C4"
+      },
+      {
+        "rule_id": "RULE-SAR-001",
+        "rule_name": "Suspicious Activity / Suspicious Transaction Report filing consideration",
+        "typology": "account_swap",
+        "status": "potentially_applicable",
+        "confidence": 0.4,
+        "supporting_evidence": [
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "sim_change_before_transaction"
+          }
+        ],
+        "rationale": "one SAR-relevant pattern found (sim_change_before_transaction); flagged for review",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-FEMA-LRS",
+            "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+            "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+            "jurisdiction": "cross_border",
+            "authority": "RBI",
+            "topic": "outward_remittance",
+            "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+            "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "remittance"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "retrieval_score": 8,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction",
+              "remittance"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CROSSBORDER",
+            "title": "Cross-border transaction record-keeping (general obligation)",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "cross_border",
+            "authority": "FIU-IND",
+            "topic": "cross_border_reporting",
+            "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+            "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "geo_country_mismatch"
+            ],
+            "source_type": "bundled_reference_corpus_unverified_figure",
+            "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "retrieval_score": 7,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-STR",
+            "title": "Suspicious Transaction Report (STR) filing duty",
+            "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "STR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "rapid_onward_transfer",
+              "multi_hop_flow",
+              "pass_through_timing",
+              "amount_retention_ratio",
+              "suspicious",
+              "no_apparent_lawful_purpose",
+              "structuring",
+              "amount_fragmentation",
+              "many_to_one",
+              "one_to_many",
+              "transaction_chain",
+              "fan_in",
+              "fan_out"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "retrieval_score": 5,
+            "matched_keywords": [
+              "amount_retention_ratio",
+              "pass_through_timing",
+              "rapid_onward_transfer"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-4F6238C4",
+          "jurisdiction": "cross_border",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN",
+            "cross_border"
+          ],
+          "confidence": "medium",
+          "registered_country": "India",
+          "cross_border_indicators": [
+            {
+              "signal": "geo_country_mismatch",
+              "geo_event_ids": [
+                "GEO000604"
+              ],
+              "count": 1
+            }
+          ],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-4F6238C4"
+      },
+      {
+        "rule_id": "RULE-ATO-001",
+        "rule_name": "Account-takeover red flags",
+        "typology": "account_swap",
+        "status": "confirmed_concern",
+        "confidence": 0.85,
+        "supporting_evidence": [
+          {
+            "evidence_type": "sim_change_evidence",
+            "source_record_ids": [
+              "DEV000272-SIM"
+            ]
+          },
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "rapid_geographic_change"
+          }
+        ],
+        "rationale": "SIM-change event and rapid/impossible geographic change corroborate each other - a genuine account-takeover-pattern red flag, not a single anomaly",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-FEMA-LRS",
+            "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+            "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+            "jurisdiction": "cross_border",
+            "authority": "RBI",
+            "topic": "outward_remittance",
+            "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+            "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "remittance"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "retrieval_score": 8,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction",
+              "remittance"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CROSSBORDER",
+            "title": "Cross-border transaction record-keeping (general obligation)",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "cross_border",
+            "authority": "FIU-IND",
+            "topic": "cross_border_reporting",
+            "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+            "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "geo_country_mismatch"
+            ],
+            "source_type": "bundled_reference_corpus_unverified_figure",
+            "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "retrieval_score": 7,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CTR",
+            "title": "Cash Transaction Report (CTR) filing threshold",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "CTR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "high_value_transaction",
+              "high-value",
+              "amount_fragmentation",
+              "large_transaction",
+              "ctr",
+              "structuring"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "retrieval_score": 3,
+            "matched_keywords": [
+              "high_value_transaction"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-4F6238C4",
+          "jurisdiction": "cross_border",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN",
+            "cross_border"
+          ],
+          "confidence": "medium",
+          "registered_country": "India",
+          "cross_border_indicators": [
+            {
+              "signal": "geo_country_mismatch",
+              "geo_event_ids": [
+                "GEO000604"
+              ],
+              "count": 1
+            }
+          ],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-4F6238C4"
+      },
+      {
+        "rule_id": "RULE-CDD-001",
+        "rule_name": "Beneficiary verification / customer due diligence",
+        "typology": "account_swap",
+        "status": "no_identified_breach",
+        "confidence": 0.6,
+        "supporting_evidence": [
+          {
+            "evidence_type": "beneficiary_information",
+            "source_record_ids": [
+              "BENE000446",
+              "BENE000447"
+            ],
+            "unverified_or_first_time_count": 0
+          }
+        ],
+        "rationale": "beneficiary records are present, verified, and not first-time",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-FEMA-LRS",
+            "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+            "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+            "jurisdiction": "cross_border",
+            "authority": "RBI",
+            "topic": "outward_remittance",
+            "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+            "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "remittance"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "retrieval_score": 8,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction",
+              "remittance"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CROSSBORDER",
+            "title": "Cross-border transaction record-keeping (general obligation)",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "cross_border",
+            "authority": "FIU-IND",
+            "topic": "cross_border_reporting",
+            "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+            "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "geo_country_mismatch"
+            ],
+            "source_type": "bundled_reference_corpus_unverified_figure",
+            "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "retrieval_score": 7,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction"
+            ]
+          },
+          {
+            "source_id": "REG-IN-RBI-KYC-CDD",
+            "title": "Customer Due Diligence / beneficiary verification expectations",
+            "citation": "Master Direction - Know Your Customer (KYC) Direction, 2016 (RBI/DBR/2015-16/18, Master Direction DBR.AML.BC.No.81/14.01.001/2015-16, dated 25 February 2016, as amended)",
+            "jurisdiction": "IN",
+            "authority": "RBI",
+            "topic": "CDD",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "RBI-regulated entities must undertake Customer Due Diligence, including identification and verification of customers, beneficial owners, and beneficiaries, at onboarding and on an ongoing basis, with enhanced due diligence for higher-risk relationships.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN.",
+            "applicable_typologies": [
+              "account_swap",
+              "money_mule"
+            ],
+            "keywords": [
+              "beneficiary_information",
+              "new_beneficiary",
+              "is_first_time_beneficiary",
+              "is_verified",
+              "unverified"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "RBI-regulated entities must undertake Customer Due Diligence, including identification and verification of customers, beneficial owners, and beneficiaries, at onboarding and on an ongoing basis, with enhanced due diligence for higher-risk relationships.",
+            "retrieval_score": 5,
+            "matched_keywords": [
+              "beneficiary_information",
+              "is_verified",
+              "new_beneficiary"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-4F6238C4",
+          "jurisdiction": "cross_border",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN",
+            "cross_border"
+          ],
+          "confidence": "medium",
+          "registered_country": "India",
+          "cross_border_indicators": [
+            {
+              "signal": "geo_country_mismatch",
+              "geo_event_ids": [
+                "GEO000604"
+              ],
+              "count": 1
+            }
+          ],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-4F6238C4"
+      }
+    ],
+    "evidence_references": [
+      "EVD-306EF7F2",
+      "EVD-54E2489E",
+      "EVD-889501C2",
+      "EVD-990AA09C",
+      "EVD-60EE6CBE",
+      "EVD-3C202323",
+      "EVD-926063BE"
+    ],
+    "auditor_decision": {
+      "case_id": "CASE-4F6238C4",
+      "issues": [
+        {
+          "issue_type": "missing_critical_evidence",
+          "severity": "critical",
+          "detail": {
+            "evidence_type": "behavioral_baseline",
+            "reason": "insufficient_transaction_history_for_baseline"
+          }
+        }
+      ],
+      "issue_count": 1,
+      "critical_issue_count": 1
+    },
+    "recommended_next_stage": "re_gather_evidence"
+  },
+  "next_best_action": {
+    "recommendation_id": "NBA-B0C44A69",
+    "case_id": "CASE-4F6238C4",
+    "typology": "account_swap",
+    "recommended_action": "REQUEST_MORE_INFORMATION",
+    "reason_codes": [
+      "case_completeness_below_threshold",
+      "critical_case_specific_evidence_missing",
+      "auditor_flagged_critical_issue"
+    ],
+    "supporting_evidence_ids": [
+      "EVD-306EF7F2",
+      "EVD-54E2489E",
+      "EVD-889501C2",
+      "EVD-990AA09C",
+      "EVD-60EE6CBE",
+      "EVD-3C202323"
+    ],
+    "regulatory_basis": [
+      "RULE-ATO-001",
+      "RULE-SAR-001"
+    ],
+    "confidence": 0.901,
+    "required_authority": "senior",
+    "requires_human_review": true,
+    "policy_version": "v1"
+  },
+  "audit_trail": [
+    {
+      "event_id": "EVT-BAA65F55",
+      "case_id": "CASE-4F6238C4",
+      "event_type": "case_created",
+      "actor_type": "system",
+      "actor_id": "detection_layer",
+      "timestamp": "2026-08-23T20:01:29.948033+00:00",
+      "before_state": null,
+      "after_state": {
+        "status": "open"
+      },
+      "reason": "case bundled from correlated alerts",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-1506AA4A",
+      "case_id": "CASE-4F6238C4",
+      "event_type": "alert_created",
+      "actor_type": "system",
+      "actor_id": "detection_layer",
+      "timestamp": "2026-08-23T20:01:29.948093+00:00",
+      "before_state": null,
+      "after_state": {
+        "alert_id": "ALERT-ACCO-3732D03A"
+      },
+      "reason": "alert triggered by detection rules",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-9F965C16",
+      "case_id": "CASE-4F6238C4",
+      "event_type": "evidence_gathered",
+      "actor_type": "system",
+      "actor_id": "network_layer",
+      "timestamp": "2026-08-23T20:01:29.948113+00:00",
+      "before_state": null,
+      "after_state": {
+        "completeness": {
+          "weighted_score": 85.0,
+          "simple_score": 85.7,
+          "required_count": 7,
+          "available_count": 6,
+          "missing": [
+            {
+              "evidence_type": "behavioral_baseline",
+              "reason": "insufficient_transaction_history_for_baseline",
+              "severity": "critical"
+            }
+          ],
+          "method": "deterministic_weighted_availability"
+        }
+      },
+      "reason": "network/timeline evidence generated for case",
+      "related_evidence_ids": [
+        "EVD-306EF7F2",
+        "EVD-54E2489E",
+        "EVD-889501C2",
+        "EVD-990AA09C",
+        "EVD-60EE6CBE",
+        "EVD-3C202323",
+        "EVD-926063BE"
+      ],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-54A7ED53",
+      "case_id": "CASE-4F6238C4",
+      "event_type": "evidence_regathered",
+      "actor_type": "system",
+      "actor_id": "regather_loop",
+      "timestamp": "2026-08-23T20:01:29.948126+00:00",
+      "before_state": null,
+      "after_state": {
+        "iterations": [
+          {
+            "iteration": 1,
+            "requested_evidence": [
+              {
+                "evidence_type": "behavioral_baseline",
+                "reason": "insufficient_transaction_history_for_baseline",
+                "severity": "critical"
+              }
+            ],
+            "evidence_returned": [],
+            "completeness_before": 85.0,
+            "completeness_after": 85.0
+          }
+        ]
+      },
+      "reason": "case_completeness was incomplete; targeted re-gather ran",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-8D341A07",
+      "case_id": "CASE-4F6238C4",
+      "event_type": "regulatory_evaluation",
+      "actor_type": "system",
+      "actor_id": "regulatory_rules",
+      "timestamp": "2026-08-23T20:01:29.948136+00:00",
+      "before_state": null,
+      "after_state": {
+        "rule_count": 4
+      },
+      "reason": "compliance rules evaluated against gathered evidence",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-B743D025",
+      "case_id": "CASE-4F6238C4",
+      "event_type": "auditor_evaluation",
+      "actor_type": "system",
+      "actor_id": "investigation_auditor",
+      "timestamp": "2026-08-23T20:01:29.948146+00:00",
+      "before_state": null,
+      "after_state": {
+        "case_id": "CASE-4F6238C4",
+        "issues": [
+          {
+            "issue_type": "missing_critical_evidence",
+            "severity": "critical",
+            "detail": {
+              "evidence_type": "behavioral_baseline",
+              "reason": "insufficient_transaction_history_for_baseline"
+            }
+          }
+        ],
+        "issue_count": 1,
+        "critical_issue_count": 1
+      },
+      "reason": "independent structural audit of the investigation",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-609B78C3",
+      "case_id": "CASE-4F6238C4",
+      "event_type": "completeness_evaluation",
+      "actor_type": "system",
+      "actor_id": "case_completeness",
+      "timestamp": "2026-08-23T20:01:29.948155+00:00",
+      "before_state": null,
+      "after_state": {
+        "case_id": "CASE-4F6238C4",
+        "score": 87.2,
+        "threshold": 75.0,
+        "status": "incomplete",
+        "missing_evidence": [
+          {
+            "evidence_type": "behavioral_baseline",
+            "reason": "insufficient_transaction_history_for_baseline",
+            "severity": "critical"
+          }
+        ],
+        "critical_missing_evidence": [
+          {
+            "evidence_type": "behavioral_baseline",
+            "reason": "insufficient_transaction_history_for_baseline",
+            "severity": "critical"
+          }
+        ],
+        "satisfied_requirements": [
+          "device_information",
+          "sim_change_evidence",
+          "geo_information",
+          "impossible_travel",
+          "high_value_transaction",
+          "beneficiary_information"
+        ],
+        "failed_requirements": [
+          "behavioral_baseline"
+        ],
+        "reasons": [
+          "critical_case_specific_evidence_missing",
+          "auditor_flagged_critical_issue"
+        ],
+        "next_step": "re_gather",
+        "components": {
+          "evidence": 85.0,
+          "regulatory": 100.0,
+          "auditor": 75.0
+        },
+        "jurisdiction_context": {
+          "case_id": "CASE-4F6238C4",
+          "jurisdiction": "cross_border",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN",
+            "cross_border"
+          ],
+          "confidence": "medium",
+          "registered_country": "India",
+          "cross_border_indicators": [
+            {
+              "signal": "geo_country_mismatch",
+              "geo_event_ids": [
+                "GEO000604"
+              ],
+              "count": 1
+            }
+          ],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        }
+      },
+      "reason": "case completeness scored",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-2820BCB2",
+      "case_id": "CASE-4F6238C4",
+      "event_type": "authority_evaluation",
+      "actor_type": "system",
+      "actor_id": "authority_policy",
+      "timestamp": "2026-08-23T20:01:29.948165+00:00",
+      "before_state": null,
+      "after_state": {
+        "case_id": "CASE-4F6238C4",
+        "authority_tier": "senior",
+        "can_resolve": false,
+        "decision": "senior_review_required",
+        "reasons": [
+          "critical_evidence_missing",
+          "high_risk_typology",
+          "high_value_transaction",
+          "junior_action_limit_exceeded"
+        ],
+        "risk_factors": [
+          "critical_evidence_gap",
+          "high_severity_alert",
+          "high_value_transaction",
+          "typology_high_risk"
+        ],
+        "missing_evidence": [
+          {
+            "evidence_type": "behavioral_baseline",
+            "reason": "insufficient_transaction_history_for_baseline",
+            "severity": "critical"
+          }
+        ],
+        "policy_version": "v1",
+        "confidence": 0.929,
+        "confidence_source": "derived_from_evidence_quality",
+        "policy_inputs": {
+          "typology": "account_swap",
+          "typology_risk": "high",
+          "weighted_completeness": 85.0,
+          "high_value_transaction": true,
+          "complex_network": false,
+          "contradiction_state": "not_evaluated",
+          "junior_action_limit_exceeded": true
+        }
+      },
+      "reason": "junior/senior routing decision (Checkpoint 4, consumed here)",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-C372DDAD",
+      "case_id": "CASE-4F6238C4",
+      "event_type": "next_best_action_generated",
+      "actor_type": "system",
+      "actor_id": "next_best_action",
+      "timestamp": "2026-08-23T20:01:29.948204+00:00",
+      "before_state": null,
+      "after_state": {
+        "recommendation_id": "NBA-B0C44A69",
+        "case_id": "CASE-4F6238C4",
+        "typology": "account_swap",
+        "recommended_action": "REQUEST_MORE_INFORMATION",
+        "reason_codes": [
+          "case_completeness_below_threshold",
+          "critical_case_specific_evidence_missing",
+          "auditor_flagged_critical_issue"
+        ],
+        "supporting_evidence_ids": [
+          "EVD-306EF7F2",
+          "EVD-54E2489E",
+          "EVD-889501C2",
+          "EVD-990AA09C",
+          "EVD-60EE6CBE",
+          "EVD-3C202323"
+        ],
+        "regulatory_basis": [
+          "RULE-ATO-001",
+          "RULE-SAR-001"
+        ],
+        "confidence": 0.901,
+        "required_authority": "senior",
+        "requires_human_review": true,
+        "policy_version": "v1"
+      },
+      "reason": "deterministic recommendation generated",
+      "related_evidence_ids": [
+        "EVD-306EF7F2",
+        "EVD-54E2489E",
+        "EVD-889501C2",
+        "EVD-990AA09C",
+        "EVD-60EE6CBE",
+        "EVD-3C202323"
+      ],
+      "metadata": {}
+    }
+  ],
+  "case_state": "INVESTIGATING",
+  "case_memory": {
+    "case_id": "CASE-4F6238C4",
+    "account_id": "ACC000176",
+    "typology": "account_swap",
+    "lifecycle_state": "INVESTIGATING",
+    "lifecycle_history": [
+      "INVESTIGATING"
+    ],
+    "jurisdiction": {
+      "case_id": "CASE-4F6238C4",
+      "jurisdiction": "cross_border",
+      "base_jurisdiction": "IN",
+      "applicable_jurisdictions": [
+        "IN",
+        "cross_border"
+      ],
+      "confidence": "medium",
+      "registered_country": "India",
+      "cross_border_indicators": [
+        {
+          "signal": "geo_country_mismatch",
+          "geo_event_ids": [
+            "GEO000604"
+          ],
+          "count": 1
+        }
+      ],
+      "basis": [
+        {
+          "signal": "account_registered_country",
+          "value": "India",
+          "mapped_to": "IN"
+        }
+      ]
+    },
+    "evidence_references": [
+      "EVD-306EF7F2",
+      "EVD-54E2489E",
+      "EVD-889501C2",
+      "EVD-990AA09C",
+      "EVD-60EE6CBE",
+      "EVD-3C202323",
+      "EVD-926063BE"
+    ],
+    "evidence_completeness": {
+      "weighted_score": 85.0,
+      "simple_score": 85.7,
+      "required_count": 7,
+      "available_count": 6,
+      "missing": [
+        {
+          "evidence_type": "behavioral_baseline",
+          "reason": "insufficient_transaction_history_for_baseline",
+          "severity": "critical"
+        }
+      ],
+      "method": "deterministic_weighted_availability"
+    },
+    "case_completeness_history": [
+      {
+        "case_id": "CASE-4F6238C4",
+        "score": 87.2,
+        "threshold": 75.0,
+        "status": "incomplete",
+        "missing_evidence": [
+          {
+            "evidence_type": "behavioral_baseline",
+            "reason": "insufficient_transaction_history_for_baseline",
+            "severity": "critical"
+          }
+        ],
+        "critical_missing_evidence": [
+          {
+            "evidence_type": "behavioral_baseline",
+            "reason": "insufficient_transaction_history_for_baseline",
+            "severity": "critical"
+          }
+        ],
+        "satisfied_requirements": [
+          "device_information",
+          "sim_change_evidence",
+          "geo_information",
+          "impossible_travel",
+          "high_value_transaction",
+          "beneficiary_information"
+        ],
+        "failed_requirements": [
+          "behavioral_baseline"
+        ],
+        "reasons": [
+          "critical_case_specific_evidence_missing",
+          "auditor_flagged_critical_issue"
+        ],
+        "next_step": "re_gather",
+        "components": {
+          "evidence": 85.0,
+          "regulatory": 100.0,
+          "auditor": 75.0
+        },
+        "jurisdiction_context": {
+          "case_id": "CASE-4F6238C4",
+          "jurisdiction": "cross_border",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN",
+            "cross_border"
+          ],
+          "confidence": "medium",
+          "registered_country": "India",
+          "cross_border_indicators": [
+            {
+              "signal": "geo_country_mismatch",
+              "geo_event_ids": [
+                "GEO000604"
+              ],
+              "count": 1
+            }
+          ],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        }
+      }
+    ],
+    "authority_decision": {
+      "case_id": "CASE-4F6238C4",
+      "authority_tier": "senior",
+      "can_resolve": false,
+      "decision": "senior_review_required",
+      "reasons": [
+        "critical_evidence_missing",
+        "high_risk_typology",
+        "high_value_transaction",
+        "junior_action_limit_exceeded"
+      ],
+      "risk_factors": [
+        "critical_evidence_gap",
+        "high_severity_alert",
+        "high_value_transaction",
+        "typology_high_risk"
+      ],
+      "missing_evidence": [
+        {
+          "evidence_type": "behavioral_baseline",
+          "reason": "insufficient_transaction_history_for_baseline",
+          "severity": "critical"
+        }
+      ],
+      "policy_version": "v1",
+      "confidence": 0.929,
+      "confidence_source": "derived_from_evidence_quality",
+      "policy_inputs": {
+        "typology": "account_swap",
+        "typology_risk": "high",
+        "weighted_completeness": 85.0,
+        "high_value_transaction": true,
+        "complex_network": false,
+        "contradiction_state": "not_evaluated",
+        "junior_action_limit_exceeded": true
+      }
+    },
+    "regulatory_findings": [
+      {
+        "rule_id": "RULE-CTR-001",
+        "rule_name": "Currency/Cash Transaction Report threshold",
+        "typology": "account_swap",
+        "status": "no_identified_breach",
+        "confidence": 1.0,
+        "supporting_evidence": [
+          {
+            "evidence_type": "transaction_amount",
+            "source_record_ids": [],
+            "observed_value": 825715.6,
+            "currency": "INR"
+          }
+        ],
+        "rationale": "largest gathered INR transaction (INR 825,715.60) is below the IN reporting threshold (INR 1,000,000)",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-FEMA-LRS",
+            "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+            "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+            "jurisdiction": "cross_border",
+            "authority": "RBI",
+            "topic": "outward_remittance",
+            "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+            "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "remittance"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "retrieval_score": 8,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction",
+              "remittance"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CROSSBORDER",
+            "title": "Cross-border transaction record-keeping (general obligation)",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "cross_border",
+            "authority": "FIU-IND",
+            "topic": "cross_border_reporting",
+            "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+            "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "geo_country_mismatch"
+            ],
+            "source_type": "bundled_reference_corpus_unverified_figure",
+            "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "retrieval_score": 7,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CTR",
+            "title": "Cash Transaction Report (CTR) filing threshold",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "CTR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "high_value_transaction",
+              "high-value",
+              "amount_fragmentation",
+              "large_transaction",
+              "ctr",
+              "structuring"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "retrieval_score": 5,
+            "matched_keywords": [
+              "ctr",
+              "high-value",
+              "high_value_transaction"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-4F6238C4",
+          "jurisdiction": "cross_border",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN",
+            "cross_border"
+          ],
+          "confidence": "medium",
+          "registered_country": "India",
+          "cross_border_indicators": [
+            {
+              "signal": "geo_country_mismatch",
+              "geo_event_ids": [
+                "GEO000604"
+              ],
+              "count": 1
+            }
+          ],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-4F6238C4"
+      },
+      {
+        "rule_id": "RULE-SAR-001",
+        "rule_name": "Suspicious Activity / Suspicious Transaction Report filing consideration",
+        "typology": "account_swap",
+        "status": "potentially_applicable",
+        "confidence": 0.4,
+        "supporting_evidence": [
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "sim_change_before_transaction"
+          }
+        ],
+        "rationale": "one SAR-relevant pattern found (sim_change_before_transaction); flagged for review",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-FEMA-LRS",
+            "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+            "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+            "jurisdiction": "cross_border",
+            "authority": "RBI",
+            "topic": "outward_remittance",
+            "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+            "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "remittance"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "retrieval_score": 8,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction",
+              "remittance"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CROSSBORDER",
+            "title": "Cross-border transaction record-keeping (general obligation)",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "cross_border",
+            "authority": "FIU-IND",
+            "topic": "cross_border_reporting",
+            "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+            "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "geo_country_mismatch"
+            ],
+            "source_type": "bundled_reference_corpus_unverified_figure",
+            "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "retrieval_score": 7,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-STR",
+            "title": "Suspicious Transaction Report (STR) filing duty",
+            "citation": "Section 12(1) and Section 12A, Prevention of Money Laundering Act, 2002; Rule 3(1)(D), Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "STR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN. Never conditioned on a specific transaction amount, unlike REG-IN-PMLA-CTR.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "rapid_onward_transfer",
+              "multi_hop_flow",
+              "pass_through_timing",
+              "amount_retention_ratio",
+              "suspicious",
+              "no_apparent_lawful_purpose",
+              "structuring",
+              "amount_fragmentation",
+              "many_to_one",
+              "one_to_many",
+              "transaction_chain",
+              "fan_in",
+              "fan_out"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "A reporting entity must furnish a Suspicious Transaction Report to FIU-IND for any transaction or attempted transaction - cash or non-cash, regardless of value - that gives rise to reasonable grounds to suspect it involves proceeds of crime, has no apparent economic rationale, is structured to fall just below a reporting threshold, or is otherwise unusual for the client's profile; unlike the CTR, there is no monetary floor.",
+            "retrieval_score": 5,
+            "matched_keywords": [
+              "amount_retention_ratio",
+              "pass_through_timing",
+              "rapid_onward_transfer"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-4F6238C4",
+          "jurisdiction": "cross_border",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN",
+            "cross_border"
+          ],
+          "confidence": "medium",
+          "registered_country": "India",
+          "cross_border_indicators": [
+            {
+              "signal": "geo_country_mismatch",
+              "geo_event_ids": [
+                "GEO000604"
+              ],
+              "count": 1
+            }
+          ],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-4F6238C4"
+      },
+      {
+        "rule_id": "RULE-ATO-001",
+        "rule_name": "Account-takeover red flags",
+        "typology": "account_swap",
+        "status": "confirmed_concern",
+        "confidence": 0.85,
+        "supporting_evidence": [
+          {
+            "evidence_type": "sim_change_evidence",
+            "source_record_ids": [
+              "DEV000272-SIM"
+            ]
+          },
+          {
+            "evidence_type": "pattern",
+            "pattern_type": "rapid_geographic_change"
+          }
+        ],
+        "rationale": "SIM-change event and rapid/impossible geographic change corroborate each other - a genuine account-takeover-pattern red flag, not a single anomaly",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-FEMA-LRS",
+            "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+            "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+            "jurisdiction": "cross_border",
+            "authority": "RBI",
+            "topic": "outward_remittance",
+            "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+            "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "remittance"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "retrieval_score": 8,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction",
+              "remittance"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CROSSBORDER",
+            "title": "Cross-border transaction record-keeping (general obligation)",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "cross_border",
+            "authority": "FIU-IND",
+            "topic": "cross_border_reporting",
+            "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+            "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "geo_country_mismatch"
+            ],
+            "source_type": "bundled_reference_corpus_unverified_figure",
+            "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "retrieval_score": 7,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CTR",
+            "title": "Cash Transaction Report (CTR) filing threshold",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005 (framed under the Prevention of Money Laundering Act, 2002)",
+            "jurisdiction": "IN",
+            "authority": "FIU-IND",
+            "topic": "CTR",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN (the account's registered_country maps to India) and the transaction amount being evaluated is denominated in INR (this bundled corpus does not fabricate an FX conversion rate to compare a non-INR amount against this threshold).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "high_value_transaction",
+              "high-value",
+              "amount_fragmentation",
+              "large_transaction",
+              "ctr",
+              "structuring"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Every reporting entity (banking company, financial institution, intermediary) must maintain a record of, and report to FIU-IND, all cash transactions of a value of more than INR 10,00,000 (ten lakh rupees), or a series of integrally connected cash transactions that cumulatively exceed that amount within a month, or their equivalent in foreign currency.",
+            "retrieval_score": 3,
+            "matched_keywords": [
+              "high_value_transaction"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-4F6238C4",
+          "jurisdiction": "cross_border",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN",
+            "cross_border"
+          ],
+          "confidence": "medium",
+          "registered_country": "India",
+          "cross_border_indicators": [
+            {
+              "signal": "geo_country_mismatch",
+              "geo_event_ids": [
+                "GEO000604"
+              ],
+              "count": 1
+            }
+          ],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-4F6238C4"
+      },
+      {
+        "rule_id": "RULE-CDD-001",
+        "rule_name": "Beneficiary verification / customer due diligence",
+        "typology": "account_swap",
+        "status": "no_identified_breach",
+        "confidence": 0.6,
+        "supporting_evidence": [
+          {
+            "evidence_type": "beneficiary_information",
+            "source_record_ids": [
+              "BENE000446",
+              "BENE000447"
+            ],
+            "unverified_or_first_time_count": 0
+          }
+        ],
+        "rationale": "beneficiary records are present, verified, and not first-time",
+        "regulatory_context": [
+          {
+            "source_id": "REG-IN-FEMA-LRS",
+            "title": "Liberalised Remittance Scheme (LRS) outward-remittance limit",
+            "citation": "Foreign Exchange Management Act, 1999 (FEMA); RBI A.P. (DIR Series) Circular No. 64 dated 4 February 2004; RBI Master Direction - Liberalised Remittance Scheme (LRS)",
+            "jurisdiction": "cross_border",
+            "authority": "RBI",
+            "topic": "outward_remittance",
+            "effective_context": "Applies to an India-registered resident individual account when this case's jurisdiction has been independently determined to be cross-border (see REG-IN-PMLA-CROSSBORDER).",
+            "summary": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. This is an outward-remittance LIMIT, not a suspicious-activity threshold - a case can be within the LRS limit and still separately warrant an STR, or vice versa; the two are independent findings, never merged into one.",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "remittance"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "Under the Liberalised Remittance Scheme, a resident individual may remit up to USD 250,000 (or equivalent) abroad per financial year for permitted current- or capital-account purposes without prior RBI approval; remittances exceeding this cumulative annual limit, or for a prohibited purpose, require specific RBI approval and are themselves a FEMA-compliance concern independent of any AML/CTR/STR analysis.",
+            "retrieval_score": 8,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction",
+              "remittance"
+            ]
+          },
+          {
+            "source_id": "REG-IN-PMLA-CROSSBORDER",
+            "title": "Cross-border transaction record-keeping (general obligation)",
+            "citation": "Rule 3, Prevention of Money-Laundering (Maintenance of Records) Rules, 2005",
+            "jurisdiction": "cross_border",
+            "authority": "FIU-IND",
+            "topic": "cross_border_reporting",
+            "effective_context": "Applies to an India-registered account when this case's jurisdiction has been independently determined to be cross-border (a real is_international transaction, non-INR-currency transaction, or foreign geo event was found for this account) - never merely because a transaction happens to touch a foreign counterparty type or currency in isolation.",
+            "summary": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "applicability": "Applies only when jurisdiction.py has found real cross-border evidence for this India-registered account. Qualitative obligation only - no numeric threshold is asserted by this entry (see summary).",
+            "applicable_typologies": [
+              "smurfing",
+              "reverse_smurfing",
+              "money_mule",
+              "account_swap"
+            ],
+            "keywords": [
+              "cross_border",
+              "international",
+              "is_international",
+              "foreign_currency",
+              "non_local_currency_transaction",
+              "geo_country_mismatch"
+            ],
+            "source_type": "bundled_reference_corpus_unverified_figure",
+            "text": "Rule 3 of the PMLA Maintenance of Records Rules obligates reporting entities to maintain records of certain cross-border wire transfers alongside cash and suspicious transactions. Independent sources consistently confirm the existence of this cross-border record-keeping/reporting obligation; this bundled corpus was NOT able to independently corroborate one specific INR reporting threshold figure for cross-border wire transfers specifically (as distinct from the well-corroborated CTR figure above) across more than one source this session, so no such figure is asserted here - see `source_type`.",
+            "retrieval_score": 7,
+            "matched_keywords": [
+              "cross_border",
+              "foreign_currency",
+              "international",
+              "is_international",
+              "non_local_currency_transaction"
+            ]
+          },
+          {
+            "source_id": "REG-IN-RBI-KYC-CDD",
+            "title": "Customer Due Diligence / beneficiary verification expectations",
+            "citation": "Master Direction - Know Your Customer (KYC) Direction, 2016 (RBI/DBR/2015-16/18, Master Direction DBR.AML.BC.No.81/14.01.001/2015-16, dated 25 February 2016, as amended)",
+            "jurisdiction": "IN",
+            "authority": "RBI",
+            "topic": "CDD",
+            "effective_context": "Applies to an India-jurisdiction account/transaction only.",
+            "summary": "RBI-regulated entities must undertake Customer Due Diligence, including identification and verification of customers, beneficial owners, and beneficiaries, at onboarding and on an ongoing basis, with enhanced due diligence for higher-risk relationships.",
+            "applicability": "Applies only when the case's determined jurisdiction is IN.",
+            "applicable_typologies": [
+              "account_swap",
+              "money_mule"
+            ],
+            "keywords": [
+              "beneficiary_information",
+              "new_beneficiary",
+              "is_first_time_beneficiary",
+              "is_verified",
+              "unverified"
+            ],
+            "source_type": "bundled_reference_corpus",
+            "text": "RBI-regulated entities must undertake Customer Due Diligence, including identification and verification of customers, beneficial owners, and beneficiaries, at onboarding and on an ongoing basis, with enhanced due diligence for higher-risk relationships.",
+            "retrieval_score": 5,
+            "matched_keywords": [
+              "beneficiary_information",
+              "is_verified",
+              "new_beneficiary"
+            ]
+          }
+        ],
+        "jurisdiction_context": {
+          "case_id": "CASE-4F6238C4",
+          "jurisdiction": "cross_border",
+          "base_jurisdiction": "IN",
+          "applicable_jurisdictions": [
+            "IN",
+            "cross_border"
+          ],
+          "confidence": "medium",
+          "registered_country": "India",
+          "cross_border_indicators": [
+            {
+              "signal": "geo_country_mismatch",
+              "geo_event_ids": [
+                "GEO000604"
+              ],
+              "count": 1
+            }
+          ],
+          "basis": [
+            {
+              "signal": "account_registered_country",
+              "value": "India",
+              "mapped_to": "IN"
+            }
+          ]
+        },
+        "case_id": "CASE-4F6238C4"
+      }
+    ],
+    "auditor_findings": {
+      "case_id": "CASE-4F6238C4",
+      "issues": [
+        {
+          "issue_type": "missing_critical_evidence",
+          "severity": "critical",
+          "detail": {
+            "evidence_type": "behavioral_baseline",
+            "reason": "insufficient_transaction_history_for_baseline"
+          }
+        }
+      ],
+      "issue_count": 1,
+      "critical_issue_count": 1
+    },
+    "recommended_action": {
+      "recommendation_id": "NBA-B0C44A69",
+      "case_id": "CASE-4F6238C4",
+      "typology": "account_swap",
+      "recommended_action": "REQUEST_MORE_INFORMATION",
+      "reason_codes": [
+        "case_completeness_below_threshold",
+        "critical_case_specific_evidence_missing",
+        "auditor_flagged_critical_issue"
+      ],
+      "supporting_evidence_ids": [
+        "EVD-306EF7F2",
+        "EVD-54E2489E",
+        "EVD-889501C2",
+        "EVD-990AA09C",
+        "EVD-60EE6CBE",
+        "EVD-3C202323"
+      ],
+      "regulatory_basis": [
+        "RULE-ATO-001",
+        "RULE-SAR-001"
+      ],
+      "confidence": 0.901,
+      "required_authority": "senior",
+      "requires_human_review": true,
+      "policy_version": "v1"
+    },
+    "human_review": null,
+    "human_review_history": [],
+    "investigator_action": null,
+    "investigator_action_history": [],
+    "audit_trail_ref": [
+      "EVT-BAA65F55",
+      "EVT-1506AA4A",
+      "EVT-9F965C16",
+      "EVT-54A7ED53",
+      "EVT-8D341A07",
+      "EVT-B743D025",
+      "EVT-609B78C3",
+      "EVT-2820BCB2",
+      "EVT-C372DDAD"
+    ],
+    "final_disposition": null
+  }
+}

@@ -35,7 +35,18 @@ fallback for anything outside the 4 known typologies) has no typed
 requirement table - completeness is reported as None with an honest
 `method`, never guessed or defaulted to a made-up table.
 """
+import hashlib
+import json
 import uuid
+
+
+def _content_hash_id(prefix, *parts):
+    """Deterministic content-hash ID, same pattern used by audit_trail.py
+    and next_best_action.py: identical inputs always yield the same ID,
+    across repeated invocations and across process runs - unlike
+    uuid.uuid4(), which is random per call."""
+    raw = json.dumps(parts, sort_keys=True, default=str)
+    return f"{prefix}-{hashlib.sha256(raw.encode()).hexdigest()[:8].upper()}"
 
 # ----------------------------------------------------------------------
 # 1. Typology-specific required evidence.
@@ -272,7 +283,13 @@ def build_evidence_items(store, case, net):
         checker = _CHECKERS[evidence_type]
         available, source_record_ids, quality, missing_reason = checker(store, case, net, account)
         item = {
-            "evidence_id": f"EVD-{uuid.uuid4().hex[:8].upper()}",
+            # Content-hash, not uuid.uuid4(): the same case run twice must
+            # produce the same evidence_id for the same evidence_type, or
+            # downstream determinism checks (and stable case-memory/audit
+            # references to a given piece of evidence) break.
+            "evidence_id": _content_hash_id(
+                "EVD", case["case_id"], evidence_type, source_record_ids
+            ),
             "case_id": case["case_id"],
             "evidence_type": evidence_type,
             "source": _EVIDENCE_SOURCE.get(evidence_type, "network_evidence_layer"),

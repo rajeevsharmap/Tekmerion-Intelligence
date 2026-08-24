@@ -50,6 +50,7 @@ EVENT_TYPES = (
     "recommendation_overridden",
     "case_escalated",
     "case_closed",
+    "sar_report_generated",  # CHECKPOINT 7 - additive, see sar_report.py
 )
 
 
@@ -86,8 +87,15 @@ class AuditTrail:
             raise ValueError(f"actor_type must be 'system' or 'investigator', got {actor_type!r}")
         ts = timestamp or utc_now_iso()
         event = {
+            # event_id is deliberately NOT derived from `ts`: the wall-clock
+            # timestamp varies run-to-run even for identical business logic,
+            # which would make this "deterministic content-hash ID" (see
+            # module docstring) non-deterministic in practice. Identity is
+            # case_id + event_type + actor_id + position-in-trail instead,
+            # which is exactly reproducible across repeated invocations of
+            # the same case with the same inputs.
             "event_id": _content_hash_id(
-                "EVT", self.case_id, event_type, actor_id, len(self._events), ts
+                "EVT", self.case_id, event_type, actor_id, len(self._events)
             ),
             "case_id": self.case_id,
             "event_type": event_type,

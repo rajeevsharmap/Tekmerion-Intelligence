@@ -7,6 +7,7 @@ import AuditReady from "./Page/Dashboard/AuditReady.jsx";
 import Reference from "./Page/Dashboard/Reference.jsx";
 import Escalated from "./Page/Dashboard/Escalated.jsx";
 import SystemInsights from "./Page/Dashboard/SystemInsights.jsx";
+import CaseReview from "./Page/Dashboard/CaseReview.jsx";
 
 function getAuthData() {
   const raw =
@@ -68,23 +69,23 @@ function RoleRoute({ allowedRole, redirectTo, children }) {
 function App() {
   return (
     <Routes>
-      {/* Public route */}
       <Route path="/" element={<Login />} />
 
-      {/* Protected dashboard routes, shared across roles */}
       <Route path="/suspected" element={<ProtectedDashboard />}>
         <Route index element={<Suspected />} />
+        <Route path=":caseId" element={<CaseReview />} />
       </Route>
 
       <Route path="/audit-ready" element={<ProtectedDashboard />}>
         <Route index element={<AuditReady />} />
+        <Route path=":caseId" element={<CaseReview />} />
       </Route>
 
       <Route path="/reference" element={<ProtectedDashboard />}>
         <Route index element={<Reference />} />
+        <Route path=":caseId" element={<CaseReview />} />
       </Route>
 
-      {/* Junior-only tab. A senior landing here is sent to System Insights. */}
       <Route path="/escalated" element={<ProtectedDashboard />}>
         <Route
           index
@@ -94,9 +95,16 @@ function App() {
             </RoleRoute>
           }
         />
+        <Route
+          path=":caseId"
+          element={
+            <RoleRoute allowedRole="junior" redirectTo="/system-insights">
+              <CaseReview />
+            </RoleRoute>
+          }
+        />
       </Route>
 
-      {/* Senior-only tab. A junior landing here is sent to Escalated. */}
       <Route path="/system-insights" element={<ProtectedDashboard />}>
         <Route
           index
@@ -108,7 +116,6 @@ function App() {
         />
       </Route>
 
-      {/* Fallback */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

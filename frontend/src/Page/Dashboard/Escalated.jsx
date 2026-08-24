@@ -1,5 +1,5 @@
 import "../../styles/Escalated.css";
-
+import { useNavigate } from "react-router-dom";
 const escalatedCases = [
   {
     id: "CASE-992-A",
@@ -43,6 +43,7 @@ const escalatedCases = [
 ];
 
 function Escalated() {
+  const navigate = useNavigate();
   return (
     <div className="dashboard-content">
       <header className="dashboard-header">
@@ -165,6 +166,7 @@ function Escalated() {
                     type="button"
                     className="review-button"
                     disabled={isActioned}
+                    onClick={() => navigate(`/escalated/${item.id}`)}
                   >
                     {isActioned ? "View Record" : "Review & Decide"}
                   </button>
