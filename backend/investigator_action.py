@@ -181,13 +181,26 @@ def record_investigator_action(case, recommendation, investigator_id, requested_
     # (b) the case's own Checkpoint-4/NBA-derived authority requirement -
     # an investigator cannot escape a senior-required CASE by requesting a
     # nominally junior-tier action instead of the recommended one.
+    #
+    # ESCALATE_TO_SENIOR is a deliberate, documented exception to (b)
+    # (see ACTION_MINIMUM_AUTHORITY above: "any investigator may escalate
+    # upward"). Escalation is precisely the mechanism a junior
+    # investigator uses to hand a senior-required case to a senior -
+    # inflating its required authority to the case's own senior
+    # requirement would make that hand-off impossible for exactly the
+    # cases it exists to handle, silently rejecting the escalation and
+    # leaving the case stuck in HUMAN_REVIEW instead of reaching
+    # ESCALATED. No other action gets this exception.
     action_min_authority = ACTION_MINIMUM_AUTHORITY.get(requested_action, "senior")
-    case_required_authority = recommendation.get("required_authority", "senior")
-    required_authority = (
-        case_required_authority
-        if _TIER_RANK.get(case_required_authority, 1) > _TIER_RANK.get(action_min_authority, 1)
-        else action_min_authority
-    )
+    if requested_action == "ESCALATE_TO_SENIOR":
+        required_authority = action_min_authority
+    else:
+        case_required_authority = recommendation.get("required_authority", "senior")
+        required_authority = (
+            case_required_authority
+            if _TIER_RANK.get(case_required_authority, 1) > _TIER_RANK.get(action_min_authority, 1)
+            else action_min_authority
+        )
 
     authz = authorize_action(requested_action, required_authority, investigator_id, directory)
 

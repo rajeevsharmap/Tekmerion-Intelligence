@@ -1,67 +1,64 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.css";
+import { useInvestigator } from "../context/useInvestigator.js";
+import { KNOWN_INVESTIGATORS, findKnownInvestigator } from "../services/investigators.js";
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useInvestigator();
 
-  const [role, setRole] = useState("junior");
-  const [name, setName] = useState("");
-  const [agentId, setAgentId] = useState("");
+  const [investigatorId, setInvestigatorId] = useState(KNOWN_INVESTIGATORS[0].investigatorId);
   const [passkey, setPasskey] = useState("");
   const [rememberDevice, setRememberDevice] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const selected = findKnownInvestigator(investigatorId);
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     setError("");
 
-    if (!name.trim() || !agentId.trim() || !passkey.trim()) {
-      setError("Name, Agent ID and Passkey are required.");
+    if (!passkey.trim()) {
+      setError("Passkey is required.");
+      return;
+    }
+
+    if (!selected) {
+      setError("Select a recognized investigator identity.");
       return;
     }
 
     setLoading(true);
 
     /*
-     * FRONTEND-ONLY AUTHENTICATION
+     * FRONTEND-ONLY (MOCK/DEV) AUTHENTICATION
      *
-     * This is temporary for frontend development.
-     * Later replace this section with the real backend
-     * authentication API.
+     * The backend does not currently expose a login endpoint. This
+     * picks one of the backend's real, known test investigator
+     * identities (investigator_action.py's INVESTIGATOR_DIRECTORY) so
+     * that every subsequent action this investigator submits is
+     * genuinely resolved and authorized by the backend against a real
+     * identity — not a frontend-invented one. The passkey field is not
+     * validated against anything; it exists as a placeholder for real
+     * credential entry once backend auth exists.
      */
     setTimeout(() => {
-      const authData = {
-        authenticated: true,
-        name: name.trim(),
-        agentId: agentId.trim(),
-        role,
-      };
-
-      /*
-       * Always clear both storage locations first.
-       * This prevents an older login from overriding
-       * the newly authenticated user's information.
-       */
-      sessionStorage.removeItem("tekmerion_auth");
-      localStorage.removeItem("tekmerion_auth");
-
-      const authStorage = rememberDevice
-        ? localStorage
-        : sessionStorage;
-
-      authStorage.setItem(
-        "tekmerion_auth",
-        JSON.stringify(authData)
+      login(
+        {
+          authenticated: true,
+          investigatorId: selected.investigatorId,
+          name: selected.name,
+          role: selected.role,
+        },
+        rememberDevice
       );
 
       setLoading(false);
 
-      navigate("/suspected", {
-        replace: true,
-      });
+      navigate("/suspected", { replace: true });
     }, 400);
   };
 
@@ -155,78 +152,34 @@ function Login() {
 
               <form onSubmit={handleSubmit}>
                 <div className="form-group">
-                  <label className="form-label">
-                    Authorization Level
+                  <label className="form-label" htmlFor="investigator-select">
+                    Investigator Identity
                   </label>
 
-                  <div className="role-selector">
-                    <label
-                      className={`role-option ${role === "junior" ? "active" : ""
-                        }`}
-                    >
-                      <input
-                        type="radio"
-                        name="role"
-                        value="junior"
-                        checked={role === "junior"}
-                        onChange={(event) =>
-                          setRole(event.target.value)
-                        }
-                      />
-                      <span>Junior Investigator</span>
-                    </label>
+                  <div className="credential-field">
+                    <span className="material-symbols-outlined">badge</span>
 
-                    <label
-                      className={`role-option ${role === "senior" ? "active" : ""
-                        }`}
+                    <select
+                      id="investigator-select"
+                      value={investigatorId}
+                      onChange={(event) => setInvestigatorId(event.target.value)}
                     >
-                      <input
-                        type="radio"
-                        name="role"
-                        value="senior"
-                        checked={role === "senior"}
-                        onChange={(event) =>
-                          setRole(event.target.value)
-                        }
-                      />
-                      <span>Senior Investigator</span>
-                    </label>
+                      {KNOWN_INVESTIGATORS.map((inv) => (
+                        <option key={inv.investigatorId} value={inv.investigatorId}>
+                          {inv.name} — {inv.investigatorId}
+                        </option>
+                      ))}
+                    </select>
                   </div>
+
+                  {selected && (
+                    <p className="form-hint">
+                      Authorization level: {selected.role === "senior" ? "Senior Investigator" : "Junior Investigator"}
+                    </p>
+                  )}
                 </div>
 
                 <div className="credential-group">
-                  <div className="credential-field">
-                    <span className="material-symbols-outlined">
-                      person
-                    </span>
-
-                    <input
-                      type="text"
-                      placeholder="Full Name"
-                      value={name}
-                      onChange={(event) =>
-                        setName(event.target.value)
-                      }
-                      autoComplete="name"
-                    />
-                  </div>
-
-                  <div className="credential-field">
-                    <span className="material-symbols-outlined">
-                      badge
-                    </span>
-
-                    <input
-                      type="text"
-                      placeholder="Agent ID"
-                      value={agentId}
-                      onChange={(event) =>
-                        setAgentId(event.target.value)
-                      }
-                      autoComplete="username"
-                    />
-                  </div>
-
                   <div className="credential-field">
                     <span className="material-symbols-outlined">
                       key

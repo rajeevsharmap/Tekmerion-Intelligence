@@ -1688,7 +1688,7 @@
       "event_type": "case_created",
       "actor_type": "system",
       "actor_id": "detection_layer",
-      "timestamp": "2026-08-24T23:48:29.673080+00:00",
+      "timestamp": "2026-08-25T10:58:33.137868+00:00",
       "before_state": null,
       "after_state": {
         "status": "open"
@@ -1698,27 +1698,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-5335DA58",
-      "case_id": "CASE-3DFAC4DF",
-      "event_type": "alert_created",
-      "actor_type": "system",
-      "actor_id": "detection_layer",
-      "timestamp": "2026-08-24T23:48:29.673128+00:00",
-      "before_state": null,
-      "after_state": {
-        "alert_id": "ALERT-ACCO-36B85313"
-      },
-      "reason": "alert triggered by detection rules",
-      "related_evidence_ids": [],
-      "metadata": {}
-    },
-    {
-      "event_id": "EVT-605457FF",
+      "event_id": "EVT-7ADB04AD",
       "case_id": "CASE-3DFAC4DF",
       "event_type": "evidence_gathered",
       "actor_type": "system",
       "actor_id": "network_layer",
-      "timestamp": "2026-08-24T23:48:29.673152+00:00",
+      "timestamp": "2026-08-25T10:58:33.138961+00:00",
       "before_state": null,
       "after_state": {
         "completeness": {
@@ -1743,12 +1728,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-D87CBAC5",
+      "event_id": "EVT-07C3C79E",
       "case_id": "CASE-3DFAC4DF",
       "event_type": "regulatory_evaluation",
       "actor_type": "system",
       "actor_id": "regulatory_rules",
-      "timestamp": "2026-08-24T23:48:29.673169+00:00",
+      "timestamp": "2026-08-25T10:58:33.139130+00:00",
       "before_state": null,
       "after_state": {
         "rule_count": 4
@@ -1758,12 +1743,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-0C2A3FD1",
+      "event_id": "EVT-8B701249",
       "case_id": "CASE-3DFAC4DF",
       "event_type": "auditor_evaluation",
       "actor_type": "system",
       "actor_id": "investigation_auditor",
-      "timestamp": "2026-08-24T23:48:29.673187+00:00",
+      "timestamp": "2026-08-25T10:58:33.139154+00:00",
       "before_state": null,
       "after_state": {
         "case_id": "CASE-3DFAC4DF",
@@ -1776,12 +1761,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-2BF2C329",
+      "event_id": "EVT-54D55C74",
       "case_id": "CASE-3DFAC4DF",
       "event_type": "completeness_evaluation",
       "actor_type": "system",
       "actor_id": "case_completeness",
-      "timestamp": "2026-08-24T23:48:29.673216+00:00",
+      "timestamp": "2026-08-25T10:58:33.139176+00:00",
       "before_state": null,
       "after_state": {
         "case_id": "CASE-3DFAC4DF",
@@ -1842,12 +1827,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-A7E2BA9C",
+      "event_id": "EVT-2B769C3A",
       "case_id": "CASE-3DFAC4DF",
       "event_type": "authority_evaluation",
       "actor_type": "system",
       "actor_id": "authority_policy",
-      "timestamp": "2026-08-24T23:48:29.673232+00:00",
+      "timestamp": "2026-08-25T10:58:33.139195+00:00",
       "before_state": null,
       "after_state": {
         "case_id": "CASE-3DFAC4DF",
@@ -1883,12 +1868,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-97AD7714",
+      "event_id": "EVT-EBC92D8C",
       "case_id": "CASE-3DFAC4DF",
       "event_type": "next_best_action_generated",
       "actor_type": "system",
       "actor_id": "next_best_action",
-      "timestamp": "2026-08-24T23:48:29.673285+00:00",
+      "timestamp": "2026-08-25T10:58:33.139347+00:00",
       "before_state": null,
       "after_state": {
         "recommendation_id": "NBA-8E728056",
@@ -1933,12 +1918,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-4CB1F9B3",
+      "event_id": "EVT-5C8E190C",
       "case_id": "CASE-3DFAC4DF",
       "event_type": "human_review_started",
       "actor_type": "system",
       "actor_id": "action_pipeline",
-      "timestamp": "2026-08-24T23:48:29.673304+00:00",
+      "timestamp": "2026-08-25T10:58:33.139366+00:00",
       "before_state": null,
       "after_state": {
         "case_state": "HUMAN_REVIEW"
@@ -1946,16 +1931,142 @@
       "reason": "case is audit-ready; queued for human review",
       "related_evidence_ids": [],
       "metadata": {}
+    },
+    {
+      "event_id": "EVT-D85060D1",
+      "case_id": "CASE-3DFAC4DF",
+      "event_type": "human_review_completed",
+      "actor_type": "investigator",
+      "actor_id": "INV-S001",
+      "timestamp": "2026-08-25T10:58:33.139518+00:00",
+      "before_state": {
+        "system_recommendation": "BLOCK_TRANSACTION"
+      },
+      "after_state": {
+        "review_id": "REVIEW-BB06FB8E",
+        "case_id": "CASE-3DFAC4DF",
+        "reviewer_id": "INV-S001",
+        "reviewer_role": "senior",
+        "review_started_at": "2026-08-25T10:58:33.139432+00:00",
+        "review_completed_at": "2026-08-25T10:58:33.139441+00:00",
+        "system_recommendation": "BLOCK_TRANSACTION",
+        "investigator_decision": "FILE_SAR",
+        "decision_reason": "sdvs",
+        "evidence_reviewed": [],
+        "regulatory_rules_reviewed": [],
+        "authority_at_review": "senior",
+        "status": "overridden"
+      },
+      "reason": "sdvs",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-B8B5B120",
+      "case_id": "CASE-3DFAC4DF",
+      "event_type": "recommendation_overridden",
+      "actor_type": "investigator",
+      "actor_id": "INV-S001",
+      "timestamp": "2026-08-25T10:58:33.139541+00:00",
+      "before_state": "BLOCK_TRANSACTION",
+      "after_state": "FILE_SAR",
+      "reason": "sdvs",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-1FED2742",
+      "case_id": "CASE-3DFAC4DF",
+      "event_type": "action_requested",
+      "actor_type": "investigator",
+      "actor_id": "INV-S001",
+      "timestamp": "2026-08-25T10:58:49.914562+00:00",
+      "before_state": null,
+      "after_state": {
+        "requested_action": "MONITOR"
+      },
+      "reason": "dfvsdsd",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-E8953E30",
+      "case_id": "CASE-3DFAC4DF",
+      "event_type": "action_authorized",
+      "actor_type": "system",
+      "actor_id": "investigator_action",
+      "timestamp": "2026-08-25T10:58:49.914705+00:00",
+      "before_state": null,
+      "after_state": {
+        "action_id": "ACTION-C8CEDFA5",
+        "case_id": "CASE-3DFAC4DF",
+        "investigator_id": "INV-S001",
+        "investigator_role": "senior",
+        "recommended_action": "BLOCK_TRANSACTION",
+        "requested_action": "MONITOR",
+        "required_authority": "senior",
+        "authorized": true,
+        "authorization_reason": "AUTHORIZED",
+        "actual_action": "MONITOR",
+        "recommendation_followed": false,
+        "override_reason": "svs",
+        "reason": "dfvsdsd",
+        "supporting_evidence": [
+          "EVD-68FBFEC3",
+          "EVD-5EFBC01A",
+          "EVD-28CE0C9B",
+          "EVD-D228A9E1",
+          "EVD-FB6276FE",
+          "EVD-320F17AB",
+          "EVD-B4E2A65B"
+        ],
+        "timestamp": "2026-08-25T10:58:49.914672+00:00"
+      },
+      "reason": "AUTHORIZED",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-5F5962A6",
+      "case_id": "CASE-3DFAC4DF",
+      "event_type": "action_executed",
+      "actor_type": "system",
+      "actor_id": "investigator_action",
+      "timestamp": "2026-08-25T10:58:49.914718+00:00",
+      "before_state": null,
+      "after_state": {
+        "actual_action": "MONITOR"
+      },
+      "reason": "authorized action executed (simulated in the mock environment)",
+      "related_evidence_ids": [],
+      "metadata": {}
+    },
+    {
+      "event_id": "EVT-A53F3863",
+      "case_id": "CASE-3DFAC4DF",
+      "event_type": "case_closed",
+      "actor_type": "system",
+      "actor_id": "action_pipeline",
+      "timestamp": "2026-08-25T10:58:49.914735+00:00",
+      "before_state": null,
+      "after_state": {
+        "final_action": "MONITOR"
+      },
+      "reason": "action executed; case closed",
+      "related_evidence_ids": [],
+      "metadata": {}
     }
   ],
-  "case_state": "HUMAN_REVIEW",
+  "case_state": "CLOSED",
   "case_memory": {
     "case_id": "CASE-3DFAC4DF",
     "account_id": "ACC000095",
     "typology": "account_swap",
-    "lifecycle_state": "HUMAN_REVIEW",
+    "lifecycle_state": "CLOSED",
     "lifecycle_history": [
-      "HUMAN_REVIEW"
+      "HUMAN_REVIEW",
+      "ACTION_PENDING",
+      "CLOSED"
     ],
     "jurisdiction": {
       "case_id": "CASE-3DFAC4DF",
@@ -2732,24 +2843,149 @@
       "requires_human_review": true,
       "policy_version": "v1"
     },
-    "human_review": null,
-    "human_review_history": [],
-    "investigator_action": null,
-    "investigator_action_history": [],
+    "human_review": {
+      "review_id": "REVIEW-BB06FB8E",
+      "case_id": "CASE-3DFAC4DF",
+      "reviewer_id": "INV-S001",
+      "reviewer_role": "senior",
+      "review_started_at": "2026-08-25T10:58:33.139432+00:00",
+      "review_completed_at": "2026-08-25T10:58:33.139441+00:00",
+      "system_recommendation": "BLOCK_TRANSACTION",
+      "investigator_decision": "FILE_SAR",
+      "decision_reason": "sdvs",
+      "evidence_reviewed": [],
+      "regulatory_rules_reviewed": [],
+      "authority_at_review": "senior",
+      "status": "overridden"
+    },
+    "human_review_history": [
+      {
+        "review_id": "REVIEW-BB06FB8E",
+        "case_id": "CASE-3DFAC4DF",
+        "reviewer_id": "INV-S001",
+        "reviewer_role": "senior",
+        "review_started_at": "2026-08-25T10:58:33.139432+00:00",
+        "review_completed_at": "2026-08-25T10:58:33.139441+00:00",
+        "system_recommendation": "BLOCK_TRANSACTION",
+        "investigator_decision": "FILE_SAR",
+        "decision_reason": "sdvs",
+        "evidence_reviewed": [],
+        "regulatory_rules_reviewed": [],
+        "authority_at_review": "senior",
+        "status": "overridden"
+      }
+    ],
+    "investigator_action": {
+      "action_id": "ACTION-C8CEDFA5",
+      "case_id": "CASE-3DFAC4DF",
+      "investigator_id": "INV-S001",
+      "investigator_role": "senior",
+      "recommended_action": "BLOCK_TRANSACTION",
+      "requested_action": "MONITOR",
+      "required_authority": "senior",
+      "authorized": true,
+      "authorization_reason": "AUTHORIZED",
+      "actual_action": "MONITOR",
+      "recommendation_followed": false,
+      "override_reason": "svs",
+      "reason": "dfvsdsd",
+      "supporting_evidence": [
+        "EVD-68FBFEC3",
+        "EVD-5EFBC01A",
+        "EVD-28CE0C9B",
+        "EVD-D228A9E1",
+        "EVD-FB6276FE",
+        "EVD-320F17AB",
+        "EVD-B4E2A65B"
+      ],
+      "timestamp": "2026-08-25T10:58:49.914672+00:00"
+    },
+    "investigator_action_history": [
+      {
+        "action_id": "ACTION-C8CEDFA5",
+        "case_id": "CASE-3DFAC4DF",
+        "investigator_id": "INV-S001",
+        "investigator_role": "senior",
+        "recommended_action": "BLOCK_TRANSACTION",
+        "requested_action": "MONITOR",
+        "required_authority": "senior",
+        "authorized": true,
+        "authorization_reason": "AUTHORIZED",
+        "actual_action": "MONITOR",
+        "recommendation_followed": false,
+        "override_reason": "svs",
+        "reason": "dfvsdsd",
+        "supporting_evidence": [
+          "EVD-68FBFEC3",
+          "EVD-5EFBC01A",
+          "EVD-28CE0C9B",
+          "EVD-D228A9E1",
+          "EVD-FB6276FE",
+          "EVD-320F17AB",
+          "EVD-B4E2A65B"
+        ],
+        "timestamp": "2026-08-25T10:58:49.914672+00:00"
+      }
+    ],
     "audit_trail_ref": [
       "EVT-FF25546E",
-      "EVT-5335DA58",
-      "EVT-605457FF",
-      "EVT-D87CBAC5",
-      "EVT-0C2A3FD1",
-      "EVT-2BF2C329",
-      "EVT-A7E2BA9C",
-      "EVT-97AD7714",
-      "EVT-4CB1F9B3"
+      "EVT-7ADB04AD",
+      "EVT-07C3C79E",
+      "EVT-8B701249",
+      "EVT-54D55C74",
+      "EVT-2B769C3A",
+      "EVT-EBC92D8C",
+      "EVT-5C8E190C",
+      "EVT-D85060D1",
+      "EVT-B8B5B120",
+      "EVT-1FED2742",
+      "EVT-E8953E30",
+      "EVT-5F5962A6",
+      "EVT-A53F3863"
     ],
-    "final_disposition": null,
+    "final_disposition": "MONITOR",
     "sar_report": null,
     "sar_report_history": []
   },
-  "sar_report": null
+  "sar_report": null,
+  "human_review": {
+    "review_id": "REVIEW-BB06FB8E",
+    "case_id": "CASE-3DFAC4DF",
+    "reviewer_id": "INV-S001",
+    "reviewer_role": "senior",
+    "review_started_at": "2026-08-25T10:58:33.139432+00:00",
+    "review_completed_at": "2026-08-25T10:58:33.139441+00:00",
+    "system_recommendation": "BLOCK_TRANSACTION",
+    "investigator_decision": "FILE_SAR",
+    "decision_reason": "sdvs",
+    "evidence_reviewed": [],
+    "regulatory_rules_reviewed": [],
+    "authority_at_review": "senior",
+    "status": "overridden"
+  },
+  "investigator_action": {
+    "action_id": "ACTION-C8CEDFA5",
+    "case_id": "CASE-3DFAC4DF",
+    "investigator_id": "INV-S001",
+    "investigator_role": "senior",
+    "recommended_action": "BLOCK_TRANSACTION",
+    "requested_action": "MONITOR",
+    "required_authority": "senior",
+    "authorized": true,
+    "authorization_reason": "AUTHORIZED",
+    "actual_action": "MONITOR",
+    "recommendation_followed": false,
+    "override_reason": "svs",
+    "reason": "dfvsdsd",
+    "supporting_evidence": [
+      "EVD-68FBFEC3",
+      "EVD-5EFBC01A",
+      "EVD-28CE0C9B",
+      "EVD-D228A9E1",
+      "EVD-FB6276FE",
+      "EVD-320F17AB",
+      "EVD-B4E2A65B"
+    ],
+    "timestamp": "2026-08-25T10:58:49.914672+00:00"
+  }
 }

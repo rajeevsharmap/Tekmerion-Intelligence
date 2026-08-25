@@ -1,88 +1,32 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import "../styles/Dashboard.css";
+import { useInvestigator } from "../context/useInvestigator.js";
 
-const baseNavItems = [
-  {
-    label: "Suspected",
-    path: "/suspected",
-    icon: "notifications_active",
-  },
-  {
-    label: "Audit-Ready",
-    path: "/audit-ready",
-    icon: "assignment_turned_in",
-  },
-  {
-    label: "Reference",
-    path: "/reference",
-    icon: "library_books",
-  },
+const navItems = [
+  { label: "Suspected", path: "/suspected", icon: "notifications_active" },
+  { label: "Escalated", path: "/escalated", icon: "priority_high" },
+  { label: "Reference", path: "/reference", icon: "library_books" },
+  { label: "Audit-Ready", path: "/audit-ready", icon: "assignment_turned_in" },
 ];
 
-const roleNavItem = {
-  junior: {
-    label: "Escalated",
-    path: "/escalated",
-    icon: "priority_high",
-  },
-  senior: {
-    label: "System Insights",
-    path: "/system-insights",
-    icon: "insights",
-  },
-};
-
-function getAuthData() {
-  const raw =
-    sessionStorage.getItem("tekmerion_auth") ||
-    localStorage.getItem("tekmerion_auth");
-
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(raw);
-  } catch {
-    // Remove corrupted authentication data.
-    sessionStorage.removeItem("tekmerion_auth");
-    localStorage.removeItem("tekmerion_auth");
-    return null;
-  }
-}
+const seniorOnlyNavItem = { label: "System Insights", path: "/system-insights", icon: "insights" };
 
 function getRoleLabel(role) {
-  const roles = {
-    junior: "Junior Investigator",
-    senior: "Senior Investigator",
-  };
-
-  return roles[role] || "Investigator";
+  return role === "senior" ? "Senior Investigator" : "Junior Investigator";
 }
 
 function Dashboard() {
   const navigate = useNavigate();
-  const authData = getAuthData();
+  const { investigator, role, logout } = useInvestigator();
 
-  const fullName =
-    authData?.name ||
-    authData?.fullName ||
-    "Investigator";
-
-  const agentId = authData?.agentId || "";
-
-  // Default to junior if role is missing or unrecognized, so nav
-  // never renders empty for a malformed/legacy auth payload.
-  const role = authData?.role === "senior" ? "senior" : "junior";
+  const fullName = investigator?.name || "Investigator";
+  const investigatorId = investigator?.investigatorId || "";
   const roleLabel = getRoleLabel(role);
 
-  const navItems = [...baseNavItems, roleNavItem[role]];
+  const items = role === "senior" ? [...navItems, seniorOnlyNavItem] : navItems;
 
   const handleLogout = () => {
-    // Clear both storage locations so old login data cannot interfere.
-    sessionStorage.removeItem("tekmerion_auth");
-    localStorage.removeItem("tekmerion_auth");
-
+    logout();
     navigate("/", { replace: true });
   };
 
@@ -95,17 +39,13 @@ function Dashboard() {
         </div>
 
         <nav className="sidebar-navigation" aria-label="Dashboard navigation">
-          {navItems.map((item) => (
+          {items.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
-              className={({ isActive }) =>
-                `sidebar-link ${isActive ? "active" : ""}`
-              }
+              className={({ isActive }) => `sidebar-link ${isActive ? "active" : ""}`}
             >
-              <span className="material-symbols-outlined">
-                {item.icon}
-              </span>
+              <span className="material-symbols-outlined">{item.icon}</span>
               <span>{item.label}</span>
             </NavLink>
           ))}
@@ -120,18 +60,11 @@ function Dashboard() {
             <div className="analyst-details">
               <p className="analyst-name">{fullName}</p>
               <span className="analyst-role">{roleLabel}</span>
-
-              {agentId && (
-                <span className="analyst-id">{agentId}</span>
-              )}
+              {investigatorId && <span className="analyst-id">{investigatorId}</span>}
             </div>
           </div>
 
-          <button
-            type="button"
-            className="logout-button"
-            onClick={handleLogout}
-          >
+          <button type="button" className="logout-button" onClick={handleLogout}>
             <span className="material-symbols-outlined">logout</span>
             Sign Out
           </button>

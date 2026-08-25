@@ -8,61 +8,30 @@ import Reference from "./Page/Dashboard/Reference.jsx";
 import Escalated from "./Page/Dashboard/Escalated.jsx";
 import SystemInsights from "./Page/Dashboard/SystemInsights.jsx";
 import CaseReview from "./Page/Dashboard/CaseReview.jsx";
-
-function getAuthData() {
-  const raw =
-    sessionStorage.getItem("tekmerion_auth") ||
-    localStorage.getItem("tekmerion_auth");
-
-  if (!raw) {
-    return null;
-  }
-
-  try {
-    return JSON.parse(raw);
-  } catch {
-    // Corrupted auth payload — treat as unauthenticated.
-    sessionStorage.removeItem("tekmerion_auth");
-    localStorage.removeItem("tekmerion_auth");
-    return null;
-  }
-}
-
-function isAuthenticated() {
-  return Boolean(getAuthData());
-}
-
-function getRole() {
-  const authData = getAuthData();
-  return authData?.role === "senior" ? "senior" : "junior";
-}
+import { useInvestigator } from "./context/useInvestigator.js";
 
 function ProtectedDashboard() {
-  if (!isAuthenticated()) {
+  const { isAuthenticated } = useInvestigator();
+  if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }
-
   return <Dashboard />;
 }
 
 /*
  * RoleRoute guards a single tab that only makes sense for one
- * authorization level (e.g. Escalated for juniors, System Insights
- * for seniors). If the signed-in investigator's role does not match,
- * they are redirected to that role's equivalent tab instead of
- * seeing a blocked/empty page.
+ * authorization level (System Insights is senior-only). If the
+ * signed-in investigator's role does not match, they are redirected
+ * to Suspected rather than seeing a blocked/empty page.
  */
-function RoleRoute({ allowedRole, redirectTo, children }) {
-  if (!isAuthenticated()) {
+function RoleRoute({ allowedRole, children }) {
+  const { isAuthenticated, role } = useInvestigator();
+  if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }
-
-  const role = getRole();
-
   if (role !== allowedRole) {
-    return <Navigate to={redirectTo} replace />;
+    return <Navigate to="/suspected" replace />;
   }
-
   return children;
 }
 
@@ -76,8 +45,8 @@ function App() {
         <Route path=":caseId" element={<CaseReview />} />
       </Route>
 
-      <Route path="/audit-ready" element={<ProtectedDashboard />}>
-        <Route index element={<AuditReady />} />
+      <Route path="/escalated" element={<ProtectedDashboard />}>
+        <Route index element={<Escalated />} />
         <Route path=":caseId" element={<CaseReview />} />
       </Route>
 
@@ -86,30 +55,16 @@ function App() {
         <Route path=":caseId" element={<CaseReview />} />
       </Route>
 
-      <Route path="/escalated" element={<ProtectedDashboard />}>
-        <Route
-          index
-          element={
-            <RoleRoute allowedRole="junior" redirectTo="/system-insights">
-              <Escalated />
-            </RoleRoute>
-          }
-        />
-        <Route
-          path=":caseId"
-          element={
-            <RoleRoute allowedRole="junior" redirectTo="/system-insights">
-              <CaseReview />
-            </RoleRoute>
-          }
-        />
+      <Route path="/audit-ready" element={<ProtectedDashboard />}>
+        <Route index element={<AuditReady />} />
+        <Route path=":caseId" element={<CaseReview />} />
       </Route>
 
       <Route path="/system-insights" element={<ProtectedDashboard />}>
         <Route
           index
           element={
-            <RoleRoute allowedRole="senior" redirectTo="/escalated">
+            <RoleRoute allowedRole="senior">
               <SystemInsights />
             </RoleRoute>
           }
