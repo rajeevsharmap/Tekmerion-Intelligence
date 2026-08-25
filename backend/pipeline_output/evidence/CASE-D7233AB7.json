@@ -1,5 +1,5 @@
 {
-  "evidence_id": "EVID-78C74191",
+  "evidence_id": "EVID-A4E5A8B8",
   "case_id": "CASE-D7233AB7",
   "account_id": "ACC000008",
   "evidence_type": "network_analysis",
@@ -119,10 +119,10 @@
     "max_depth": 3,
     "time_window_hours": 24
   },
-  "generated_at": "2026-08-24T01:31:29.796177",
+  "generated_at": "2026-08-25T05:18:29.590398",
   "evidence_items": [
     {
-      "evidence_id": "EVD-5CA15F33",
+      "evidence_id": "EVD-3A34CB22",
       "case_id": "CASE-D7233AB7",
       "evidence_type": "inbound_transaction_chain",
       "source": "network_evidence_layer",
@@ -144,7 +144,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-C480C890",
+      "evidence_id": "EVD-ACC83624",
       "case_id": "CASE-D7233AB7",
       "evidence_type": "outbound_transaction_chain",
       "source": "network_evidence_layer",
@@ -161,7 +161,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-8A95D80B",
+      "evidence_id": "EVD-0818E23C",
       "case_id": "CASE-D7233AB7",
       "evidence_type": "pass_through_timing",
       "source": "network_evidence_layer",
@@ -176,7 +176,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-48D04E40",
+      "evidence_id": "EVD-6B859022",
       "case_id": "CASE-D7233AB7",
       "evidence_type": "amount_retention_ratio",
       "source": "network_evidence_layer",
@@ -191,7 +191,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-52297D3F",
+      "evidence_id": "EVD-F48F059A",
       "case_id": "CASE-D7233AB7",
       "evidence_type": "counterparty_relationship",
       "source": "network_evidence_layer",
@@ -208,7 +208,7 @@
       }
     },
     {
-      "evidence_id": "EVD-A5B66EE1",
+      "evidence_id": "EVD-130011F4",
       "case_id": "CASE-D7233AB7",
       "evidence_type": "beneficiary_information",
       "source": "beneficiaries.csv",
@@ -228,7 +228,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-45D8AB90",
+      "evidence_id": "EVD-8A2FC4ED",
       "case_id": "CASE-D7233AB7",
       "evidence_type": "device_information",
       "source": "devices.csv",
@@ -246,7 +246,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-52BAE5DE",
+      "evidence_id": "EVD-0D58C4AE",
       "case_id": "CASE-D7233AB7",
       "evidence_type": "geo_information",
       "source": "geo_events.csv",
@@ -1276,14 +1276,14 @@
       }
     ],
     "evidence_references": [
-      "EVD-5CA15F33",
-      "EVD-C480C890",
-      "EVD-8A95D80B",
-      "EVD-48D04E40",
-      "EVD-52297D3F",
-      "EVD-A5B66EE1",
-      "EVD-45D8AB90",
-      "EVD-52BAE5DE"
+      "EVD-3A34CB22",
+      "EVD-ACC83624",
+      "EVD-0818E23C",
+      "EVD-6B859022",
+      "EVD-F48F059A",
+      "EVD-130011F4",
+      "EVD-8A2FC4ED",
+      "EVD-0D58C4AE"
     ],
     "auditor_decision": {
       "case_id": "CASE-D7233AB7",
@@ -1305,13 +1305,13 @@
       "funds_in_motion_typology"
     ],
     "supporting_evidence_ids": [
-      "EVD-5CA15F33",
-      "EVD-C480C890",
-      "EVD-8A95D80B",
-      "EVD-48D04E40",
-      "EVD-A5B66EE1",
-      "EVD-45D8AB90",
-      "EVD-52BAE5DE"
+      "EVD-3A34CB22",
+      "EVD-ACC83624",
+      "EVD-0818E23C",
+      "EVD-6B859022",
+      "EVD-130011F4",
+      "EVD-8A2FC4ED",
+      "EVD-0D58C4AE"
     ],
     "regulatory_basis": [
       "RULE-CDD-001",
@@ -1324,12 +1324,12 @@
   },
   "audit_trail": [
     {
-      "event_id": "EVT-A364CB21",
+      "event_id": "EVT-23308C5A",
       "case_id": "CASE-D7233AB7",
       "event_type": "case_created",
       "actor_type": "system",
       "actor_id": "detection_layer",
-      "timestamp": "2026-08-23T20:01:29.796594+00:00",
+      "timestamp": "2026-08-24T23:48:29.590708+00:00",
       "before_state": null,
       "after_state": {
         "status": "open"
@@ -1339,12 +1339,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-DE53D15D",
+      "event_id": "EVT-C5875064",
       "case_id": "CASE-D7233AB7",
       "event_type": "alert_created",
       "actor_type": "system",
       "actor_id": "detection_layer",
-      "timestamp": "2026-08-23T20:01:29.796641+00:00",
+      "timestamp": "2026-08-24T23:48:29.590729+00:00",
       "before_state": null,
       "after_state": {
         "alert_id": "ALERT-SMUR-01A24100"
@@ -1354,12 +1354,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-CEE7A469",
+      "event_id": "EVT-66B45A92",
       "case_id": "CASE-D7233AB7",
       "event_type": "alert_created",
       "actor_type": "system",
       "actor_id": "detection_layer",
-      "timestamp": "2026-08-23T20:01:29.796654+00:00",
+      "timestamp": "2026-08-24T23:48:29.590739+00:00",
       "before_state": null,
       "after_state": {
         "alert_id": "ALERT-MONE-0776989E"
@@ -1369,12 +1369,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-44A12582",
+      "event_id": "EVT-4250F23C",
       "case_id": "CASE-D7233AB7",
       "event_type": "evidence_gathered",
       "actor_type": "system",
       "actor_id": "network_layer",
-      "timestamp": "2026-08-23T20:01:29.796666+00:00",
+      "timestamp": "2026-08-24T23:48:29.590749+00:00",
       "before_state": null,
       "after_state": {
         "completeness": {
@@ -1394,24 +1394,24 @@
       },
       "reason": "network/timeline evidence generated for case",
       "related_evidence_ids": [
-        "EVD-5CA15F33",
-        "EVD-C480C890",
-        "EVD-8A95D80B",
-        "EVD-48D04E40",
-        "EVD-52297D3F",
-        "EVD-A5B66EE1",
-        "EVD-45D8AB90",
-        "EVD-52BAE5DE"
+        "EVD-3A34CB22",
+        "EVD-ACC83624",
+        "EVD-0818E23C",
+        "EVD-6B859022",
+        "EVD-F48F059A",
+        "EVD-130011F4",
+        "EVD-8A2FC4ED",
+        "EVD-0D58C4AE"
       ],
       "metadata": {}
     },
     {
-      "event_id": "EVT-00241046",
+      "event_id": "EVT-B7A2FAC4",
       "case_id": "CASE-D7233AB7",
       "event_type": "regulatory_evaluation",
       "actor_type": "system",
       "actor_id": "regulatory_rules",
-      "timestamp": "2026-08-23T20:01:29.796675+00:00",
+      "timestamp": "2026-08-24T23:48:29.590760+00:00",
       "before_state": null,
       "after_state": {
         "rule_count": 3
@@ -1421,12 +1421,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-573CCCB9",
+      "event_id": "EVT-92475F6E",
       "case_id": "CASE-D7233AB7",
       "event_type": "auditor_evaluation",
       "actor_type": "system",
       "actor_id": "investigation_auditor",
-      "timestamp": "2026-08-23T20:01:29.796684+00:00",
+      "timestamp": "2026-08-24T23:48:29.590768+00:00",
       "before_state": null,
       "after_state": {
         "case_id": "CASE-D7233AB7",
@@ -1439,12 +1439,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-F75B9BA4",
+      "event_id": "EVT-123A695B",
       "case_id": "CASE-D7233AB7",
       "event_type": "completeness_evaluation",
       "actor_type": "system",
       "actor_id": "case_completeness",
-      "timestamp": "2026-08-23T20:01:29.796692+00:00",
+      "timestamp": "2026-08-24T23:48:29.590775+00:00",
       "before_state": null,
       "after_state": {
         "case_id": "CASE-D7233AB7",
@@ -1504,12 +1504,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-CACCAE4D",
+      "event_id": "EVT-6718B9BF",
       "case_id": "CASE-D7233AB7",
       "event_type": "authority_evaluation",
       "actor_type": "system",
       "actor_id": "authority_policy",
-      "timestamp": "2026-08-23T20:01:29.796700+00:00",
+      "timestamp": "2026-08-24T23:48:29.590781+00:00",
       "before_state": null,
       "after_state": {
         "case_id": "CASE-D7233AB7",
@@ -1551,12 +1551,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-B68899A0",
+      "event_id": "EVT-07FE669D",
       "case_id": "CASE-D7233AB7",
       "event_type": "next_best_action_generated",
       "actor_type": "system",
       "actor_id": "next_best_action",
-      "timestamp": "2026-08-23T20:01:29.796733+00:00",
+      "timestamp": "2026-08-24T23:48:29.590812+00:00",
       "before_state": null,
       "after_state": {
         "recommendation_id": "NBA-A9C97031",
@@ -1570,13 +1570,13 @@
           "funds_in_motion_typology"
         ],
         "supporting_evidence_ids": [
-          "EVD-5CA15F33",
-          "EVD-C480C890",
-          "EVD-8A95D80B",
-          "EVD-48D04E40",
-          "EVD-A5B66EE1",
-          "EVD-45D8AB90",
-          "EVD-52BAE5DE"
+          "EVD-3A34CB22",
+          "EVD-ACC83624",
+          "EVD-0818E23C",
+          "EVD-6B859022",
+          "EVD-130011F4",
+          "EVD-8A2FC4ED",
+          "EVD-0D58C4AE"
         ],
         "regulatory_basis": [
           "RULE-CDD-001",
@@ -1589,23 +1589,23 @@
       },
       "reason": "deterministic recommendation generated",
       "related_evidence_ids": [
-        "EVD-5CA15F33",
-        "EVD-C480C890",
-        "EVD-8A95D80B",
-        "EVD-48D04E40",
-        "EVD-A5B66EE1",
-        "EVD-45D8AB90",
-        "EVD-52BAE5DE"
+        "EVD-3A34CB22",
+        "EVD-ACC83624",
+        "EVD-0818E23C",
+        "EVD-6B859022",
+        "EVD-130011F4",
+        "EVD-8A2FC4ED",
+        "EVD-0D58C4AE"
       ],
       "metadata": {}
     },
     {
-      "event_id": "EVT-0C7E72A6",
+      "event_id": "EVT-9960A0F1",
       "case_id": "CASE-D7233AB7",
       "event_type": "human_review_started",
       "actor_type": "system",
       "actor_id": "action_pipeline",
-      "timestamp": "2026-08-23T20:01:29.796746+00:00",
+      "timestamp": "2026-08-24T23:48:29.590823+00:00",
       "before_state": null,
       "after_state": {
         "case_state": "HUMAN_REVIEW"
@@ -1643,14 +1643,14 @@
       ]
     },
     "evidence_references": [
-      "EVD-5CA15F33",
-      "EVD-C480C890",
-      "EVD-8A95D80B",
-      "EVD-48D04E40",
-      "EVD-52297D3F",
-      "EVD-A5B66EE1",
-      "EVD-45D8AB90",
-      "EVD-52BAE5DE"
+      "EVD-3A34CB22",
+      "EVD-ACC83624",
+      "EVD-0818E23C",
+      "EVD-6B859022",
+      "EVD-F48F059A",
+      "EVD-130011F4",
+      "EVD-8A2FC4ED",
+      "EVD-0D58C4AE"
     ],
     "evidence_completeness": {
       "weighted_score": 90.0,
@@ -2178,13 +2178,13 @@
         "funds_in_motion_typology"
       ],
       "supporting_evidence_ids": [
-        "EVD-5CA15F33",
-        "EVD-C480C890",
-        "EVD-8A95D80B",
-        "EVD-48D04E40",
-        "EVD-A5B66EE1",
-        "EVD-45D8AB90",
-        "EVD-52BAE5DE"
+        "EVD-3A34CB22",
+        "EVD-ACC83624",
+        "EVD-0818E23C",
+        "EVD-6B859022",
+        "EVD-130011F4",
+        "EVD-8A2FC4ED",
+        "EVD-0D58C4AE"
       ],
       "regulatory_basis": [
         "RULE-CDD-001",
@@ -2200,17 +2200,20 @@
     "investigator_action": null,
     "investigator_action_history": [],
     "audit_trail_ref": [
-      "EVT-A364CB21",
-      "EVT-DE53D15D",
-      "EVT-CEE7A469",
-      "EVT-44A12582",
-      "EVT-00241046",
-      "EVT-573CCCB9",
-      "EVT-F75B9BA4",
-      "EVT-CACCAE4D",
-      "EVT-B68899A0",
-      "EVT-0C7E72A6"
+      "EVT-23308C5A",
+      "EVT-C5875064",
+      "EVT-66B45A92",
+      "EVT-4250F23C",
+      "EVT-B7A2FAC4",
+      "EVT-92475F6E",
+      "EVT-123A695B",
+      "EVT-6718B9BF",
+      "EVT-07FE669D",
+      "EVT-9960A0F1"
     ],
-    "final_disposition": null
-  }
+    "final_disposition": null,
+    "sar_report": null,
+    "sar_report_history": []
+  },
+  "sar_report": null
 }

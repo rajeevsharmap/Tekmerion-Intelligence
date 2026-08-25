@@ -214,17 +214,16 @@ reason) from the prior version of this document is now DONE (Checkpoint
    explicit instruction.**
 7. **LLM privacy/masking architecture** — lower priority; no prior version
    exists to restore (see `ARCHITECTURE.md`'s "API/LLM safety" section).
-8. **Evidence-stage determinism** (`evidence_id`/`generated_at` in
+8. **Evidence-stage determinism** — ~~`evidence_id`/`generated_at` in
    `network_layer.py`/`evidence_model.py` use `uuid.uuid4()`/
-   `datetime.now()`) — verified this checkpoint to be the *only* source of
-   non-determinism in the full pipeline's output (stripping just these two
-   keys from every `evidence/*.json` file makes two runs byte-identical;
-   confirmed across all 21 generated evidence files). **Deliberately not
-   fixed this checkpoint** — evidence generation is downstream of Case
-   Bundling and explicitly out of Checkpoint 3's scope; fixing it means
-   editing `evidence_model.py`/`network_layer.py`, which the governing
-   instruction reserves for a future checkpoint that explicitly owns the
-   Evidence stage.
+   `datetime.now()`~~ **RESOLVED, see CHECKPOINT 7 below.** As of
+   Checkpoint 7, `evidence_id` (`evidence_model.py`), `event_id`
+   (`audit_trail.py`), and every other in-pipeline identifier are
+   SHA-256 content hashes of their real inputs — `uuid.uuid4()` is not
+   called anywhere in the live pipeline (confirmed by repo-wide grep;
+   see Checkpoint 7's determinism write-up for the full trace and a
+   double-run verification with zero diffs, `generated_at`/`timestamp`
+   wall-clock fields aside).
 9. **Broader correlation signals for case bundling** — the current
    correlation policy (Checkpoint 3) only has `typology` and
    `relevant_transaction_ids` to work with, because the `Alert` object
@@ -944,15 +943,335 @@ prior session's handoff):**
   it as an optional parameter and defaults to policy-neutral behavior
   when absent, rather than guessing.
 
+**CHECKPOINT 7 (this session): LLM PII Sanitization Boundary + SAR
+Generation + Scoped Investigator Data Access + LangGraph Orchestration +
+API Integration. [COMPLETE] [VERIFIED].**
+
+**What this checkpoint adds** (built across this and a prior session;
+this session finished, verified, and corrected it — see below): five new
+modules — `agents/llm_pii_sanitizer.py`, `sar_report.py`,
+`case_data_access.py`, `langgraph_orchestration.py`, plus `main.py`'s
+investigation API layer — and five new/extended test files
+(`tests/test_llm_pii_sanitizer.py`, `tests/test_checkpoint7.py`,
+`tests/test_scoped_data_access.py`, `tests/test_langgraph_orchestration.py`,
+plus `test_ground_truth_isolation.py`'s `LIVE_MODULES` list extended to
+cover all five).
+
+**LLM PII sanitization boundary — [IMPLEMENTED] [VERIFIED].**
+`agents/llm_pii_sanitizer.py` sits immediately in front of the three (and
+only three — confirmed via `grep -rn "generate_content" backend/`) live
+`client.models.generate_content()` call sites:
+`agents/scammer_hypothesis_agent.py`, `agents/legitimate_hypothesis_agent.py`
+(both mask `evidence`+`derived_signals` via `sanitize_pair_for_llm()` before
+building the prompt), and `agents/contradiction_agent.py` (takes no raw
+evidence at all — only the two hypothesis agents' own JSON output, which by
+construction can only reference already-masked pseudonyms). Direct
+identifiers (`ACC*`/`BENE*`/`DEV*` prefixes, plus `beneficiary_name`) are
+replaced with deterministic, sorted-order pseudonyms
+(`ACCOUNT_001`, `BENEFICIARY_002`, ...); the SAME raw value always maps to
+the SAME pseudonym within one call (evidence and derived_signals share one
+pseudonym map), and different values never collide. Financial/behavioral
+facts (amounts, ratios, timestamps, typology, pattern flags) pass through
+unmasked — masking them would make the evidence useless to the model, and
+that's explicitly out of scope. The masked payload is a separate, deep-copied
+object; the original `evidence`/`derived_signals` objects are never mutated
+and remain exactly what the rest of the pipeline (case storage, audit trail,
+SAR generation) sees — this is a distinct trust boundary from
+`case_data_access.mask_account()`'s investigator-UI PII masking, and the two
+are not confused anywhere in the code. `resolve_pseudonym()` is the only
+reverse-lookup path, and it is never called to send a real value back to the
+LLM. **25/25 tests pass** in `tests/test_llm_pii_sanitizer.py`: unit tests
+against the sanitizer directly (no raw PII in the masked payload, no
+mutation, deterministic repeated execution, consistent same-value mapping,
+no collisions, correct recursion into arbitrarily nested evidence, graceful
+handling of missing/null fields, non-PII fields intact, beneficiary-name/
+sibling-ID reuse, hash-fallback pseudonyms for names with no sibling ID,
+`resolve_pseudonym` round-trip) plus integration tests that mock
+`client.models.generate_content` and assert on the actual outbound
+`contents` string sent to both hypothesis agents (no raw ID pattern, no raw
+name, agent's return value untouched, the caller's own `evidence` object
+still holds the real data after the call) and on `contradiction_agent.py`
+(its function signature takes no `evidence` parameter at all; its outbound
+payload never contains `"beneficiary"`/`"account_profile"`).
+
+**Two genuine test-file defects found and fixed this session** (both in
+test code, not production code):
+1. `tests/test_llm_pii_sanitizer.py`'s hand-built `_evidence()` fixture's
+   `geo_events` entry was missing `distance_from_last_location_km`, a field
+   `agents/evidence_builder.py`'s real `gather_evidence()`/`_clean_geo()`
+   always populates and `compute_derived_signals()` indexes directly
+   (`g["distance_from_last_location_km"]`, no `.get()`) — the fixture
+   didn't match the real evidence shape it was standing in for, causing a
+   `KeyError` before sanitization even ran. Fixed by adding the missing
+   field to the fixture, not by loosening the production code's indexing.
+2. `test_sanitizer_module_has_no_ground_truth_dependency()` false-positived
+   on the sanitizer's own docstring, which used the ordinary-English phrase
+   "no ground-truth or external data is consulted" (about the hash-fallback
+   pseudonym, nothing to do with `mock_data/ground_truth_*.csv`) — the
+   test's substring scan for `"ground-truth"` doesn't distinguish that from
+   an actual evaluation-data reference. Fixed by rewording the docstring to
+   "no external reference data of any kind" — no behavior change, and
+   `agents/llm_pii_sanitizer.py` still has zero actual ground-truth
+   dependency (confirmed independently by
+   `test_ground_truth_isolation.py`'s AST-based static scan, which this
+   session added the module to).
+
+**SAR generation — [IMPLEMENTED] [VERIFIED].** `sar_report.py` is
+deterministic and template-based: no new evidence gathered, no LLM call, no
+randomness, `sar_id` a SHA-256 content hash. Three preconditions
+independently re-validated (never trusted from the caller): at least one
+`confirmed_concern` regulatory finding, a resolved jurisdiction
+(`IN`/`US`/`cross_border`, never `unknown`), and an actually-authorized
+`FILE_SAR` investigator action — any one failing returns a structured
+`BLOCKED_*` record, never a fabricated filing. A critical, unresolved
+auditor issue at generation time downgrades a filing to
+`DRAFT_REQUIRES_SECONDARY_REVIEW` rather than silently filing anyway.
+Cross-border cases file to India (`FIU-IND`) with cross-border material as
+supplementary-only citations, never substituted for the India filing
+(Rule 4/5 — verified, never a silent US filing). **Explicitly NOT
+implemented, and not claimed as implemented: PDF generation and
+password-protection of the SAR document** — `sar_report.py` produces a
+JSON-serializable structured record only; there is no `pdf`/`pdf_path`/
+`password`/`encrypted` field anywhere in its output (asserted directly by
+`test_no_pdf_or_password_protection_fields_present`). This remains
+deferred, exactly as the prior session's own instructions deferred it — it
+is not silently implied to exist anywhere in this checkpoint's code or
+docs. **24/24 tests pass** in `tests/test_checkpoint7.py`: every
+precondition/status branch, India/US/cross-border filing routing,
+citation-jurisdiction filtering, empty-citation honesty (never
+backfilled), critical-vs-moderate auditor-warning handling, determinism,
+`sar_id` sensitivity to which findings are confirmed, evidence-availability
+filtering, and integration through `action_pipeline.CaseActionLayer`
+(junior cannot file, senior can, a non-SAR action never populates
+`sar_report`, `case_memory.py`'s `sar_report`/`sar_report_history` fields
+default/append correctly) plus a regression check against real, checked-in
+Checkpoint 4–6 pipeline output (every real case gets a `sar_report`/
+`sar_report_history` key; none reach a real `FILE_SAR` on this dataset —
+a documented, known dataset property, not a defect, matching Checkpoint
+6's own documented limitation that no real case naturally reaches
+`CLEAR`/`MONITOR`/`FILE_SAR`).
+
+**Scoped investigator data access — [IMPLEMENTED] [VERIFIED].**
+`case_data_access.py`'s `ScopedDataAccess` is the one controlled interface
+a case/agent/investigator goes through — `DataStore` itself remains
+unscoped-but-trusted for the existing deterministic pipeline (Checkpoints
+2–6), by design; this is an additive, narrower view layered in front of it
+for the Checkpoint 7 API/agent surface only. Case scope is derived only
+from data the deterministic pipeline already computed (the case's own
+account, graph nodes for graph-based typologies, transaction counterparties)
+— never a fresh, wider traversal. `junior` gets root-account + depth-1
+counterparties only; `senior` gets the full case-derived scope; an unknown
+role defaults to `junior` (least privilege). `mask_account()` redacts
+`customer_name`/`occupation`/`annual_income`/`home_branch` for non-senior
+roles via a deterministic content-hash redaction — never mutates its
+input, never touches non-PII risk fields (`kyc_status`/`risk_rating`/
+`account_type`) the investigation logic actually reasons over. This PII
+masking is a distinct boundary from the LLM sanitization boundary above —
+`ScopedDataAccess` governs what an investigator's UI/API view sees;
+`llm_pii_sanitizer.py` governs what an external LLM call sees; neither
+delegates to or is confused with the other anywhere in the code. A request
+for data outside the computed/authorized scope raises `ScopeViolationError`
+(never silently narrowed or ignored) — verified against both a hand-built
+fixture graph (root → direct → indirect accounts, plus one genuinely
+unrelated account) and the real, checked-in `pipeline_output/`
+(junior scope is always a subset of senior scope; senior scope always
+includes the case's own root account; junior view masks PII, senior view
+doesn't, on every real persisted case). **29/29 tests pass** in
+`tests/test_scoped_data_access.py`.
+
+**LangGraph orchestration — [IMPLEMENTED] [VERIFIED — including real
+build/compile/invoke, not just the manual-chain approximation].**
+`langgraph_orchestration.py` wraps the existing Checkpoint 2–6
+deterministic functions as one node per orchestration responsibility
+(case intake, evidence, network, investigation/evidence-synthesis,
+jurisdiction, regulatory, auditor, completeness, bounded re-gather,
+authority/action) with an explicit `InvestigationGraphState` schema and
+`langgraph.graph.StateGraph` as the execution engine. No node
+recomputes, duplicates, or second-guesses its wrapped function's answer.
+Makes **no LLM calls** — the "Investigation Agent" node maps to
+`evidence_model.build_evidence_items()` (deterministic), not to the
+`agents/` LLM modules, exactly as documented in the module's own
+docstring, so nothing here can let an LLM decide jurisdiction, regulatory
+applicability, authority, completeness, or evidence truth.
+`HUMAN_REVIEW`/`INVESTIGATING` is a real terminal graph state — the
+compiled graph's execution always ends there; `resume_after_human_review()`
+is the *only* function that can advance a case past it, and it does so by
+calling `action_pipeline.CaseActionLayer`'s existing, unmodified
+`complete_human_review()`/`submit_action()` methods, adding no new
+authorization logic of its own. `langgraph` (v1.2.11 in this environment)
+is genuinely importable and usable here — unlike a documented prior
+sandbox limitation (Windows-only checked-in `venv/` with compiled
+`pydantic_core` `.pyd` files that don't load on Linux), this session's
+execution environment has a working Linux-native install. This session
+therefore added **real** `build_graph()`/`.compile()`/`.invoke()` coverage
+(`test_real_graph_compiles_to_an_invocable_object`,
+`test_real_graph_invocation_reaches_human_review_or_investigating`,
+`test_real_graph_invocation_matches_manual_chain_approximation` — the real
+`StateGraph` execution and the hand-chained node-by-node approximation
+used elsewhere in the file are cross-checked and produce identical
+`case_state`/`next_best_action`/`case_completeness` output for the same
+case, `test_real_graph_bounded_regather_never_exceeds_max_hops_across_dataset`,
+`test_real_graph_never_bypasses_human_review`) alongside the pre-existing
+manual-chain-based tests, which remain valid and are kept as an
+environment-independent fallback path (skipped, not failed, if a future
+environment can't import `langgraph`). **22/22 tests pass** in
+`tests/test_langgraph_orchestration.py` (17 pre-existing + 5 new
+real-graph tests this session added).
+
+**API integration — [IMPLEMENTED].** `main.py` adds a read-oriented
+investigation API over already-persisted `pipeline_output/` (list/get
+case, evidence, network — role-scoped via `ScopedDataAccess`, — regulatory,
+audit, actions, SAR, timeline) plus two human-in-the-loop mutating
+endpoints (`POST /cases/{case_id}/human-review`, `POST /cases/{case_id}/action`)
+that rebuild that case's `CaseActionLayer` from persisted evidence and call
+its existing Checkpoint 6 methods, adding no new authorization logic. An
+in-process `_LIVE_LAYERS` cache is an explicit, documented limitation (does
+not survive a process restart — a real deployment would persist the layer's
+constituent state in a datastore instead).
+
+**Deterministic-ID investigation — [VERIFIED, and a prior-session static
+claim corrected].** A prior session's static trace suggested
+`evidence_model.py`'s `EvidenceItem.evidence_id` might still use
+`uuid.uuid4()`, based on stale, since-superseded evidence-stage
+non-determinism documented back in Checkpoint 3 (see section 4, item 8,
+now marked resolved above). That specific claim does **not** hold against
+the current code: `grep -rn "uuid\.uuid4()"` across every live-pipeline
+module returns zero real call sites — `uuid` is imported in
+`evidence_model.py`/`network_layer.py` only for comments explaining why
+content-hashing was chosen *instead*, and the one genuine `uuid.uuid4()`
+call anywhere in the repository is in `generate_mock_data.py` (a
+`device_fingerprint` field on synthetic input data, unrelated to pipeline
+output determinism). `evidence_id` is `_content_hash_id("EVD", case_id,
+evidence_type, source_record_ids)` (SHA-256); `event_id` in
+`audit_trail.py` is `_content_hash_id("EVT", case_id, event_type,
+actor_id, position_in_trail)` — deliberately *not* derived from the
+wall-clock timestamp, precisely so it stays reproducible across runs.
+
+The apparent non-determinism actually observed this session (diffing a
+fresh `run_pipeline.py` run against the `pipeline_output/` snapshot
+already checked into the working tree) was traced to its real cause:
+**that checked-in snapshot predates the current content-hash-based ID
+scheme** — recomputing `_content_hash_id("EVD", "CASE-37897EBB",
+"amount_retention_ratio", [])` by hand against the *current* code
+reproduces the fresh run's ID exactly, and does **not** reproduce the
+stale snapshot's ID, confirming the snapshot itself (not the current
+code) is the outdated artifact. It is not evidence of live nondeterminism.
+
+**Real double-run verification performed this session:** `run_pipeline.py`
+executed twice in immediate succession against the identical, unmodified
+`mock_data/`. Console summary output byte-identical between the two runs.
+All 21 `pipeline_output/evidence/*.json` files byte-identical between the
+two runs after stripping only the two fields explicitly documented as
+wall-clock/runtime-generated (`generated_at`, audit-event `timestamp`) —
+**zero other diffs**, across every `evidence_id`, `event_id`, `sar_id`
+(where applicable), `case_id`, `alert_id`, `next_best_action`, `case_state`,
+`audit_trail`, and `case_memory` field. `cases.json`/`suspected_alerts.json`
+case-id and alert-id sets identical between runs.
+
+**Real pipeline numbers (unchanged from the Checkpoint 6 baseline —
+re-verified, not re-tuned):**
+```
+Accounts scanned      : 220
+Alerts generated       : 31   {money_mule: 11, smurfing: 10, account_swap: 5, reverse_smurfing: 5}
+Cases generated        : 21   {money_mule: 5, smurfing: 6, account_swap: 5, reverse_smurfing: 5}
+Evidence objects        : 21
+Evidence completeness (weighted): avg=86.9 min=85.0 max=100.0 (21/21)
+Case completeness (Ckpt 5): 17 complete / 4 incomplete (4/21 triggered re-gather)
+Next-Best-Action (Ckpt 6): BLOCK_TRANSACTION=6, RESTRICT_ACCOUNT=11, REQUEST_MORE_INFORMATION=4
+Case lifecycle after Ckpt 6 seeding: HUMAN_REVIEW=17, INVESTIGATING=4
+SAR reports generated (Ckpt 7): 0/21 — expected; see sar_report.py's own
+  known-dataset-property note; FILE_SAR is exercised via hand-built
+  fixtures in tests/test_checkpoint7.py instead.
+Jurisdiction distribution: IN(base)=21/21, cross_border=14/21, US=0/21, unknown=0/21
+```
+India-primary jurisdiction behavior is intact: 0/21 real cases ever resolve
+to a bare `US` jurisdiction; the 14 cross-border cases still file to
+`FIU-IND` per `sar_report.py`'s own jurisdiction routing (re-confirmed by
+`test_cross_border_case_files_as_india_never_as_us`, unmodified and
+passing). No international-transaction case silently triggers US
+regulatory contamination — `RULE-CTR-001`'s USD/US-threshold path is
+exercised only by explicit `registered_country="United States"` fixtures,
+never by an `is_international` flag alone.
+
+**Ground-truth isolation — [VERIFIED].** `test_ground_truth_isolation.py`'s
+`LIVE_MODULES` list now covers all five Checkpoint 7 modules
+(`sar_report.py`, `case_data_access.py`, `langgraph_orchestration.py`, plus
+the three LLM agent modules already listed from Checkpoint 5). Both the
+static AST scan (imports/string-literals/attributes/identifiers, excluding
+docstrings) and the dynamic proof (real Detection→Case-Intake pipeline run
+against a copy of `mock_data/` with every `ground_truth_*.csv` physically
+deleted, output byte-identical to the untouched run) pass. **30/30 tests
+pass** in `tests/test_ground_truth_isolation.py`.
+
+**Checkpoint 4–6 regression — [VERIFIED].** `test_authority_policy.py`,
+`test_checkpoint5.py`, `test_checkpoint6.py`, `test_case_bundling.py`,
+`test_evidence_model.py` all pass unmodified in content. Real pipeline
+numbers (above) are byte-for-byte the same funnel as every prior
+checkpoint's documented baseline.
+
+**Full backend test suite: 262/262 passing, 0 failed** (up from
+Checkpoint 6's 153 — the +109 delta is Checkpoint 5's fixture/coverage work
+already counted in that baseline being superseded by a larger, correctly-
+accounted total, plus this session's 5 new real-langgraph tests; see each
+file's individual count above for the itemized breakdown: 24
+`test_checkpoint7.py` + 29 `test_scoped_data_access.py` + 22
+`test_langgraph_orchestration.py` + 25 `test_llm_pii_sanitizer.py` + 30
+`test_ground_truth_isolation.py` + 31 `test_checkpoint5.py` + 38
+`test_checkpoint6.py` + the pre-Checkpoint-5 baseline). Run via:
+```
+cd backend
+python3 -m pytest tests/ -q
+```
+No `PYTHONPATH`/`PYTEST_DISABLE_PLUGIN_AUTOLOAD` workaround was needed in
+this session's execution environment — `fastapi`, `uvicorn`, `langgraph`,
+and `google-genai` all import cleanly on this Linux Python 3.12.3
+install (pip-installed from `requirements.txt`, not the checked-in
+Windows-targeted `venv/`). A future session on a different sandbox may
+still need that workaround; it is not required here and this document
+does not claim it's required universally.
+
+**Environment / dependencies used this session:**
+- Python 3.12.3 (system `/usr/bin/python3`, not the checked-in `venv/`).
+- Installed via `pip install -r requirements.txt --break-system-packages`:
+  `fastapi` 0.141.1, `uvicorn` 0.52.4, `python-dotenv` 1.2.2, `langgraph`
+  1.2.11, `google-genai` 2.19.0, `Faker` 40.37.0, `networkx` 3.6.1,
+  `matplotlib` 3.10.8, `pytest` 9.1.1.
+- Required environment variable: `GEMINI_API_KEY` (present in `backend/.env`,
+  loaded via `python-dotenv`; value never printed/logged/committed by this
+  session).
+- Test command: `cd backend && python3 -m pytest tests/ -q`.
+- Pipeline command: `cd backend && python3 run_pipeline.py`.
+- Backend startup command (not exercised this session — no request was
+  made to actually serve the API): `cd backend && uvicorn main:app --reload`.
+
+**Known limitations, honestly carried forward:**
+- Password-protected SAR PDF generation is **not implemented** — explicitly
+  deferred, not silently claimed. `sar_report.py` produces a structured
+  JSON record only.
+- SAR generation is never naturally reached on the current mock dataset
+  (documented dataset property, same class of limitation as Checkpoint 6's
+  own "no case naturally reaches CLEAR" note) — exercised via hand-built
+  fixtures in `tests/test_checkpoint7.py` instead.
+- `main.py`'s `_LIVE_LAYERS` in-process cache does not survive a restart —
+  documented in that module's own docstring as a explicit, intentional
+  simplification for this checkpoint, not a production-ready session store.
+- Real execution against an external banking system remains simulated only
+  (unchanged, pre-existing Checkpoint 6 limitation).
+- `INVESTIGATOR_DIRECTORY` remains a deterministic test identity table, not
+  real auth/SSO (unchanged, pre-existing Checkpoint 6 limitation).
+- The bundled regulatory corpus remains small and hand-curated, not a
+  licensed/live feed (unchanged, pre-existing Checkpoint 5 limitation).
+
 Remaining checkpoints, reserved for future sessions:
-- CHECKPOINT 7: SAR report generation (including password-protected SAR
-  PDFs), final frontend integration, API productionization, deployment —
-  explicitly out of scope for this session per the task brief.
+- (unscheduled) password-protected SAR PDF generation — explicitly
+  deferred per this checkpoint's own instruction; see "Known limitations"
+  above.
+- Frontend integration, API productionization, deployment — explicitly out
+  of scope for this session; backend Checkpoint 7 does not touch the
+  frontend.
 - (unscheduled) ground-truth network model + `eval_pipeline.py` rebuild
-  (renumbered twice now — see the numbering note above)
-- (unscheduled) evidence-stage determinism fix (`evidence_id`/
-  `generated_at` in `network_layer.py`/`evidence_model.py`) — see section
-  4, item 8
+  (renumbered multiple times now — see the numbering notes above,
+  unchanged this session).
 - (unscheduled) real execution of an authorized action against an actual
   banking system — Checkpoint 6 computes, authorizes, and audits the
   decision; performing the real-world action itself is not yet built.

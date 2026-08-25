@@ -87,19 +87,39 @@ def mask_account(account, role):
     return masked
 
 
-def case_account_scope(case, evidence):
+def _resolve_transaction(txn, store=None):
+    """`evidence["source_transactions"]` is a dict in older/hand-built
+    fixtures but the real pipeline (`network_layer.py`) persists it as a
+    list of bare transaction-ID strings. Resolve a string entry to its
+    real transaction dict via `store.txn_by_id` (the same lookup
+    `ScopedDataAccess.get_transaction` already uses elsewhere in this
+    module) when a store is available; a dict entry passes through
+    unchanged. Never fabricates a transaction - an unresolvable string
+    (no store, or unknown id) simply contributes nothing to scope."""
+    if isinstance(txn, dict):
+        return txn
+    if isinstance(txn, str) and store is not None:
+        return store.txn_by_id.get(txn)
+    return None
+
+
+def case_account_scope(case, evidence, store=None):
     """The deterministic, case-derived set of account_ids this case is
     authorized to touch - see module docstring. `evidence` is the same
     per-case dict run_pipeline.py already builds (evidence["data"],
-    evidence["source_transactions"]); nothing new is computed here."""
+    evidence["source_transactions"]); nothing new is computed here.
+    `store` (optional, backward-compatible) is used only to resolve
+    transaction-ID-string entries in `source_transactions` to their real
+    sender/receiver accounts - see `_resolve_transaction`."""
     scope = {case["account_id"]}
     data = (evidence or {}).get("data") or {}
     for node in data.get("nodes", []) or []:
         node_id = (node.get("data") or {}).get("id")
         if node_id:
             scope.add(node_id)
-    for txn in (evidence or {}).get("source_transactions", []) or []:
-        if isinstance(txn, dict):
+    for raw_txn in (evidence or {}).get("source_transactions", []) or []:
+        txn = _resolve_transaction(raw_txn, store)
+        if txn:
             for key in ("sender_account_id", "receiver_account_id"):
                 if txn.get(key):
                     scope.add(txn[key])
@@ -116,15 +136,16 @@ class ScopedDataAccess:
         self.case = case
         self.evidence = evidence
         self.role = role if role in ("junior", "senior") else "junior"
-        self._full_scope = case_account_scope(case, evidence)
+        self._full_scope = case_account_scope(case, evidence, store=store)
         if self.role == "senior":
             self._authorized_scope = set(self._full_scope)
         else:
             # junior: root account + direct counterparties only (depth-1)
             root = case["account_id"]
             direct = {root}
-            for txn in (evidence or {}).get("source_transactions", []) or []:
-                if isinstance(txn, dict):
+            for raw_txn in (evidence or {}).get("source_transactions", []) or []:
+                txn = _resolve_transaction(raw_txn, store)
+                if txn:
                     if txn.get("sender_account_id") == root:
                         direct.add(txn.get("receiver_account_id"))
                     if txn.get("receiver_account_id") == root:

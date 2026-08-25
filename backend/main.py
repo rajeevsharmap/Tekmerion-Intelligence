@@ -308,13 +308,27 @@ def get_case_sar(case_id: str):
 def get_case_timeline(case_id: str):
     """GET /cases/{case_id}/timeline - the audit trail re-expressed
     chronologically, plus (for timeline-typology cases) the underlying
-    transaction/behavioral timeline data itself."""
+    transaction/behavioral timeline data itself.
+
+    `transaction_timeline` (money_mule's `data.transactions`) was the only
+    typology-specific field originally exposed here. `behavioral_events`/
+    `behavioral_summary` (account_swap's `data.events`/
+    `data.behavioral_summary` - see network_layer.build_account_swap_timeline)
+    are additive fields added for the frontend Checkpoint: account_swap has
+    no graph (`/cases/{case_id}/network` returns `graph: None` for it, by
+    design - see that endpoint's own docstring) and, before this addition,
+    no endpoint exposed its timeline data at all. Both typologies' fields
+    are simply `None` when not applicable to a given case - never
+    fabricated, never repurposing the other typology's shape."""
     evidence = _load_evidence(case_id)
     events = sorted(evidence.get("audit_trail", []), key=lambda e: e.get("timestamp") or "")
+    data = evidence.get("data", {}) or {}
     return {
         "case_id": case_id,
         "audit_timeline": events,
-        "transaction_timeline": evidence.get("data", {}).get("transactions"),
+        "transaction_timeline": data.get("transactions"),
+        "behavioral_events": data.get("events"),
+        "behavioral_summary": data.get("behavioral_summary"),
     }
 
 

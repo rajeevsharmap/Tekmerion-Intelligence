@@ -1,5 +1,5 @@
 {
-  "evidence_id": "EVID-E7CD3787",
+  "evidence_id": "EVID-257A06D4",
   "case_id": "CASE-B5748E63",
   "account_id": "ACC000115",
   "evidence_type": "network_analysis",
@@ -164,10 +164,10 @@
     "max_depth": 3,
     "time_window_hours": 24
   },
-  "generated_at": "2026-08-24T01:31:29.905694",
+  "generated_at": "2026-08-25T05:18:29.730337",
   "evidence_items": [
     {
-      "evidence_id": "EVD-5490533A",
+      "evidence_id": "EVD-7742AC1A",
       "case_id": "CASE-B5748E63",
       "evidence_type": "device_information",
       "source": "devices.csv",
@@ -185,7 +185,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-D57198B2",
+      "evidence_id": "EVD-E6421F4C",
       "case_id": "CASE-B5748E63",
       "evidence_type": "sim_change_evidence",
       "source": "network_evidence_layer",
@@ -202,7 +202,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-F0674AD0",
+      "evidence_id": "EVD-F228EF51",
       "case_id": "CASE-B5748E63",
       "evidence_type": "geo_information",
       "source": "geo_events.csv",
@@ -220,7 +220,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-EC2175A5",
+      "evidence_id": "EVD-1B3D6F74",
       "case_id": "CASE-B5748E63",
       "evidence_type": "impossible_travel",
       "source": "network_evidence_layer",
@@ -237,7 +237,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-22A1D731",
+      "evidence_id": "EVD-0B090B39",
       "case_id": "CASE-B5748E63",
       "evidence_type": "high_value_transaction",
       "source": "network_evidence_layer",
@@ -258,7 +258,7 @@
       }
     },
     {
-      "evidence_id": "EVD-ECC9BC4E",
+      "evidence_id": "EVD-1232AC9E",
       "case_id": "CASE-B5748E63",
       "evidence_type": "beneficiary_information",
       "source": "beneficiaries.csv",
@@ -277,7 +277,7 @@
       "contradicts": []
     },
     {
-      "evidence_id": "EVD-AA73FDBD",
+      "evidence_id": "EVD-38280BC3",
       "case_id": "CASE-B5748E63",
       "evidence_type": "behavioral_baseline",
       "source": "network_evidence_layer",
@@ -1314,7 +1314,7 @@
         "TXN001595",
         "TXN000761"
       ],
-      "generated_at": "2026-08-24T01:31:29.906522",
+      "generated_at": "2026-08-25T05:18:29.731216",
       "network_scope": {
         "max_depth": 3,
         "widened_multiplier": 3
@@ -1322,7 +1322,7 @@
     },
     "final_evidence_items": [
       {
-        "evidence_id": "EVD-5490533A",
+        "evidence_id": "EVD-7742AC1A",
         "case_id": "CASE-B5748E63",
         "evidence_type": "device_information",
         "source": "devices.csv",
@@ -1340,7 +1340,7 @@
         "contradicts": []
       },
       {
-        "evidence_id": "EVD-D57198B2",
+        "evidence_id": "EVD-E6421F4C",
         "case_id": "CASE-B5748E63",
         "evidence_type": "sim_change_evidence",
         "source": "network_evidence_layer",
@@ -1357,7 +1357,7 @@
         "contradicts": []
       },
       {
-        "evidence_id": "EVD-F0674AD0",
+        "evidence_id": "EVD-F228EF51",
         "case_id": "CASE-B5748E63",
         "evidence_type": "geo_information",
         "source": "geo_events.csv",
@@ -1375,7 +1375,7 @@
         "contradicts": []
       },
       {
-        "evidence_id": "EVD-EC2175A5",
+        "evidence_id": "EVD-1B3D6F74",
         "case_id": "CASE-B5748E63",
         "evidence_type": "impossible_travel",
         "source": "network_evidence_layer",
@@ -1392,7 +1392,7 @@
         "contradicts": []
       },
       {
-        "evidence_id": "EVD-22A1D731",
+        "evidence_id": "EVD-0B090B39",
         "case_id": "CASE-B5748E63",
         "evidence_type": "high_value_transaction",
         "source": "network_evidence_layer",
@@ -1413,7 +1413,7 @@
         }
       },
       {
-        "evidence_id": "EVD-ECC9BC4E",
+        "evidence_id": "EVD-1232AC9E",
         "case_id": "CASE-B5748E63",
         "evidence_type": "beneficiary_information",
         "source": "beneficiaries.csv",
@@ -1432,7 +1432,7 @@
         "contradicts": []
       },
       {
-        "evidence_id": "EVD-AA73FDBD",
+        "evidence_id": "EVD-38280BC3",
         "case_id": "CASE-B5748E63",
         "evidence_type": "behavioral_baseline",
         "source": "network_evidence_layer",
@@ -2209,13 +2209,13 @@
       }
     ],
     "evidence_references": [
-      "EVD-5490533A",
-      "EVD-D57198B2",
-      "EVD-F0674AD0",
-      "EVD-EC2175A5",
-      "EVD-22A1D731",
-      "EVD-ECC9BC4E",
-      "EVD-AA73FDBD"
+      "EVD-7742AC1A",
+      "EVD-E6421F4C",
+      "EVD-F228EF51",
+      "EVD-1B3D6F74",
+      "EVD-0B090B39",
+      "EVD-1232AC9E",
+      "EVD-38280BC3"
     ],
     "auditor_decision": {
       "case_id": "CASE-B5748E63",
@@ -2245,12 +2245,12 @@
       "auditor_flagged_critical_issue"
     ],
     "supporting_evidence_ids": [
-      "EVD-5490533A",
-      "EVD-D57198B2",
-      "EVD-F0674AD0",
-      "EVD-EC2175A5",
-      "EVD-ECC9BC4E",
-      "EVD-AA73FDBD"
+      "EVD-7742AC1A",
+      "EVD-E6421F4C",
+      "EVD-F228EF51",
+      "EVD-1B3D6F74",
+      "EVD-1232AC9E",
+      "EVD-38280BC3"
     ],
     "regulatory_basis": [
       "RULE-ATO-001",
@@ -2264,12 +2264,12 @@
   },
   "audit_trail": [
     {
-      "event_id": "EVT-C21935A5",
+      "event_id": "EVT-38B57EA4",
       "case_id": "CASE-B5748E63",
       "event_type": "case_created",
       "actor_type": "system",
       "actor_id": "detection_layer",
-      "timestamp": "2026-08-23T20:01:29.906793+00:00",
+      "timestamp": "2026-08-24T23:48:29.731665+00:00",
       "before_state": null,
       "after_state": {
         "status": "open"
@@ -2279,12 +2279,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-3B8FC690",
+      "event_id": "EVT-99EC9282",
       "case_id": "CASE-B5748E63",
       "event_type": "alert_created",
       "actor_type": "system",
       "actor_id": "detection_layer",
-      "timestamp": "2026-08-23T20:01:29.906839+00:00",
+      "timestamp": "2026-08-24T23:48:29.731717+00:00",
       "before_state": null,
       "after_state": {
         "alert_id": "ALERT-ACCO-9784E96F"
@@ -2294,12 +2294,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-5CE69F88",
+      "event_id": "EVT-CFD0ABBF",
       "case_id": "CASE-B5748E63",
       "event_type": "evidence_gathered",
       "actor_type": "system",
       "actor_id": "network_layer",
-      "timestamp": "2026-08-23T20:01:29.906855+00:00",
+      "timestamp": "2026-08-24T23:48:29.731733+00:00",
       "before_state": null,
       "after_state": {
         "completeness": {
@@ -2319,23 +2319,23 @@
       },
       "reason": "network/timeline evidence generated for case",
       "related_evidence_ids": [
-        "EVD-5490533A",
-        "EVD-D57198B2",
-        "EVD-F0674AD0",
-        "EVD-EC2175A5",
-        "EVD-22A1D731",
-        "EVD-ECC9BC4E",
-        "EVD-AA73FDBD"
+        "EVD-7742AC1A",
+        "EVD-E6421F4C",
+        "EVD-F228EF51",
+        "EVD-1B3D6F74",
+        "EVD-0B090B39",
+        "EVD-1232AC9E",
+        "EVD-38280BC3"
       ],
       "metadata": {}
     },
     {
-      "event_id": "EVT-47CDB411",
+      "event_id": "EVT-5FBFADB7",
       "case_id": "CASE-B5748E63",
       "event_type": "evidence_regathered",
       "actor_type": "system",
       "actor_id": "regather_loop",
-      "timestamp": "2026-08-23T20:01:29.906866+00:00",
+      "timestamp": "2026-08-24T23:48:29.731746+00:00",
       "before_state": null,
       "after_state": {
         "iterations": [
@@ -2379,12 +2379,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-8C9557FF",
+      "event_id": "EVT-B1583CCF",
       "case_id": "CASE-B5748E63",
       "event_type": "regulatory_evaluation",
       "actor_type": "system",
       "actor_id": "regulatory_rules",
-      "timestamp": "2026-08-23T20:01:29.906877+00:00",
+      "timestamp": "2026-08-24T23:48:29.731756+00:00",
       "before_state": null,
       "after_state": {
         "rule_count": 4
@@ -2394,12 +2394,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-68B51942",
+      "event_id": "EVT-AB5981B1",
       "case_id": "CASE-B5748E63",
       "event_type": "auditor_evaluation",
       "actor_type": "system",
       "actor_id": "investigation_auditor",
-      "timestamp": "2026-08-23T20:01:29.906886+00:00",
+      "timestamp": "2026-08-24T23:48:29.731766+00:00",
       "before_state": null,
       "after_state": {
         "case_id": "CASE-B5748E63",
@@ -2421,12 +2421,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-425C835D",
+      "event_id": "EVT-FD9714FD",
       "case_id": "CASE-B5748E63",
       "event_type": "completeness_evaluation",
       "actor_type": "system",
       "actor_id": "case_completeness",
-      "timestamp": "2026-08-23T20:01:29.906894+00:00",
+      "timestamp": "2026-08-24T23:48:29.731776+00:00",
       "before_state": null,
       "after_state": {
         "case_id": "CASE-B5748E63",
@@ -2508,12 +2508,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-574F9DD7",
+      "event_id": "EVT-02C1C962",
       "case_id": "CASE-B5748E63",
       "event_type": "authority_evaluation",
       "actor_type": "system",
       "actor_id": "authority_policy",
-      "timestamp": "2026-08-23T20:01:29.906903+00:00",
+      "timestamp": "2026-08-24T23:48:29.731785+00:00",
       "before_state": null,
       "after_state": {
         "case_id": "CASE-B5748E63",
@@ -2560,12 +2560,12 @@
       "metadata": {}
     },
     {
-      "event_id": "EVT-172863B0",
+      "event_id": "EVT-9DD30BFF",
       "case_id": "CASE-B5748E63",
       "event_type": "next_best_action_generated",
       "actor_type": "system",
       "actor_id": "next_best_action",
-      "timestamp": "2026-08-23T20:01:29.906935+00:00",
+      "timestamp": "2026-08-24T23:48:29.731821+00:00",
       "before_state": null,
       "after_state": {
         "recommendation_id": "NBA-5363FCC4",
@@ -2578,12 +2578,12 @@
           "auditor_flagged_critical_issue"
         ],
         "supporting_evidence_ids": [
-          "EVD-5490533A",
-          "EVD-D57198B2",
-          "EVD-F0674AD0",
-          "EVD-EC2175A5",
-          "EVD-ECC9BC4E",
-          "EVD-AA73FDBD"
+          "EVD-7742AC1A",
+          "EVD-E6421F4C",
+          "EVD-F228EF51",
+          "EVD-1B3D6F74",
+          "EVD-1232AC9E",
+          "EVD-38280BC3"
         ],
         "regulatory_basis": [
           "RULE-ATO-001",
@@ -2597,12 +2597,12 @@
       },
       "reason": "deterministic recommendation generated",
       "related_evidence_ids": [
-        "EVD-5490533A",
-        "EVD-D57198B2",
-        "EVD-F0674AD0",
-        "EVD-EC2175A5",
-        "EVD-ECC9BC4E",
-        "EVD-AA73FDBD"
+        "EVD-7742AC1A",
+        "EVD-E6421F4C",
+        "EVD-F228EF51",
+        "EVD-1B3D6F74",
+        "EVD-1232AC9E",
+        "EVD-38280BC3"
       ],
       "metadata": {}
     }
@@ -2651,13 +2651,13 @@
       ]
     },
     "evidence_references": [
-      "EVD-5490533A",
-      "EVD-D57198B2",
-      "EVD-F0674AD0",
-      "EVD-EC2175A5",
-      "EVD-22A1D731",
-      "EVD-ECC9BC4E",
-      "EVD-AA73FDBD"
+      "EVD-7742AC1A",
+      "EVD-E6421F4C",
+      "EVD-F228EF51",
+      "EVD-1B3D6F74",
+      "EVD-0B090B39",
+      "EVD-1232AC9E",
+      "EVD-38280BC3"
     ],
     "evidence_completeness": {
       "weighted_score": 85.0,
@@ -3450,12 +3450,12 @@
         "auditor_flagged_critical_issue"
       ],
       "supporting_evidence_ids": [
-        "EVD-5490533A",
-        "EVD-D57198B2",
-        "EVD-F0674AD0",
-        "EVD-EC2175A5",
-        "EVD-ECC9BC4E",
-        "EVD-AA73FDBD"
+        "EVD-7742AC1A",
+        "EVD-E6421F4C",
+        "EVD-F228EF51",
+        "EVD-1B3D6F74",
+        "EVD-1232AC9E",
+        "EVD-38280BC3"
       ],
       "regulatory_basis": [
         "RULE-ATO-001",
@@ -3472,16 +3472,19 @@
     "investigator_action": null,
     "investigator_action_history": [],
     "audit_trail_ref": [
-      "EVT-C21935A5",
-      "EVT-3B8FC690",
-      "EVT-5CE69F88",
-      "EVT-47CDB411",
-      "EVT-8C9557FF",
-      "EVT-68B51942",
-      "EVT-425C835D",
-      "EVT-574F9DD7",
-      "EVT-172863B0"
+      "EVT-38B57EA4",
+      "EVT-99EC9282",
+      "EVT-CFD0ABBF",
+      "EVT-5FBFADB7",
+      "EVT-B1583CCF",
+      "EVT-AB5981B1",
+      "EVT-FD9714FD",
+      "EVT-02C1C962",
+      "EVT-9DD30BFF"
     ],
-    "final_disposition": null
-  }
+    "final_disposition": null,
+    "sar_report": null,
+    "sar_report_history": []
+  },
+  "sar_report": null
 }

@@ -328,15 +328,115 @@ def test_human_review_is_never_bypassed_by_manual_chain_alone():
 # ----------------------------------------------------------------------
 
 def test_build_graph_requires_langgraph_package():
-    """Documents (rather than silently skipping) that this sandbox
-    cannot build/compile/invoke the real langgraph.StateGraph: the
-    checked-in venv/ is Windows-only (compiled pydantic_core .pyd) and
-    this environment has no network access to install a Linux build.
-    XFAIL here is the honest signal - see
-    docs/backend_implementation_status.md's Checkpoint 7 section."""
+    """Documents (rather than silently skipping) that SOME sandboxes
+    cannot build/compile/invoke the real langgraph.StateGraph (e.g. a
+    Windows-only checked-in venv/ with compiled pydantic_core .pyd and no
+    network access to install a Linux build - see
+    docs/backend_implementation_status.md's Checkpoint 7 section). XFAIL
+    is the honest signal in that case. In an environment where the
+    `langgraph` package IS actually usable (as confirmed by the real
+    build/compile/invoke tests below), this simply passes."""
     store = DataStore(MOCK_DATA_DIR)
     from langgraph_orchestration import build_graph
     try:
         build_graph(store)
     except ModuleNotFoundError as e:
         pytest.xfail(f"langgraph package unusable in this sandbox: {e}")
+
+
+# ----------------------------------------------------------------------
+# Real langgraph.StateGraph build/compile/invoke - only meaningful (and
+# only runs its real assertions) in an environment where `import
+# langgraph.graph` actually succeeds. Skips cleanly, rather than failing,
+# when it doesn't - this is an environment capability, not a code defect.
+# ----------------------------------------------------------------------
+def _langgraph_available():
+    try:
+        import langgraph.graph  # noqa: F401
+        return True
+    except ModuleNotFoundError:
+        return False
+
+
+requires_real_langgraph = pytest.mark.skipif(
+    not _langgraph_available(),
+    reason="langgraph package not importable in this environment - see test_build_graph_requires_langgraph_package",
+)
+
+
+@requires_real_langgraph
+def test_real_graph_compiles_to_an_invocable_object():
+    from langgraph_orchestration import build_graph
+
+    store = DataStore(MOCK_DATA_DIR)
+    compiled = build_graph(store)
+    assert hasattr(compiled, "invoke")
+
+
+@requires_real_langgraph
+def test_real_graph_invocation_reaches_human_review_or_investigating():
+    from langgraph_orchestration import run_case_graph
+
+    store, case = _load_real_case(0)
+    result = run_case_graph(store, case, case_alerts=[])
+    assert result["case_state"] in (cs.HUMAN_REVIEW, cs.INVESTIGATING)
+    assert result["case_id"] == case["case_id"]
+
+
+@requires_real_langgraph
+def test_real_graph_invocation_matches_manual_chain_approximation():
+    """The real StateGraph execution engine and the manual node-chaining
+    approximation used elsewhere in this file must reach the same
+    business outcome for the same case - confirming the manual chain is a
+    faithful stand-in and that build_graph()'s wiring (node functions,
+    edges, conditional routing) matches what _run_case_manually()
+    replicates by hand."""
+    from langgraph_orchestration import run_case_graph, serializable_state
+
+    store, case = _load_real_case(0)
+    real_result = run_case_graph(store, case, case_alerts=[])
+    manual_result = _run_case_manually(store, case, case_alerts=[])
+
+    real_ser = _strip_wallclock_timestamps(serializable_state(real_result))
+    manual_ser = _strip_wallclock_timestamps(serializable_state(manual_result))
+    assert real_ser["case_state"] == manual_ser["case_state"]
+    assert real_ser["next_best_action"] == manual_ser["next_best_action"]
+    assert real_ser["case_completeness"] == manual_ser["case_completeness"]
+
+
+@requires_real_langgraph
+def test_real_graph_bounded_regather_never_exceeds_max_hops_across_dataset():
+    from langgraph_orchestration import run_case_graph
+
+    store = DataStore(MOCK_DATA_DIR)
+    cases = {c["case_id"]: c for c in json.load(open(os.path.join(PIPELINE_OUT_DIR, "cases.json")))}
+    files = sorted(glob.glob(os.path.join(EVIDENCE_DIR, "*.json")))
+    checked = 0
+    for path in files:
+        evidence = json.load(open(path))
+        case = cases.get(evidence["case_id"])
+        if not case:
+            continue
+        result = run_case_graph(store, case, case_alerts=[])
+        assert result.get("regather_hops", 0) <= MAX_REGATHER_HOPS
+        checked += 1
+    assert checked > 0
+
+
+@requires_real_langgraph
+def test_real_graph_never_bypasses_human_review():
+    from langgraph_orchestration import run_case_graph
+
+    store = DataStore(MOCK_DATA_DIR)
+    cases = {c["case_id"]: c for c in json.load(open(os.path.join(PIPELINE_OUT_DIR, "cases.json")))}
+    files = sorted(glob.glob(os.path.join(EVIDENCE_DIR, "*.json")))
+    checked = 0
+    for path in files:
+        evidence = json.load(open(path))
+        case = cases.get(evidence["case_id"])
+        if not case:
+            continue
+        result = run_case_graph(store, case, case_alerts=[])
+        assert result["case_state"] not in (cs.CLOSED, cs.ACTION_EXECUTED)
+        checked += 1
+    assert checked > 0

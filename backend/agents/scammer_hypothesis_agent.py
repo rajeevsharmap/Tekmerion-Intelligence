@@ -20,6 +20,7 @@ from google.genai import types
 load_dotenv()
 
 from agents.evidence_builder import compute_derived_signals
+from agents.llm_pii_sanitizer import sanitize_pair_for_llm
 
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
@@ -106,14 +107,21 @@ def evaluate_scammer_hypothesis(evidence: dict, as_of: datetime = None) -> dict:
     as_of = as_of or datetime.now(timezone.utc)
     derived_signals = compute_derived_signals(evidence, as_of)
 
+    # LLM security boundary: never send raw internal evidence to the
+    # external model. `masked_evidence`/`masked_signals` are pseudonymized,
+    # deterministic derived copies - see agents/llm_pii_sanitizer.py. The
+    # real `evidence`/`derived_signals` objects above are untouched and
+    # still returned/used by every other (trusted, internal) caller.
+    masked_evidence, masked_signals, _pseudonym_map = sanitize_pair_for_llm(evidence, derived_signals)
+
     user_message = f"""Current time (as_of): {as_of.isoformat()}
 Typology under investigation: {evidence.get("typology")}
 
 Evidence:
-{json.dumps(evidence, indent=2, default=str)}
+{json.dumps(masked_evidence, indent=2, default=str)}
 
 Derived signals (pre-computed, trust these over doing your own date math):
-{json.dumps(derived_signals, indent=2, default=str)}"""
+{json.dumps(masked_signals, indent=2, default=str)}"""
 
     response = client.models.generate_content(
         model="gemini-3.6-flash",
