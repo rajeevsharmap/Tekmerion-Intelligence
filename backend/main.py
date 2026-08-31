@@ -54,6 +54,7 @@ BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BACKEND_DIR, "mock_data")
 OUT_DIR = os.path.join(BACKEND_DIR, "pipeline_output")
 EVIDENCE_DIR = os.path.join(OUT_DIR, "evidence")
+CASES_BUNDLE_PATH = os.path.join(OUT_DIR, "cases.json")
 
 # Loaded once at process start - the same read-only bank-source dataset
 # run_pipeline.py already read to produce pipeline_output/. Endpoints
@@ -122,6 +123,22 @@ def _load_all_cases():
     return out
 
 
+def _load_case_bundles():
+    """Loads `pipeline_output/cases.json` - the detection agent's own
+    alert-bundling record (one entry per case, with the `alert_ids` it
+    bundled together and when that bundle was created). This is the
+    only place that bundle count/timestamp is persisted; the per-case
+    evidence files in EVIDENCE_DIR do not repeat it. Returns a dict
+    keyed by case_id so callers can merge it onto evidence-derived case
+    data without guessing at a shape. Missing file -> {} (never invents
+    bundle data for a case that doesn't have any)."""
+    if not os.path.isfile(CASES_BUNDLE_PATH):
+        return {}
+    with open(CASES_BUNDLE_PATH) as f:
+        bundles = json.load(f)
+    return {b["case_id"]: b for b in bundles}
+
+
 def _case_from_evidence(evidence):
     """Reconstructs the minimal `case` dict CaseActionLayer needs, from
     an already-persisted evidence record - never invents a field that
@@ -173,17 +190,34 @@ def _persist_layer(case_id, evidence, layer):
 def list_cases():
     """GET /cases - case list for the dashboard (Suspected/Audit-Ready/
     Escalated/Reference views filter this client-side on `case_state`,
-    matching the existing frontend's four-view split)."""
+    matching the existing frontend's four-view split).
+
+    Also merges in each case's own bundle record from
+    `pipeline_output/cases.json` (`alert_ids`/`alert_count`/
+    `created_at`/`bundle_reason`) - the detection agent's record of
+    which alerts it bundled into this case. Previously this endpoint
+    exposed no way to tell how many alerts (or which ones) had been
+    bundled into a given case, even though that data was already being
+    persisted by the pipeline; the Suspected dashboard view needs it to
+    show real bundled-alert counts instead of placeholder ones."""
+    bundles = _load_case_bundles()
     cases = []
     for evidence in _load_all_cases():
+        case_id = evidence["case_id"]
+        bundle = bundles.get(case_id, {})
+        alert_ids = bundle.get("alert_ids", [])
         cases.append({
-            "case_id": evidence["case_id"],
+            "case_id": case_id,
             "account_id": evidence["account_id"],
             "typology": evidence["typology"],
             "case_state": evidence.get("case_state"),
             "case_completeness_status": (evidence.get("case_completeness") or {}).get("status"),
             "recommended_action": (evidence.get("next_best_action") or {}).get("recommended_action"),
             "sar_status": (evidence.get("sar_report") or {}).get("status"),
+            "alert_ids": alert_ids,
+            "alert_count": len(alert_ids),
+            "created_at": bundle.get("created_at"),
+            "bundle_reason": bundle.get("bundle_reason"),
         })
     return {"cases": cases, "count": len(cases)}
 

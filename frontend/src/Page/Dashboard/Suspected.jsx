@@ -1,48 +1,108 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../styles/Suspected.css";
 
-const cases = [
-  {
-    id: "CASE-8992-A",
-    risk: "High",
-    age: "12 mins ago",
-    title: "Unusual Cross-Border Transfer",
-    typology: "Money Mule",
-    alerts: 5,
-  },
-  {
-    id: "CASE-8991-B",
-    risk: "Medium",
-    age: "1 hour ago",
-    title: "Account Takeover Suspected",
-    typology: "Account Swap",
-    alerts: 2,
-  },
-  {
-    id: "CASE-8990-C",
-    risk: "High",
-    age: "3 hours ago",
-    title: "Structuring / Smurfing",
-    typology: "Smurfing",
-    alerts: 18,
-  },
-  {
-    id: "CASE-8989-D",
-    risk: "Low",
-    age: "5 hours ago",
-    title: "Velocity Anomaly",
-    typology: "Reverse Smurfing",
-    alerts: 3,
-  },
-];
+// main.py (backend) serves plain, unprefixed routes - GET /cases, not
+// /api/cases - so that's what this points at.
+const API_BASE = "http://localhost:8000";
+
+// GET /cases exposes each case's real `recommended_action`
+// (next_best_action.py's own output) but not a plain risk label - this
+// maps that action to the badge levels the UI already has, rather
+// than inventing an unrelated risk score.
+const RISK_BY_RECOMMENDED_ACTION = {
+  BLOCK_TRANSACTION: "High",
+  RESTRICT_ACCOUNT: "Medium",
+  REQUEST_MORE_INFORMATION: "Low",
+};
+
+function typologyLabel(typology) {
+  if (!typology) return "Unknown Typology";
+  return typology
+    .split("_")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function formatAge(isoTimestamp) {
+  if (!isoTimestamp) return "Unknown";
+
+  const created = new Date(isoTimestamp);
+  if (Number.isNaN(created.getTime())) return "Unknown";
+
+  const diffMs = Date.now() - created.getTime();
+  const minutes = Math.floor(diffMs / 60000);
+
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes} min${minutes === 1 ? "" : "s"} ago`;
+
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days} day${days === 1 ? "" : "s"} ago`;
+
+  const months = Math.floor(days / 30);
+  if (months < 12) return `${months} month${months === 1 ? "" : "s"} ago`;
+
+  const years = Math.floor(months / 12);
+  return `${years} year${years === 1 ? "" : "s"} ago`;
+}
+
+// Maps a case record from GET /cases into the shape this page renders.
+// Every field is either read straight off the API response or a
+// deterministic, documented transform of one (see helpers above) -
+// nothing here is invented per-case data.
+function toDisplayCase(apiCase) {
+  return {
+    id: apiCase.case_id,
+    risk: RISK_BY_RECOMMENDED_ACTION[apiCase.recommended_action] || "Medium",
+    age: formatAge(apiCase.created_at),
+    title: `${typologyLabel(apiCase.typology)} Case`,
+    typology: typologyLabel(apiCase.typology),
+    typologyKey: apiCase.typology,
+    alerts: apiCase.alert_count ?? 0,
+  };
+}
 
 function Suspected() {
   const navigate = useNavigate();
 
+  const [cases, setCases] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [search, setSearch] = useState("");
   const [riskFilter, setRiskFilter] = useState("all");
   const [typologyFilter, setTypologyFilter] = useState("all");
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    fetch(`${API_BASE}/cases`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+        return res.json();
+      })
+      .then((data) => {
+        if (cancelled) return;
+        // Show every bundled case, all typologies and lifecycle
+        // states - no client-side state filtering.
+        setCases((data.cases || []).map(toDisplayCase));
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err.message);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filteredCases = useMemo(() => {
     return cases.filter((item) => {
@@ -124,7 +184,7 @@ function Suspected() {
             <h3>Bundled Cases</h3>
           </div>
 
-          <strong className="summary-number">34</strong>
+          <strong className="summary-number">{cases.length}</strong>
 
           <span className="summary-meta">Active</span>
         </div>
@@ -193,7 +253,24 @@ function Suspected() {
         </div>
 
         <div className="case-list">
-          {filteredCases.map((item) => (
+          {loading && (
+            <div className="empty-state">
+              <h3>Loading cases…</h3>
+            </div>
+          )}
+
+          {!loading && error && (
+            <div className="empty-state">
+              <span className="material-symbols-outlined">error</span>
+              <h3>Couldn't load cases</h3>
+              <p>
+                {error} — is the backend running?{" "}
+                <code>uvicorn main:app --reload --port 8000</code>
+              </p>
+            </div>
+          )}
+
+          {!loading && !error && filteredCases.map((item) => (
             <article key={item.id} className="case-row">
               <div className="case-information">
                 <div className="case-topline">
@@ -260,7 +337,7 @@ function Suspected() {
             </article>
           ))}
 
-          {filteredCases.length === 0 && (
+          {!loading && !error && filteredCases.length === 0 && (
             <div className="empty-state">
               <span className="material-symbols-outlined">
                 search_off
@@ -277,7 +354,7 @@ function Suspected() {
 
         <div className="pagination">
           <span>
-            Showing {filteredCases.length} of 34 cases
+            Showing {filteredCases.length} of {cases.length} cases
           </span>
 
           <div>
